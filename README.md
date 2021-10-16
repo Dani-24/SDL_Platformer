@@ -1,6 +1,8 @@
 # SDL_Platformer
 Platformer game made with Tiled and SDL
 
+● TO DO:
+
 ● XML config file loading
 
 ● Load/Save game state using XML file
