@@ -48,12 +48,32 @@ void Map::Draw()
 	*/
 	
 	// L04: TODO 5: Prepare the loop to draw all tiles in a layer + DrawTexture()
+	
+	ListItem<MapLayer*>* mapLayerItem;
+	mapLayerItem = mapData.maplayers.start;
 
-	// L04: TODO 9: Complete the draw function (inside the loop from TODO 5)
-	// Find which tile id is on x, y coordinates 
-	// Find out that Tile’s Rect inside the tileset Image (
-	// Find out where in the World(screen) we have to draw
-	// DrawTexture()
+	while (mapLayerItem != NULL) {
+		for (int x = 0; x < mapLayerItem->data->width; x++) 
+		{
+			for (int y = 0; y < mapLayerItem->data->height; y++)
+			{
+				// L04: TODO 9: Complete the draw function
+
+				int gid = mapLayerItem->data->Get(x,y); 
+				SDL_Rect r = mapData.tilesets.start->data->GetTileRect(gid);
+				iPoint pos = MapToWorld(x, y);
+
+				app->render->DrawTexture(mapData.tilesets.start->data->texture,
+					pos.x,
+					pos.y,
+					&r);				 
+			}
+		}
+
+		mapLayerItem = mapLayerItem->next;
+		
+	}
+
 
 
 }
@@ -63,16 +83,23 @@ iPoint Map::MapToWorld(int x, int y) const
 {
 	iPoint ret;
 
-	//ret.x = //..;
-	//ret.y = //..;
+	ret.x = x * mapData.tileWidth;
+	ret.y = y * mapData.tileHeight;
 
 	return ret;
 }
 
-// L04: TODO 7:Implement the method that receives a tile id and returns it's Rectfind the Rect associated with a specific tile id
+// Get relative Tile rectangle
 SDL_Rect TileSet::GetTileRect(int id) const
 {
 	SDL_Rect rect = { 0 };
+	int relativeIndex = id - firstgid;
+	
+	// L04: TODO 7: Get relative Tile rectangle
+	rect.w = tile_width;
+	rect.h = tile_height; 
+	rect.x = margin + (tile_width + spacing) * (relativeIndex % columns);
+	rect.y = margin + (tile_width + spacing) * (relativeIndex / columns);
 
 	return rect;
 }
@@ -80,8 +107,6 @@ SDL_Rect TileSet::GetTileRect(int id) const
 // Called before quitting
 bool Map::CleanUp()
 {
-	bool ret = true; 
-
     LOG("Unloading map");
 
     // L03: DONE 2: Make sure you clean up any memory allocated from tilesets/map
@@ -98,9 +123,16 @@ bool Map::CleanUp()
 
 	// L04: TODO 2: clean up all layer data
 	// Remove all layers
+	ListItem<MapLayer*>* layerItem;
+	layerItem = mapData.maplayers.start;
 
-	return true;
+	while (layerItem != NULL) 
+	{
+		RELEASE(layerItem->data);
+		layerItem = layerItem->next;
+	}
 
+    return true;
 }
 
 // Load new map
@@ -235,27 +267,44 @@ bool Map::LoadTilesetImage(pugi::xml_node& tileset_node, TileSet* set)
 	return ret;
 }
 
-// L04: TODO 3: Implement the LoadLayer function that loads a single layer
+// L04: TODO 3: Implement a function that loads a single layer layer
 bool Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 {
 	bool ret = true;
 	
-	//Load the attributes and assign to the layer variables
+	//Load the attributes
+	layer->name = node.attribute("name").as_string();
+	layer->width = node.attribute("width").as_int();
+	layer->height = node.attribute("height").as_int();
 	
-	//Initialize the tile array and reserve the memory 
+	//Reserve the memory for the tile array
+	layer->data = new uint[layer->width * layer->height];
+	memset(layer->data, 0, layer->width * layer->height);
 	
-	//Iterate over all the tiles in the xml and assign the values
+	//Iterate over all the tiles and assign the values
+	pugi::xml_node tile;
+	int i = 0;
+	for (tile = node.child("data").child("tile"); tile && ret; tile = tile.next_sibling("tile"))
+	{
+		layer->data[i] = tile.attribute("gid").as_int();
+		i++;
+	}
 
 	return ret;
 }
 
 // L04: TODO 4: Iterate all layers and load each of them
-// This function is call from Mapp::Load()
 bool Map::LoadAllLayers(pugi::xml_node mapNode) {
-	
 	bool ret = true; 
-	
-	//Iterate ovel all layers in the XML and call the individual LoadLayer()
+	for (pugi::xml_node layerNode = mapNode.child("layer"); layerNode && ret; layerNode = layerNode.next_sibling("layer"))
+	{
+		//Load the layer
+		MapLayer* mapLayer = new MapLayer();
+		ret = LoadLayer(layerNode,mapLayer);
+
+		//add the layer to the map
+		mapData.maplayers.add(mapLayer);
+	}
 
 	return ret;
 }

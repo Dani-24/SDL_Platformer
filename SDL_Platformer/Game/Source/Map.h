@@ -23,8 +23,10 @@ struct TileSet
 	int	texHeight;
 	int	tilecount;
 	int	columns;
+	//int	offsetX;
+	//int	offsetY;
 
-	// L04: TODO 7:Implement the method that receives a tile id and returns it's Rectfind the Rect associated with a specific tile id
+	// L04: TODO 7: Create a method that receives a tile id and returns it's Rectfind the Rect associated with a specific tile id
 	SDL_Rect GetTileRect(int id) const;
 };
 
@@ -34,24 +36,31 @@ enum MapTypes
 {
 	MAPTYPE_UNKNOWN = 0,
 	MAPTYPE_ORTHOGONAL,
-	MAPTYPE_ISOMETRIC,
+	//MAPTYPE_ISOMETRIC,
 	MAPTYPE_STAGGERED
 };
 
 // L04: TODO 1: Create a struct for the map layer
 struct MapLayer
 {
-	//vars to store layer data
+	SString	name;
+	int width;
+	int height;
+	uint* data;
 
-	MapLayer()
+	MapLayer() : data(NULL)
 	{}
 
 	~MapLayer()
 	{
+		RELEASE(data);
 	}
 
-	// L04: TODO 6: Short function to get the value of x,y
-	
+	// L04: TODO 6: Short function to get the gid value of x,y
+	inline uint Get(int x, int y) const
+	{
+		return data[(y*width)+x];
+	}
 };
 
 // L03: DONE 1: Create a struct needed to hold the information to Map node
