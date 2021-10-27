@@ -37,19 +37,18 @@ bool Player:: Start()
 
 	texture = app->tex->Load("Assets/textures/player.png");
 
-	app->player->position.x = 48;
-	app->player->position.y = 464;
+	app->player->position.x = 0;
+	app->player->position.y = 0;
 
 	app->render->camera.x = 0;
 	app->render->camera.y = 0;
 
 	Player_Position = true;
-	destroyed = false;
 
 	return ret;
 }
 
-bool Player::Update()
+bool Player::Update(float dt)
 {
 	bool ret = true;
 
@@ -79,29 +78,16 @@ bool Player::Update()
 		}
 	}
 
-
-	if (destroyed)
-	{
-		destroyedCountdown--;
-		if (destroyedCountdown <= 0)
-			return ret;
-	}
-
 	return ret;
 }
 
 bool Player::PostUpdate() {
 	bool ret = true;
 
-	if (!destroyed)
-	{
-		if (app->scene->active == true) {
-			
-			SDL_Rect rect = currentAnimation->GetCurrentFrame();
-			app->render->DrawTexture(texture, position.x, position.y, &rect);//draw player
-			
-		}
-	}
+	SDL_Rect rect = currentAnimation->GetCurrentFrame();
+	app->render->DrawTexture(texture, position.x, position.y, &rect);//draw player
+		
+
 
 	return ret;
 }
