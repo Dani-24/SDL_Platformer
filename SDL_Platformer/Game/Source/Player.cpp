@@ -6,13 +6,14 @@
 #include "Render.h"
 #include "Audio.h"
 #include "Input.h"
+#include "Animation.h"
 
 Player::Player() : Module()
 {
 
 	//idle Right animation
 	idleR.PushBack({ 0, 0, 32, 32 });
-	idleR.loop = false;
+	idleR.loop = true;
 
 	//Walk right -> animation
 	walkR.PushBack({ 0,0,32,32 });
@@ -22,7 +23,8 @@ Player::Player() : Module()
 	walkR.PushBack({ 128,0,32,32 });
 	walkR.PushBack({ 160,0,32,32 });
 	walkR.loop = true;
-	walkR.speed = 0.15f;
+	walkR.speed = 0.3;
+
 
 }
 
@@ -38,8 +40,8 @@ bool Player:: Start()
 	texture = app->tex->Load("Assets/textures/player.png");
 	currentAnimation = &idleR;
 
-	app->player->position.x = 0;
-	app->player->position.y = 0;
+	app->player->position.x = 32;
+	app->player->position.y = 432;
 
 	app->render->camera.x = 0;
 	app->render->camera.y = 0;
@@ -53,23 +55,32 @@ bool Player::Update(float dt)
 {
 	bool ret = true;
 
-	if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+	if ((app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT))
 	{
 		position.x += speed;
 		if (currentAnimation != &walkR)
 		{
 			walkR.Reset();
 			currentAnimation = &walkR;
-			Player_Position = true;
 		}
 	}
 
-	if (app->input->GetKey(SDL_SCANCODE_S) == KEY_IDLE
+	if ((app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT))
+	{
+		position.x -= speed;
+		/*if (currentAnimation != &walkR)
+		{
+			walkR.Reset();
+			currentAnimation = &walkR;
+			Player_Position = true;
+		}*/
+	}
+
+	if ((app->input->GetKey(SDL_SCANCODE_S) == KEY_IDLE
 		&& app->input->GetKey(SDL_SCANCODE_W) == KEY_IDLE
 		&& app->input->GetKey(SDL_SCANCODE_D) == KEY_IDLE
 		&& app->input->GetKey(SDL_SCANCODE_A) == KEY_IDLE
-		&& app->input->GetKey(SDL_SCANCODE_K) == KEY_IDLE
-		&& app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE)
+		&& app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE))
 	{
 		if (currentAnimation != &idleR)
 		{
@@ -79,6 +90,8 @@ bool Player::Update(float dt)
 		}
 	}
 
+	currentAnimation->Update();
+
 	return ret;
 }
 
@@ -86,7 +99,7 @@ bool Player::PostUpdate() {
 	bool ret = true;
 
 	SDL_Rect rect = currentAnimation->GetCurrentFrame();
-	app->render->DrawTexture(texture, position.x, position.y, &rect);//draw player
+	app->render->DrawTexture(texture, position.x, position.y, &rect, 1.0f, 0,0,0);//draw player
 		
 	return ret;
 }
