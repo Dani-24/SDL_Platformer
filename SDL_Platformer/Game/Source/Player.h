@@ -50,7 +50,8 @@ private:
 
 	bool isEnabled = true;
 	// The speed in which we move the player (pixels per frame)
-	int speed = 1;
+	int speed = 3;
+	int lowSpeed = 1;
 
 	bool Player_Position = true;
 
@@ -62,8 +63,19 @@ private:
 	Animation* currentAnimation = nullptr;
 
 	// A set of animations
-	Animation idleR;
-	Animation walkR;
+	Animation playerR, playerL,
+		punchR, punchL,
+		doublePunchR, doublePunchL,
+		climb,
+		deathR, deathL,
+		hitR, hitL,
+		idleR, idleL,
+		jumpR, jumpL,
+		pushR, pushL,
+		runR, runL,
+		throwR, throwL,
+		walkR, walkL,
+		walkPunchR, walkPunchL;	
 
 	// The player's collider
 	Collider* collider = nullptr;
