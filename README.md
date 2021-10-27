@@ -1,7 +1,4 @@
 # SDL_Platformer
-Platformer game made with Tiled and SDL
-
-
 
 ### Link to the Github project:
 https://github.com/Dani-24/SDL_Platformer
@@ -47,7 +44,7 @@ We are MacacoSerapios, a pair of students from CITM leads of Macacos and Serapio
 
 
 ## Additional comments
-This game has been done thanks to SDL (https://www.libsdl.org/index.php)
+This game has been done thanks to [SDL](https://www.libsdl.org/index.php) and [Tiled](https://www.mapeditor.org/)
   
   
 ## License
