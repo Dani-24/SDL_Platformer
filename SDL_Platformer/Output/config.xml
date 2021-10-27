@@ -1,13 +1,12 @@
 <!-- Config file for the game -->
-<!-- L01: DONE 1: Create configuration file-->
 <config>
   <app>
-    <title>Game Development Testbed</title>
+    <title>SDL Platformer Game</title>
     <organization>UPC</organization>
   </app>
 
   <renderer>
-    <vsync value="false"/>
+    <vsync value="true"/>
   </renderer>
 
   <window>
@@ -18,8 +17,7 @@
     <fullscreen_window value="false"/>
   </window>
 
-  <!-- L03: Added maps folder as config option -->
   <map>
-    <folder>Assets/maps/</folder>
+    <folder>Assets/maps/</folder> <!-- Map directory -->
   </map>
 </config>
