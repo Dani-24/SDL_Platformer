@@ -5,7 +5,7 @@ https://github.com/Dani-24/SDL_Platformer
 
 
 ## Description
-We are MacacoSerapios, a pair of students from CITM, leads of Macacos and Serapios: creators from SDL [Super Soukoban](https://github.com/Dani-24/Serapios) and [Teen Mutant Ninja Turtles](https://github.com/Divangus/Macacos) versions.
+We are MacacoSerapios, a pair of students from CITM, leads of Macacos and Serapios: creators from [Super Soukoban](https://github.com/Dani-24/Serapios) and [Teen Mutant Ninja Turtles](https://github.com/Divangus/Macacos) SDL versions.
   
 ---
 <img width="500" height="300" src="https://i.ytimg.com/vi/yXGCelvsACA/maxresdefault.jpg">
