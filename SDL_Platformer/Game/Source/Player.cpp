@@ -36,6 +36,7 @@ bool Player:: Start()
 	bool ret = true;
 
 	texture = app->tex->Load("Assets/textures/player.png");
+	currentAnimation = &idleR;
 
 	app->player->position.x = 0;
 	app->player->position.y = 0;
@@ -87,8 +88,6 @@ bool Player::PostUpdate() {
 	SDL_Rect rect = currentAnimation->GetCurrentFrame();
 	app->render->DrawTexture(texture, position.x, position.y, &rect);//draw player
 		
-
-
 	return ret;
 }
 

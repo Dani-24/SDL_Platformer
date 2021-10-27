@@ -15,11 +15,11 @@ class Input;
 class Render;
 class Textures;
 class Audio;
+class Player;
 class Scene;
 class SceneTitle;
 class SceneLogo;
 class Map;
-class Player;
 
 class App
 {
@@ -89,12 +89,13 @@ public:
 	Render* render;
 	Textures* tex;
 	Audio* audio;
+
+	Player* player;
 	Scene* scene;
 	SceneTitle* sceneTitle;
 	SceneLogo* sceneLogo;
 
 	Map* map;
-	Player* player;
 
 private:
 

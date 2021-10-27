@@ -4,6 +4,7 @@
 #include "Render.h"
 #include "Textures.h"
 #include "Audio.h"
+#include "Player.h"
 #include "Scene.h"
 #include "SceneTitle.h"
 #include "SceneLogo.h"
@@ -25,6 +26,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	render = new Render();
 	tex = new Textures();
 	audio = new Audio();
+	player = new Player();
 	scene = new Scene();
 	sceneTitle = new SceneTitle();
 	sceneLogo = new SceneLogo();
@@ -36,6 +38,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(input);
 	AddModule(tex);
 	AddModule(audio);
+	AddModule(player);
 	AddModule(sceneLogo);
 	AddModule(sceneTitle);
 	AddModule(scene);
