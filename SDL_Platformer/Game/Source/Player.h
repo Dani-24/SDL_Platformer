@@ -16,7 +16,7 @@ class Player : public Module
 {
 public:
 	// Constructor
-	Player(bool startEnabled);
+	Player();
 
 	// Destructor
 	~Player();
@@ -55,7 +55,7 @@ private:
 	bool Player_Position = true;
 
 	// The player spritesheet loaded into an SDL_Texture
-	//SDL_Texture* texture = nullptr;
+	SDL_Texture* texture = nullptr;
 
 	// The pointer to the current player animation
 	// It will be switched depending on the player's movement direction
@@ -63,6 +63,7 @@ private:
 
 	// A set of animations
 	Animation idleR;
+	Animation walkR;
 
 	// The player's collider
 	Collider* collider = nullptr;
