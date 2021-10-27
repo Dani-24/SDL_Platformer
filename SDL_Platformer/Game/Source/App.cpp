@@ -5,6 +5,8 @@
 #include "Textures.h"
 #include "Audio.h"
 #include "Scene.h"
+#include "SceneTitle.h"
+#include "SceneLogo.h"
 #include "Map.h"
 
 #include "Defs.h"
@@ -24,8 +26,10 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	tex = new Textures();
 	audio = new Audio();
 	scene = new Scene();
+	sceneTitle = new SceneTitle();
+	sceneLogo = new SceneLogo();
 	map = new Map();
-
+	
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
 	AddModule(win);
@@ -33,6 +37,8 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(tex);
 	AddModule(audio);
 	AddModule(scene);
+	AddModule(sceneTitle);
+	AddModule(sceneLogo);
 	AddModule(map);
 
 	// Render last to swap buffer
@@ -313,6 +319,3 @@ bool App::SaveGame() const
 
 	return ret;
 }
-
-
-

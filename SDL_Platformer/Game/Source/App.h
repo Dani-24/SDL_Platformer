@@ -16,6 +16,8 @@ class Render;
 class Textures;
 class Audio;
 class Scene;
+class SceneTitle;
+class SceneLogo;
 class Map;
 class Player;
 
@@ -88,6 +90,9 @@ public:
 	Textures* tex;
 	Audio* audio;
 	Scene* scene;
+	SceneTitle* sceneTitle;
+	SceneLogo* sceneLogo;
+
 	Map* map;
 	Player* player;
 
