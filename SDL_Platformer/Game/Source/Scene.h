@@ -2,6 +2,7 @@
 #define __SCENE_H__
 
 #include "Module.h"
+#include "Animation.h"
 
 struct SDL_Texture;
 
@@ -31,6 +32,18 @@ public:
 
 	// Called before quitting
 	bool CleanUp();
+
+	// EasterEgg
+
+	void EasterEgg();
+
+	Animation eggAnim;
+
+	SDL_Texture* egg;
+
+	bool easterEgg;
+
+	bool loadEgg, eggMusic;
 
 private:
 	SDL_Texture* img;

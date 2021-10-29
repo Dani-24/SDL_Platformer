@@ -33,7 +33,13 @@ bool Scene::Start()
 {
 	// L03: DONE: Load map
 	app->map->Load("hello.tmx");
-	app->audio->PlayMusic("Assets/audio/music/music_spy.ogg");
+	app->audio->PlayMusic("Assets/audio/music/music_bg.ogg");
+
+
+
+	// Easter Egg - Press 5 when playing :D
+	loadEgg = false;
+	EasterEgg();
 
 	return true;
 }
@@ -66,6 +72,11 @@ bool Scene::Update(float dt)
 	if(app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 		app->render->camera.x -= 2;
 
+	if (app->input->GetKey(SDL_SCANCODE_5) == KEY_DOWN) {
+		easterEgg = !easterEgg;
+		EasterEgg();
+	}
+
 	//app->render->DrawTexture(img, 380, 100); // Placeholder not needed any more
 
 	// Draw map
@@ -90,6 +101,12 @@ bool Scene::PostUpdate()
 	if(app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		ret = false;
 
+	if (easterEgg == true) {
+		eggAnim.Update();
+		SDL_Rect rect = eggAnim.GetCurrentFrame();
+		app->render->DrawTexture(egg, 0, 0, &rect);
+	}
+
 	return ret;
 }
 
@@ -99,4 +116,27 @@ bool Scene::CleanUp()
 	LOG("Freeing scene");
 
 	return true;
+}
+
+void Scene::EasterEgg() {
+	if (loadEgg == false) {
+		egg = app->tex->Load("Assets/textures/easteregg.png");
+		int N = 0;
+		for (int i = 0; i < 54; i++) {
+			eggAnim.PushBack({ N,0,195,200 });
+			N += 195;
+		}
+		eggAnim.speed = 0.25f;
+		eggAnim.loop = true;
+
+		loadEgg = true;
+	}
+	else if (eggMusic != true) {
+		app->audio->PlayMusic("Assets/audio/music/music_spy.ogg");
+		eggMusic = true;
+	}
+	else {
+		app->audio->PlayMusic("Assets/audio/music/music_bg.ogg");
+		eggMusic = false;
+	}
 }
