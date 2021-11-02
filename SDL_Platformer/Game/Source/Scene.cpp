@@ -35,8 +35,6 @@ bool Scene::Start()
 	app->map->Load("hello.tmx");
 	app->audio->PlayMusic("Assets/audio/music/music_bg.ogg");
 
-
-
 	// Easter Egg - Press 5 when playing :D
 	loadEgg = false;
 	EasterEgg();
@@ -102,9 +100,22 @@ bool Scene::PostUpdate()
 		ret = false;
 
 	if (easterEgg == true) {
+
 		eggAnim.Update();
 		SDL_Rect rect = eggAnim.GetCurrentFrame();
-		app->render->DrawTexture(egg, 0, 0, &rect);
+
+		panderetAnim.Update();
+		SDL_Rect rect1 = panderetAnim.GetCurrentFrame();
+		for (int i = 0; i < 10; i++) {
+			for (int j = 0; j < 5; j++) {
+				if (i % 2 == 0 && j % 2 == 0) {
+					app->render->DrawTexture(pandereta, i * 200, j * 200, &rect1);
+				}
+				else {
+					app->render->DrawTexture(egg, i * 200, j * 200, &rect);
+				}
+			}
+		}
 	}
 
 	return ret;
@@ -121,6 +132,8 @@ bool Scene::CleanUp()
 void Scene::EasterEgg() {
 	if (loadEgg == false) {
 		egg = app->tex->Load("Assets/textures/easteregg.png");
+		pandereta = app->tex->Load("Assets/textures/pandereta.png");
+
 		int N = 0;
 		for (int i = 0; i < 54; i++) {
 			eggAnim.PushBack({ N,0,195,200 });
@@ -128,6 +141,14 @@ void Scene::EasterEgg() {
 		}
 		eggAnim.speed = 0.25f;
 		eggAnim.loop = true;
+
+		int M = 0;
+		for (int i = 0; i < 16; i++) {
+			panderetAnim.PushBack({ M,0,200,200 });
+			M += 200;
+		}
+		panderetAnim.speed = 0.25f;
+		panderetAnim.loop = true;
 
 		loadEgg = true;
 	}

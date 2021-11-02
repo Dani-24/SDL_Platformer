@@ -38,8 +38,9 @@ public:
 	void EasterEgg();
 
 	Animation eggAnim;
-
+	Animation panderetAnim;
 	SDL_Texture* egg;
+	SDL_Texture* pandereta;
 
 	bool easterEgg;
 
