@@ -101,13 +101,16 @@ bool Scene::PostUpdate()
 
 	if (easterEgg == true) {
 
+		int vecesQSeRepiteEnX = 10;
+		int vecesQSeRepiteEnY = 5;
+
 		eggAnim.Update();
 		SDL_Rect rect = eggAnim.GetCurrentFrame();
 
 		panderetAnim.Update();
 		SDL_Rect rect1 = panderetAnim.GetCurrentFrame();
-		for (int i = 0; i < 10; i++) {
-			for (int j = 0; j < 5; j++) {
+		for (int i = 0; i < vecesQSeRepiteEnX; i++) {
+			for (int j = 0; j < vecesQSeRepiteEnY; j++) {
 				if (i % 2 == 0 && j % 2 == 0) {
 					app->render->DrawTexture(pandereta, i * 200, j * 200, &rect1);
 				}
