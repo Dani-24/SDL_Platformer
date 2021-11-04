@@ -16,7 +16,7 @@ class Player : public Module
 {
 public:
 	// Constructor
-	Player();
+	Player(App* application, bool start_enabled);
 
 	// Destructor
 	~Player();

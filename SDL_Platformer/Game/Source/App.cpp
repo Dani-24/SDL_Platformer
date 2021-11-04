@@ -9,10 +9,9 @@
 #include "SceneTitle.h"
 #include "SceneLogo.h"
 #include "Map.h"
-
+#include "FadeToBlack.h"
 #include "Defs.h"
 #include "Log.h"
-
 #include <iostream>
 #include <sstream>
 
@@ -21,16 +20,17 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 {
 	frames = 0;
 
-	win = new Window();
-	input = new Input();
-	render = new Render();
-	tex = new Textures();
-	audio = new Audio();
-	player = new Player();
-	scene = new Scene();
-	sceneTitle = new SceneTitle();
-	sceneLogo = new SceneLogo();
-	map = new Map();
+	win = new Window(this);
+	input = new Input(this);
+	render = new Render(this);
+	tex = new Textures(this);
+	audio = new Audio(this);
+	fade = new FadeToBlack(this);
+	sceneLogo = new SceneLogo(this, false);
+	sceneTitle = new SceneTitle(this, false);
+	player = new Player(this, false);
+	scene = new Scene(this, true);
+	map = new Map(this);
 	
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -38,6 +38,8 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(input);
 	AddModule(tex);
 	AddModule(audio);
+	AddModule(fade);
+
 	AddModule(player);
 	AddModule(sceneLogo);
 	AddModule(sceneTitle);
@@ -98,12 +100,10 @@ bool App::Awake()
 
 		while ((item != NULL) && (ret == true))
 		{
-			// L01: DONE 5: Add a new argument to the Awake method to receive a pointer to an xml node.
-			// If the section with the module name exists in config.xml, fill the pointer with the valid xml_node
-			// that can be used to read all variables for that module.
-			// Send nullptr if the node does not exist in config.xml
-			ret = item->data->Awake(config.child(item->data->name.GetString()));
-			item = item->next;
+			if (item->data->isEnabled() == true) {
+				ret = item->data->Awake(config.child(item->data->name.GetString()));
+				item = item->next;
+			}
 		}
 	}
 
@@ -119,8 +119,10 @@ bool App::Start()
 
 	while(item != NULL && ret == true)
 	{
-		ret = item->data->Start();
-		item = item->next;
+		if (item->data->isEnabled() == true) {
+			ret = item->data->Start();
+			item = item->next;
+		}
 	}
 
 	return ret;
@@ -181,17 +183,12 @@ bool App::PreUpdate()
 	bool ret = true;
 	ListItem<Module*>* item;
 	item = modules.start;
-	Module* pModule = NULL;
 
 	for(item = modules.start; item != NULL && ret == true; item = item->next)
 	{
-		pModule = item->data;
-
-		if(pModule->active == false) {
-			continue;
+		if (item->data->isEnabled() == true) {
+			ret = item->data->PreUpdate();
 		}
-
-		ret = item->data->PreUpdate();
 	}
 
 	return ret;
@@ -203,17 +200,12 @@ bool App::DoUpdate()
 	bool ret = true;
 	ListItem<Module*>* item;
 	item = modules.start;
-	Module* pModule = NULL;
 
 	for(item = modules.start; item != NULL && ret == true; item = item->next)
 	{
-		pModule = item->data;
-
-		if(pModule->active == false) {
-			continue;
+		if (item->data->isEnabled() == true) {
+			ret = item->data->Update(dt);
 		}
-
-		ret = item->data->Update(dt);
 	}
 
 	return ret;
@@ -224,17 +216,12 @@ bool App::PostUpdate()
 {
 	bool ret = true;
 	ListItem<Module*>* item;
-	Module* pModule = NULL;
 
 	for(item = modules.start; item != NULL && ret == true; item = item->next)
 	{
-		pModule = item->data;
-
-		if(pModule->active == false) {
-			continue;
+		if (item->data->isEnabled() == true) {
+			ret = item->data->PostUpdate();
 		}
-
-		ret = item->data->PostUpdate();
 	}
 
 	return ret;

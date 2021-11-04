@@ -9,7 +9,7 @@
 #include "Defs.h"
 #include "Log.h"
 
-SceneLogo::SceneLogo() : Module()
+SceneLogo::SceneLogo(App* application, bool start_enabled) : Module(application, start_enabled)
 {
 	name.Create("sceneLogo");
 }

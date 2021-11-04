@@ -10,7 +10,7 @@
 #include "Defs.h"
 #include "Log.h"
 
-Scene::Scene() : Module()
+Scene::Scene(App* application, bool start_enabled) : Module(application, start_enabled)
 {
 	name.Create("scene");
 }

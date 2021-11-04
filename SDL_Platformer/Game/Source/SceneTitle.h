@@ -9,7 +9,7 @@ class SceneTitle : public Module
 {
 public:
 
-	SceneTitle();
+	SceneTitle(App* application, bool start_enabled = true);
 
 	// Destructor
 	virtual ~SceneTitle();

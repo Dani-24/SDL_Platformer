@@ -10,9 +10,11 @@ class App;
 class Module
 {
 public:
+	App* Application;
+	Module(App* parent, bool startActive) : Application(parent), active(startActive)
+	{
 
-	Module() : active(false)
-	{}
+	}
 
 	void Init()
 	{
@@ -68,22 +70,27 @@ public:
 	}
 
 	virtual void Enable() {
-
+		if (!active) {
+			active = true;
+			Start();
+		}
 	}
 
 	virtual void Disable() {
-
+		if (active) {
+			active = false;
+			CleanUp();
+		}
 	}
 
-	virtual bool isEnabled() {
-
+	inline bool isEnabled() {
 		return active;
 	}
 
 public:
 
 	SString name;
-	bool active;
+	bool active = true;
 
 };
 

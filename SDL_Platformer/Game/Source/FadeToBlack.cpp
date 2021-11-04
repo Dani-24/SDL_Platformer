@@ -9,14 +9,17 @@
 #include "Defs.h"
 #include "Log.h"
 
-FadeToBlack::FadeToBlack()/*(bool startEnabled) : Module(startEnabled)*/
-	{
-		screenRect = {0,0,app->win->width * app->win->scale,app->win->height * app->win->scale};
+FadeToBlack::FadeToBlack(App* application, bool start_enabled) : Module(application, start_enabled)
+{
+	if (app != nullptr) {
+		screenRect = { 0,0,app->win->width * app->win->scale,app->win->height * app->win->scale };
 	}
+}
 FadeToBlack::~FadeToBlack()
 {
 
 }
+
 bool FadeToBlack::Start()
 {
 	LOG("Preparing Fade Screen");

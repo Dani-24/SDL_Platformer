@@ -8,7 +8,7 @@
 #include "Input.h"
 #include "Animation.h"
 
-Player::Player() : Module()
+Player::Player(App* application, bool start_enabled) : Module(application, start_enabled)
 {
 
 	//player

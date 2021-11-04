@@ -8,7 +8,7 @@
 #include "SDL_image/include/SDL_image.h"
 //#pragma comment(lib, "../Game/Source/External/SDL_image/libx86/SDL2_image.lib")
 
-Textures::Textures() : Module()
+Textures::Textures(App* application, bool start_enabled) : Module(application, start_enabled)
 {
 	name.Create("textures");
 }

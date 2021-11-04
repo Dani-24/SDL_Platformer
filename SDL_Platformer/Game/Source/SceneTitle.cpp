@@ -9,7 +9,7 @@
 #include "Defs.h"
 #include "Log.h"
 
-SceneTitle::SceneTitle() : Module()
+SceneTitle::SceneTitle(App* application, bool start_enabled) : Module(application, start_enabled)
 {
 	name.Create("sceneTitle");
 }

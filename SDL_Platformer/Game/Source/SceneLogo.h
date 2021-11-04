@@ -9,7 +9,7 @@ class SceneLogo : public Module
 {
 public:
 
-	SceneLogo();
+	SceneLogo(App* application, bool start_enabled = true);
 
 	// Destructor
 	virtual ~SceneLogo();

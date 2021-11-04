@@ -12,7 +12,7 @@
 // NOTE: Library linkage is configured in Linker Options
 //#pragma comment(lib, "../Game/Source/External/SDL_mixer/libx86/SDL2_mixer.lib")
 
-Audio::Audio() : Module()
+Audio::Audio(App* application, bool start_enabled) : Module(application, start_enabled)
 {
 	music = NULL;
 	name.Create("audio");

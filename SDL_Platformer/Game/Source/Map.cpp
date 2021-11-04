@@ -9,7 +9,7 @@
 
 #include <math.h>
 
-Map::Map() : Module(), mapLoaded(false)
+Map::Map(App* application, bool start_enabled) : Module(application, start_enabled)
 {
     name.Create("map");
 }

@@ -7,10 +7,10 @@
 class FadeToBlack : public Module
 {
 public:
-	FadeToBlack(/*bool startEnabled*/);
+	FadeToBlack(App* application, bool start_enabled = true);
 
 	~FadeToBlack();
-
+	
 	bool Start();
 
 	bool Update(float dt);

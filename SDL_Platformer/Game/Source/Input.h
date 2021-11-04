@@ -30,7 +30,7 @@ class Input : public Module
 
 public:
 
-	Input();
+	Input(App* application, bool start_enabled = true);
 
 	// Destructor
 	virtual ~Input();
