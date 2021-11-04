@@ -67,6 +67,19 @@ public:
 		return true;
 	}
 
+	virtual void Enable() {
+
+	}
+
+	virtual void Disable() {
+
+	}
+
+	virtual bool isEnabled() {
+
+		return active;
+	}
+
 public:
 
 	SString name;

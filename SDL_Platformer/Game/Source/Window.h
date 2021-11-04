@@ -37,11 +37,11 @@ public:
 	// The surface contained by the window
 	SDL_Surface* screenSurface;
 
-private:
+public:
 	SString title;
-	uint width;
-	uint height;
-	uint scale;
+	int width;
+	int height;
+	int scale;
 };
 
 #endif // __WINDOW_H__

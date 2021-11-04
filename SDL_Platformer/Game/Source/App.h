@@ -20,6 +20,7 @@ class Scene;
 class SceneTitle;
 class SceneLogo;
 class Map;
+class Fade;
 
 class App
 {

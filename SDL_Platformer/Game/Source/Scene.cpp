@@ -75,8 +75,6 @@ bool Scene::Update(float dt)
 		EasterEgg();
 	}
 
-	//app->render->DrawTexture(img, 380, 100); // Placeholder not needed any more
-
 	// Draw map
 	app->map->Draw();
 
@@ -128,7 +126,6 @@ bool Scene::PostUpdate()
 bool Scene::CleanUp()
 {
 	LOG("Freeing scene");
-
 	return true;
 }
 
