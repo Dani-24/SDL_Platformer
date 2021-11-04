@@ -285,25 +285,19 @@ void App::SaveGameRequest() const
 }
 
 // ---------------------------------------
-// L02: TODO 5: Create a method to actually load an xml file
-// then call all the modules to load themselves
+
 bool App::LoadGame()
 {
 	bool ret = false;
-
-	//...
 
 	loadGameRequested = false;
 
 	return ret;
 }
 
-// L02: TODO 7: Implement the xml save method for current state
 bool App::SaveGame() const
 {
 	bool ret = true;
-
-	//...
 
 	saveGameRequested = false;
 

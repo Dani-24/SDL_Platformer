@@ -97,17 +97,9 @@ private:
 
 	// Call modules before each loop iteration
 	void PrepareUpdate();
-
-	// Call modules before each loop iteration
 	void FinishUpdate();
-
-	// Call modules before each loop iteration
 	bool PreUpdate();
-
-	// Call modules on each loop iteration
 	bool DoUpdate();
-
-	// Call modules after each loop iteration
 	bool PostUpdate();
 
 	// Load / Save

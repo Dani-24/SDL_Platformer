@@ -70,20 +70,20 @@ public:
 	}
 
 	virtual void Enable() {
-		if (!active) {
+		if (active == false) {
 			active = true;
 			Start();
 		}
 	}
 
 	virtual void Disable() {
-		if (active) {
+		if (active == true) {
 			active = false;
 			CleanUp();
 		}
 	}
 
-	inline bool isEnabled() {
+	virtual bool isEnabled() {
 		return active;
 	}
 
