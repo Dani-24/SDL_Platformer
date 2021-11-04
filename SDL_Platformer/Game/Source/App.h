@@ -24,7 +24,6 @@ class FadeToBlack;
 
 class App
 {
-
 public:
 
 	// Modules

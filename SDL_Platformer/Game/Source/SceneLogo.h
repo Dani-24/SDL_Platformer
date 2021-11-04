@@ -33,7 +33,10 @@ public:
 	bool CleanUp();
 
 private:
-	SDL_Texture* img;
+
+	SDL_Texture* logo;
+
+	int count;
 };
 
 #endif // __SCENELOGO_H__

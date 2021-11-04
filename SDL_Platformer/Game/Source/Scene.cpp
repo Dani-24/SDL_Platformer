@@ -6,9 +6,10 @@
 #include "Window.h"
 #include "Scene.h"
 #include "Map.h"
-
+#include "FadeToBlack.h"
 #include "Defs.h"
 #include "Log.h"
+#include "Player.h"
 
 Scene::Scene(App* application, bool start_enabled) : Module(application, start_enabled)
 {
@@ -31,11 +32,20 @@ bool Scene::Awake()
 // Called before the first frame
 bool Scene::Start()
 {
-	// L03: DONE: Load map
+	// Check if player is enabled:
+	if (app->player->active != true) {
+		app->player->Enable();
+	}
+
+	// Load map
 	app->map->Load("hello.tmx");
+
+	// Load Assets
+
 	app->audio->PlayMusic("Assets/audio/music/music_bg.ogg");
 
 	// Easter Egg - Press 5 when playing :D
+	easterEgg = false;
 	loadEgg = false;
 	EasterEgg();
 
@@ -75,6 +85,11 @@ bool Scene::Update(float dt)
 		EasterEgg();
 	}
 
+	// Back
+	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {
+		app->fade->StartFadeToBlack(this, (Module*)app->sceneLogo, 60);
+	}
+
 	// Draw map
 	app->map->Draw();
 
@@ -93,9 +108,6 @@ bool Scene::Update(float dt)
 bool Scene::PostUpdate()
 {
 	bool ret = true;
-
-	if(app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
-		ret = false;
 
 	if (easterEgg == true) {
 
@@ -126,6 +138,16 @@ bool Scene::PostUpdate()
 bool Scene::CleanUp()
 {
 	LOG("Freeing scene");
+
+	app->tex->UnLoad(img);
+	app->tex->UnLoad(egg);
+	app->tex->UnLoad(pandereta);
+	
+	eggAnim.DeleteAnim();
+	panderetAnim.DeleteAnim();
+
+	app->player->Disable();
+
 	return true;
 }
 

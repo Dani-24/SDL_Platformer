@@ -26,10 +26,10 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	tex = new Textures(this);
 	audio = new Audio(this);
 	fade = new FadeToBlack(this);
-	sceneLogo = new SceneLogo(this, false);
+	sceneLogo = new SceneLogo(this, true);
 	sceneTitle = new SceneTitle(this, false);
+	scene = new Scene(this, false);
 	player = new Player(this, false);
-	scene = new Scene(this, true);
 	map = new Map(this);
 	
 	// Ordered for awake / Start / Update
@@ -67,7 +67,6 @@ App::~App()
 
 void App::AddModule(Module* module)
 {
-	module->Init();
 	modules.add(module);
 }
 
@@ -80,7 +79,7 @@ bool App::Awake()
 
 	bool ret = false;
 
-	// L01: DONE 3: Load config from XML
+	// Load config from XML
 	config = LoadConfig(configFile);
 
 	if (config.empty() == false)
@@ -88,7 +87,7 @@ bool App::Awake()
 		ret = true;
 		configApp = config.child("app");
 
-		// L01: DONE 4: Read the title from the config file
+		// Read the title from the config file
 		title.Create(configApp.child("title").child_value());
 		organization.Create(configApp.child("organization").child_value());
 	}
@@ -100,10 +99,8 @@ bool App::Awake()
 
 		while ((item != NULL) && (ret == true))
 		{
-			if (item->data->isEnabled() == true) {
-				ret = item->data->Awake(config.child(item->data->name.GetString()));
-				item = item->next;
-			}
+			ret = item->data->Awake(config.child(item->data->name.GetString()));
+			item = item->next;
 		}
 	}
 
@@ -121,8 +118,8 @@ bool App::Start()
 	{
 		if (item->data->isEnabled() == true) {
 			ret = item->data->Start();
-			item = item->next;
 		}
+		item = item->next;
 	}
 
 	return ret;

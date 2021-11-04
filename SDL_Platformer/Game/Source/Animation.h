@@ -58,6 +58,9 @@ public:
 		return frames[actualFrame];
 	}
 
+	void DeleteAnim() {
+		totalFrames = 0;
+	}
 		
 };
 

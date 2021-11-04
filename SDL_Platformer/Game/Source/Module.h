@@ -10,15 +10,21 @@ class App;
 class Module
 {
 public:
+
+	SString name;
+	bool active = true;
+
+public:
+
 	App* Application;
-	Module(App* parent, bool startActive) : Application(parent), active(startActive)
+	Module(App* parent, bool startEnabled) : Application(parent), active(startEnabled)
 	{
 
 	}
 
 	void Init()
 	{
-		active = true;
+
 	}
 
 	// Called before render is available
@@ -70,28 +76,22 @@ public:
 	}
 
 	virtual void Enable() {
-		if (active == false) {
+		if (!active) {
 			active = true;
 			Start();
 		}
 	}
 
 	virtual void Disable() {
-		if (active == true) {
+		if (active) {
 			active = false;
 			CleanUp();
 		}
 	}
 
-	virtual bool isEnabled() {
+	inline bool isEnabled() {
 		return active;
 	}
-
-public:
-
-	SString name;
-	bool active = true;
-
 };
 
 #endif // __MODULE_H__

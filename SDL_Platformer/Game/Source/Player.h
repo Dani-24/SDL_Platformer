@@ -42,18 +42,17 @@ public:
 	bool CleanUp() override;
 
 	iPoint position;
-	bool death = false;
+	bool death;
 
 
 
 private:
 
-	bool isEnabled = true;
 	// The speed in which we move the player (pixels per frame)
-	int speed = 3;
-	int lowSpeed = 1;
+	int speed;
+	int lowSpeed;
 
-	bool Player_Position = true;
+	bool Player_Position;
 
 	// The player spritesheet loaded into an SDL_Texture
 	SDL_Texture* texture = nullptr;
@@ -78,23 +77,20 @@ private:
 		walkPunchR, walkPunchL;	
 
 	// The player's collider
-	Collider* collider = nullptr;
-	Collider* colliderAttack = nullptr;
+	Collider* collider;
+	Collider* colliderAttack;
 
 	// A flag to detect when the player has been destroyed
 	bool destroyed = false;
-
-	// A countdown to when the player gets destroyed. After a while, the game exits
-	uint destroyedCountdown = 120;
 
 	// Sound effects indices
 	uint PlayerAttackFx = 0;
 	uint AttackQuoteFx = 0;
 
 
-	bool god = false;
+	bool god;
 
-	int HP = Max_HP;
+	int HP;
 };
 
 #endif //!__PLAYER_H__

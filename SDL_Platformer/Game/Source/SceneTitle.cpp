@@ -5,7 +5,7 @@
 #include "Render.h"
 #include "Window.h"
 #include "SceneTitle.h"
-
+#include "FadeToBlack.h"
 #include "Defs.h"
 #include "Log.h"
 
@@ -42,7 +42,9 @@ bool SceneTitle::PreUpdate()
 // Called each loop iteration
 bool SceneTitle::Update(float dt)
 {
-	
+	// De momento no hay nada asi q pasa a la scene
+	app->fade->StartFadeToBlack(this, (Module*)app->scene, 0);
+
 	return true;
 }
 
@@ -57,7 +59,7 @@ bool SceneTitle::PostUpdate()
 // Called before quitting
 bool SceneTitle::CleanUp()
 {
-	LOG("Freeing scene");
+	LOG("Cleaning Title Scene");
 
 	return true;
 }

@@ -5,7 +5,7 @@
 #include "Render.h"
 #include "Window.h"
 #include "SceneLogo.h"
-
+#include "FadeToBlack.h"
 #include "Defs.h"
 #include "Log.h"
 
@@ -30,6 +30,11 @@ bool SceneLogo::Awake()
 // Called before the first frame
 bool SceneLogo::Start()
 {
+	count = 0;
+	logo = app->tex->Load("Assets/textures/logo.png");
+
+	app->audio->PlayMusic("Assets/audio/music/logoMusic.ogg");
+
 	return true;
 }
 
@@ -42,6 +47,17 @@ bool SceneLogo::PreUpdate()
 // Called each loop iteration
 bool SceneLogo::Update(float dt)
 {
+	if (count > 500 || app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
+		app->fade->StartFadeToBlack(this, (Module*)app->sceneTitle, 60);
+	}
+	else {
+		count++;
+		LOG("Count : %d", count);
+	}
+
+	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_UP) {
+		return false;
+	}
 
 	return true;
 }
@@ -49,6 +65,9 @@ bool SceneLogo::Update(float dt)
 // Called each loop iteration
 bool SceneLogo::PostUpdate()
 {
+
+	app->render->DrawTexture(logo, 0,0);
+
 	bool ret = true;
 
 	return ret;
@@ -57,7 +76,9 @@ bool SceneLogo::PostUpdate()
 // Called before quitting
 bool SceneLogo::CleanUp()
 {
-	LOG("Freeing scene");
+	LOG("Freeing best logo ever scene");
+
+	app->tex->UnLoad(logo);
 
 	return true;
 }

@@ -17,7 +17,7 @@ public:
 
 	bool PostUpdate();
 	//call another module and starts the proces to fade
-	bool FadeToBlackThis(Module* toDisable, Module* toEnable, float frames = 60);
+	bool StartFadeToBlack(Module* toDisable, Module* toEnable, float frames = 60);
 private:
 
 	enum Fade_Step

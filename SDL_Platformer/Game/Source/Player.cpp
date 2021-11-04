@@ -247,6 +247,18 @@ bool Player:: Start()
 {
 	bool ret = true;
 
+	// Inicializar variables
+	Player_Position = true;
+	death = false;
+	speed = 3;
+	lowSpeed = 1;
+	god = false;
+	HP = Max_HP;
+	destroyed = false;
+	collider = nullptr;
+	colliderAttack = nullptr;
+
+	// Load assets
 	texture = app->tex->Load("Assets/textures/player.png");
 	currentAnimation = &idleR;
 
@@ -373,12 +385,38 @@ bool Player::PostUpdate() {
 }
 
 bool Player::CleanUp() {
+	// Clean player bullshit
 
+	// Animations
+	currentAnimation = nullptr;
+	playerR.DeleteAnim(); 
+	playerL.DeleteAnim();
+	punchR.DeleteAnim(); 
+	punchL.DeleteAnim();
+	doublePunchR.DeleteAnim(); 
+	doublePunchL.DeleteAnim();
+	climb.DeleteAnim();
+	deathR.DeleteAnim(); 
+	deathL.DeleteAnim();
+	hitR.DeleteAnim(); 
+	hitL.DeleteAnim();
+	idleR.DeleteAnim(); 
+	idleL.DeleteAnim();
+	jumpR.DeleteAnim(); 
+	jumpL.DeleteAnim();
+	pushR.DeleteAnim(); 
+	pushL.DeleteAnim();
+	runR.DeleteAnim(); 
+	runL.DeleteAnim();
+	throwR.DeleteAnim(); 
+	throwL.DeleteAnim();
+	walkR.DeleteAnim(); 
+	walkL.DeleteAnim();
+	walkPunchR.DeleteAnim(); 
+	walkPunchL.DeleteAnim();
 
+	// Textures
 	app->tex->UnLoad(texture);
-
-	isEnabled = true;
-
 
 	return true;
 }

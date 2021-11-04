@@ -40,8 +40,8 @@ bool FadeToBlack::Update(float dt)
 		++frameCount;
 		if (frameCount >= maxFadeFrames)
 		{
-			/*moduleToDisable->Disable();
-			moduleToEnable->Enable();*/
+			moduleToDisable->Disable();
+			moduleToEnable->Enable();
 
 			currentStep = Fade_Step::FROM_BLACK;
 		}
@@ -71,7 +71,7 @@ bool FadeToBlack::PostUpdate()
 	return true;
 }
 
-bool FadeToBlack::FadeToBlackThis(Module* moduleToDisable, Module* moduleToEnable, float frames)
+bool FadeToBlack::StartFadeToBlack(Module* moduleToDisable, Module* moduleToEnable, float frames)
 {
 	bool ret = false;
 
