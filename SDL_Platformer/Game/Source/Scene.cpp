@@ -47,7 +47,8 @@ bool Scene::Start()
 
 	app->audio->PlayMusic("Assets/audio/music/music_bg.ogg");
 
-	Background=app->tex->Load("Assets/maps/Background.png");
+	Background = app->tex->Load("Assets/maps/Background.png");
+	Background2 = app->tex->Load("Assets/maps/Background2.png");
 
 	// Easter Egg - Press 5 when playing :D
 	easterEgg = false;
@@ -106,7 +107,8 @@ bool Scene::Update(float dt)
 	}
 
 
-	app->render->DrawTexture(Background, 0, -100); 
+	app->render->DrawTexture(Background, 0, 0); 
+	app->render->DrawTexture(Background2, 886, 0);
 
 	// Draw map
 	app->map->Draw();

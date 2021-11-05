@@ -42,6 +42,7 @@ public:
 	SDL_Texture* egg;
 	SDL_Texture* pandereta;
 	SDL_Texture* Background;
+	SDL_Texture* Background2;
 
 	bool easterEgg;
 
