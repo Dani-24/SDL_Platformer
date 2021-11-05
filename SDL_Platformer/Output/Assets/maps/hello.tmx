@@ -50,7 +50,9 @@
  <tileset firstgid="171" name="Snack_machine_Bench_Trash_bin (16 x 16)" tilewidth="16" tileheight="16" tilecount="32" columns="8">
   <image source="Snack_machine_Bench_Trash_bin (16 x 16).png" width="128" height="64"/>
  </tileset>
- <tileset firstgid="203" source="Blocks (16 x 16).tsx"/>
+ <tileset firstgid="203" name="Blocks (16 x 16)" tilewidth="16" tileheight="16" tilecount="66" columns="11">
+  <image source="Blocks (16 x 16).png" width="176" height="96"/>
+ </tileset>
  <tileset firstgid="269" name="Extra_plants (16 x 16)" tilewidth="16" tileheight="16" tilecount="50" columns="10">
   <image source="Extra_plants (16 x 16).png" width="160" height="80"/>
  </tileset>
