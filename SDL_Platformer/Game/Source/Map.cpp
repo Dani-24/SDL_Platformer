@@ -18,6 +18,22 @@ Map::Map(App* application, bool start_enabled) : Module(application, start_enabl
 Map::~Map()
 {}
 
+int Properties::GetProperty(const char* value, int defaultValue) const
+{
+	//...
+
+	ListItem<Property*>* item = list.start;
+
+	while (item)
+	{
+		if (item->data->name == value)
+			return item->data->value;
+		item = item->next;
+	}
+
+	return defaultValue;
+}
+
 // Called before render is available
 bool Map::Awake(pugi::xml_node& config)
 {
@@ -33,19 +49,6 @@ bool Map::Awake(pugi::xml_node& config)
 void Map::Draw()
 {
 	if (mapLoaded == false) return;
-
-    // L03: DONE 6: Iterate all tilesets and draw all their 
-    // images in 0,0 (you should have only one tileset for now)
-	/*
-    ListItem<TileSet*>* tileset;
-    tileset = mapData.tilesets.start;
-
-    while (tileset != NULL) 
-	{
-        app->render->DrawTexture(tileset->data->texture,0,0);
-        tileset = tileset->next;
-    }
-	*/
 	
 	// L04: TODO 5: Prepare the loop to draw all tiles in a layer + DrawTexture()
 	
@@ -53,29 +56,38 @@ void Map::Draw()
 	mapLayerItem = mapData.maplayers.start;
 
 	while (mapLayerItem != NULL) {
-		for (int x = 0; x < mapLayerItem->data->width; x++) 
-		{
-			for (int y = 0; y < mapLayerItem->data->height; y++)
+
+		if (mapLayerItem->data->properties.GetProperty("Draw") == 1) {
+
+			for (int x = 0; x < mapLayerItem->data->width; x++)
 			{
-				// L04: TODO 9: Complete the draw function
+				for (int y = 0; y < mapLayerItem->data->height; y++)
+				{
+					// L04: DONE 9: Complete the draw function
+					int gid = mapLayerItem->data->Get(x, y);
 
-				int gid = mapLayerItem->data->Get(x,y); 
-				SDL_Rect r = mapData.tilesets.start->data->GetTileRect(gid);
-				iPoint pos = MapToWorld(x, y);
+					if (gid > 0) {
 
-				app->render->DrawTexture(mapData.tilesets.start->data->texture,
-					pos.x,
-					pos.y,
-					&r);				 
+						//L06: TODO 4: Obtain the tile set using GetTilesetFromTileId
+						//now we always use the firt tileset in the list
+						//TileSet* tileset = mapData.tilesets.start->data;
+						TileSet* tileset = GetTilesetFromTileId(gid);
+
+						SDL_Rect r = tileset->GetTileRect(gid);
+						iPoint pos = MapToWorld(x, y);
+
+						app->render->DrawTexture(tileset->texture,
+							pos.x,
+							pos.y,
+							&r);
+					}
+
+				}
 			}
 		}
 
 		mapLayerItem = mapLayerItem->next;
-		
 	}
-
-
-
 }
 
 // L04: TODO 8: Create a method that translates x,y coordinates from map positions to world positions
@@ -87,6 +99,25 @@ iPoint Map::MapToWorld(int x, int y) const
 	ret.y = y * mapData.tileHeight;
 
 	return ret;
+}
+
+TileSet* Map::GetTilesetFromTileId(int id) const
+{
+	ListItem<TileSet*>* item = mapData.tilesets.start;
+	TileSet* set = item->data;
+
+	while (item)
+	{
+		if (id < item->data->firstgid)
+		{
+			set = item->prev->data;
+			break;
+		}
+		set = item->data;
+		item = item->next;
+	}
+
+	return set;
 }
 
 // Get relative Tile rectangle
@@ -276,6 +307,8 @@ bool Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 	layer->name = node.attribute("name").as_string();
 	layer->width = node.attribute("width").as_int();
 	layer->height = node.attribute("height").as_int();
+
+	LoadProperties(node, layer->properties);
 	
 	//Reserve the memory for the tile array
 	layer->data = new uint[layer->width * layer->height];
@@ -304,6 +337,22 @@ bool Map::LoadAllLayers(pugi::xml_node mapNode) {
 
 		//add the layer to the map
 		mapData.maplayers.add(mapLayer);
+	}
+
+	return ret;
+}
+
+bool Map::LoadProperties(pugi::xml_node& node, Properties& properties)
+{
+	bool ret = false;
+
+	for (pugi::xml_node propertieNode = node.child("properties").child("property"); propertieNode; propertieNode = propertieNode.next_sibling("property"))
+	{
+		Properties::Property* p = new Properties::Property();
+		p->name = propertieNode.attribute("name").as_string();
+		p->value = propertieNode.attribute("value").as_int();
+
+		properties.list.add(p);
 	}
 
 	return ret;
