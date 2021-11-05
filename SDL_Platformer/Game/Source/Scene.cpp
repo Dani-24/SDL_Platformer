@@ -48,6 +48,7 @@ bool Scene::Start()
 	easterEgg = false;
 	loadEgg = false;
 	EasterEgg();
+	
 
 	return true;
 }

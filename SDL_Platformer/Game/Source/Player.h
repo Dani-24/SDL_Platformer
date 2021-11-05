@@ -36,6 +36,8 @@ public:
 	// Collision callback, called when the player intersects with another collider
 	void OnCollision(Collider* c1, Collider* c2);
 
+	void jump_action();
+
 	void GodMode();
 	// Position of the player in the map
 
@@ -51,6 +53,7 @@ private:
 	// The speed in which we move the player (pixels per frame)
 	int speed;
 	int lowSpeed;
+
 
 	bool Player_Position;
 

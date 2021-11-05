@@ -266,12 +266,13 @@ bool Player:: Start()
 	app->player->position.y = 432;
 
 	app->render->camera.x = 0;
-	app->render->camera.y = 0;
+	app->render->camera.y = -432;
 
 	Player_Position = true;
 
 	return ret;
 }
+
 
 bool Player::Update(float dt)
 {
@@ -370,6 +371,8 @@ bool Player::Update(float dt)
 		}
 	}
 
+	
+
 	currentAnimation->Update();
 
 	return ret;
@@ -383,6 +386,8 @@ bool Player::PostUpdate() {
 		
 	return ret;
 }
+
+
 
 bool Player::CleanUp() {
 	// Clean player bullshit
