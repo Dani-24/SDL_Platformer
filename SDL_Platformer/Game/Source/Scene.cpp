@@ -10,6 +10,8 @@
 #include "Defs.h"
 #include "Log.h"
 #include "Player.h"
+#include "Collider.h"
+#include "Collision.h"
 
 Scene::Scene(App* application, bool start_enabled) : Module(application, start_enabled)
 {
@@ -39,10 +41,13 @@ bool Scene::Start()
 
 	// Load map
 	app->map->Load("hello.tmx");
-
+	app->map->CreateCollisions();
+	
 	// Load Assets
 
 	app->audio->PlayMusic("Assets/audio/music/music_bg.ogg");
+
+	Background=app->tex->Load("Assets/maps/Background.png");
 
 	// Easter Egg - Press 5 when playing :D
 	easterEgg = false;
@@ -70,20 +75,29 @@ bool Scene::Update(float dt)
 		app->SaveGameRequest();
 
 	if(app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-		app->render->camera.y += 2;
+		app->render->camera.y += 20;
 
 	if(app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-		app->render->camera.y -= 2;
+		app->render->camera.y -= 20;
 
 	if(app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-		app->render->camera.x += 2;
+		app->render->camera.x += 20;
 
 	if(app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-		app->render->camera.x -= 2;
+		app->render->camera.x -= 20;
 
 	if (app->input->GetKey(SDL_SCANCODE_5) == KEY_DOWN) {
 		easterEgg = !easterEgg;
 		EasterEgg();
+	}
+
+	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN) {
+		if (app->collision->debug == true) {
+			app->collision->debug = false;
+		}
+		else {
+			app->collision->debug = true;
+		}
 	}
 
 	// Back
@@ -91,8 +105,12 @@ bool Scene::Update(float dt)
 		app->fade->StartFadeToBlack(this, (Module*)app->sceneLogo, 60);
 	}
 
+
+	app->render->DrawTexture(Background, 0, -100); 
+
 	// Draw map
 	app->map->Draw();
+
 
 	// L03: DONE 7: Set the window title with map/tileset info
 	SString title("Map:%dx%d Tiles:%dx%d Tilesets:%d",
@@ -109,6 +127,7 @@ bool Scene::Update(float dt)
 bool Scene::PostUpdate()
 {
 	bool ret = true;
+
 
 	if (easterEgg == true) {
 
@@ -143,6 +162,7 @@ bool Scene::CleanUp()
 	app->tex->UnLoad(img);
 	app->tex->UnLoad(egg);
 	app->tex->UnLoad(pandereta);
+	app->tex->UnLoad(Background);
 	
 	eggAnim.DeleteAnim();
 	panderetAnim.DeleteAnim();

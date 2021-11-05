@@ -51,8 +51,8 @@ public:
 private:
 
 	// The speed in which we move the player (pixels per frame)
-	int speed;
-	int lowSpeed;
+	float speed;
+	float lowSpeed;
 
 
 	bool Player_Position;
@@ -81,7 +81,6 @@ private:
 
 	// The player's collider
 	Collider* collider;
-	Collider* colliderAttack;
 
 	// A flag to detect when the player has been destroyed
 	bool destroyed = false;

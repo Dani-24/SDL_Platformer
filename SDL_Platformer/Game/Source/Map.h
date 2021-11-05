@@ -7,6 +7,8 @@
 
 #include "PugiXml\src\pugixml.hpp"
 
+#define MAX_COLLIDERS 1000
+
 // L03: DONE 2: Create a struct to hold information for a TileSet
 // Ignore Terrain Types and Tile Types for now, but we want the image!
 struct TileSet
@@ -118,12 +120,17 @@ public:
 
     // Destructor
     virtual ~Map();
+	
 
     // Called before render is available
     bool Awake(pugi::xml_node& conf);
 
+	//bool Start();
+
     // Called each loop iteration
     void Draw();
+
+	void CreateCollisions();
 
     // Called before quitting
     bool CleanUp();
@@ -158,6 +165,7 @@ public:
 
 private:
 
+	Collider* MapColliders[MAX_COLLIDERS] = { nullptr };
     SString folder;
     bool mapLoaded;
 };

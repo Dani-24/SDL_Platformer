@@ -2,6 +2,7 @@
 #define __MODULE_H__
 
 #include "SString.h"
+#include "Collider.h"
 
 #include "PugiXml/src/pugixml.hpp"
 
@@ -62,6 +63,11 @@ public:
 	virtual bool CleanUp()
 	{
 		return true;
+	}
+
+	virtual void OnCollision(Collider* c1, Collider* c2) 
+	{
+
 	}
 
     // L02: DONE 2: Create new virtual methods to Load / Save state

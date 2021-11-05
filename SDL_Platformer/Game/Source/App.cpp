@@ -12,6 +12,7 @@
 #include "FadeToBlack.h"
 #include "Defs.h"
 #include "Log.h"
+#include "Collision.h"
 #include <iostream>
 #include <sstream>
 
@@ -31,6 +32,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	scene = new Scene(this, false);
 	player = new Player(this, false);
 	map = new Map(this);
+	collision = new Collision(this);
 	
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -39,12 +41,14 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(tex);
 	AddModule(audio);
 	AddModule(fade);
+	AddModule(collision);
 
 	AddModule(player);
 	AddModule(sceneLogo);
 	AddModule(sceneTitle);
 	AddModule(scene);
 	AddModule(map);
+	
 
 	// Render last to swap buffer
 	AddModule(render);

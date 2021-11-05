@@ -7,6 +7,8 @@
 #include "Audio.h"
 #include "Input.h"
 #include "Animation.h"
+#include "Collision.h"
+#include "Collider.h"
 
 Player::Player(App* application, bool start_enabled) : Module(application, start_enabled)
 {
@@ -98,7 +100,7 @@ Player::Player(App* application, bool start_enabled) : Module(application, start
 	runR.PushBack({ 128,288,32,32 });
 	runR.PushBack({ 160,288,32,32 });
 	runR.loop = true;
-	runR.speed = 0.3;
+	runR.speed = 0.2;
 
 	//throw ->
 	throwR.PushBack({ 0,320,32,32 });
@@ -207,7 +209,7 @@ Player::Player(App* application, bool start_enabled) : Module(application, start
 	runL.PushBack({ 96,704,32,32 });
 	runL.PushBack({ 64,704,32,32 });
 	runL.loop = true;
-	runL.speed = 0.3;
+	runL.speed = 0.2;
 
 	//throw <-
 	throwL.PushBack({ 224,736,32,32 });
@@ -250,13 +252,12 @@ bool Player:: Start()
 	// Inicializar variables
 	Player_Position = true;
 	death = false;
-	speed = 3;
+	speed = 2;
 	lowSpeed = 1;
 	god = false;
 	HP = Max_HP;
 	destroyed = false;
 	collider = nullptr;
-	colliderAttack = nullptr;
 
 	// Load assets
 	texture = app->tex->Load("Assets/textures/player.png");
@@ -264,6 +265,9 @@ bool Player:: Start()
 
 	app->player->position.x = 32;
 	app->player->position.y = 432;
+
+	collider = app->collision->AddCollider({ position.x, position.y+2, 30, 30 }, Collider::Type::PLAYER);
+
 
 	app->render->camera.x = 0;
 	app->render->camera.y = -432;
@@ -277,6 +281,17 @@ bool Player:: Start()
 bool Player::Update(float dt)
 {
 	bool ret = true;
+
+	collider->SetPos(position.x, position.y+2);
+
+	//if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN) {
+	//	if (app->collision->debug == true) {
+	//		app->collision->debug = false;
+	//	}
+	//	else {
+	//		app->collision->debug = true;
+	//	}
+	//}
 
 	//run ->
 	if ((app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT))
@@ -387,7 +402,10 @@ bool Player::PostUpdate() {
 	return ret;
 }
 
+void Player::OnCollision(Collider* c1, Collider* c2)
+{
 
+}
 
 bool Player::CleanUp() {
 	// Clean player bullshit

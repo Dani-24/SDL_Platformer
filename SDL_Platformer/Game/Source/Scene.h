@@ -41,6 +41,7 @@ public:
 	Animation panderetAnim;
 	SDL_Texture* egg;
 	SDL_Texture* pandereta;
+	SDL_Texture* Background;
 
 	bool easterEgg;
 
