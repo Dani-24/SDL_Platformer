@@ -282,17 +282,9 @@ bool Player::Update(float dt)
 {
 	bool ret = true;
 
+	fall = 1;
+
 	collider->SetPos(position.x, position.y+2);
-
-	//if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN) {
-	//	if (app->collision->debug == true) {
-	//		app->collision->debug = false;
-	//	}
-	//	else {
-	//		app->collision->debug = true;
-	//	}
-	//}
-
 	//run ->
 	if ((app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT))
 	{
@@ -362,6 +354,29 @@ bool Player::Update(float dt)
 		}
 	}
 
+	if ((app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT))
+	{
+
+		if (falling == false)
+		{
+			if (jump == 0)
+			{
+				falling == true;
+			}
+			else
+			{
+				position.y -= jump;
+				jump -= gravetat;
+			}
+		}
+
+	}
+	
+	if (falling == true) 
+	{
+		position.y += fall;
+		fall += gravetat;
+	}
 
 	//idle
 	if ((app->input->GetKey(SDL_SCANCODE_S) == KEY_IDLE
@@ -371,6 +386,9 @@ bool Player::Update(float dt)
 		&& app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE
 		&& app->input->GetKey(SDL_SCANCODE_O) == KEY_IDLE))
 	{
+		if (jump != 0 && jump != 4) {
+			falling = true;
+		}
 		if (currentAnimation != &idleR && Player_Position == true)
 		{
 			idleR.Reset();
@@ -404,7 +422,11 @@ bool Player::PostUpdate() {
 
 void Player::OnCollision(Collider* c1, Collider* c2)
 {
-
+	if (c1->type == Collider::Type::PLAYER && c2->type == Collider::Type::GROUND) {
+		falling = false;
+		jump = 4;
+	}
+	
 }
 
 bool Player::CleanUp() {

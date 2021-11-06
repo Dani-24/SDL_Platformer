@@ -34,7 +34,7 @@ public:
 	bool PostUpdate();
 
 	// Collision callback, called when the player intersects with another collider
-	void OnCollision(Collider* c1, Collider* c2);
+	void OnCollision(Collider* c1, Collider* c2) override;
 
 	void jump_action();
 
@@ -53,7 +53,10 @@ private:
 	// The speed in which we move the player (pixels per frame)
 	float speed;
 	float lowSpeed;
-
+	float fall = 1;
+	float jump = 4;
+	float gravetat = 0.2;
+	bool falling = false;
 
 	bool Player_Position;
 
