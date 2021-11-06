@@ -53,7 +53,7 @@ private:
 	// The speed in which we move the player (pixels per frame)
 	float speed;
 	float lowSpeed;
-	float fall = 1;
+	float fall = 4;
 	float jump = 4;
 	float gravetat = 0.2;
 	bool falling = false;

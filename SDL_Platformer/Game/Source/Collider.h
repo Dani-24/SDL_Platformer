@@ -2,6 +2,7 @@
 #define __COLLIDER_H__
 
 #include "SDL/include/SDL_Rect.h"
+#define MAX_LISTENERS 400
 
 class Module;
 
@@ -23,11 +24,13 @@ struct Collider
 
 	bool Intersects(const SDL_Rect& r) const;
 
+	void Collider::AddListener(Module* listener);
+
 	//Variables
 	SDL_Rect rect;
 	bool pendingToDelete = false;
 	Type type;
-	Module* listener = nullptr;
+	Module* listeners[MAX_LISTENERS] = { nullptr };
 };
 
 

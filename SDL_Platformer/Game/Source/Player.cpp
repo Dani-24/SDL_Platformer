@@ -423,10 +423,11 @@ bool Player::PostUpdate() {
 void Player::OnCollision(Collider* c1, Collider* c2)
 {
 	if (c1->type == Collider::Type::PLAYER && c2->type == Collider::Type::GROUND) {
+
 		falling = false;
 		jump = 4;
+		fall = 4;
 	}
-	
 }
 
 bool Player::CleanUp() {
