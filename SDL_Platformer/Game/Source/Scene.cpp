@@ -165,6 +165,7 @@ bool Scene::CleanUp()
 	app->tex->UnLoad(egg);
 	app->tex->UnLoad(pandereta);
 	app->tex->UnLoad(Background);
+	app->tex->UnLoad(Background2);
 	
 	eggAnim.DeleteAnim();
 	panderetAnim.DeleteAnim();
