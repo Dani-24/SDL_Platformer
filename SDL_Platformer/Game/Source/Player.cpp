@@ -76,11 +76,14 @@ Player::Player(App* application, bool start_enabled) : Module(application, start
 	jumpR.PushBack({ 64,224,32,32 });
 	jumpR.PushBack({ 96,224,32,32 });
 	jumpR.PushBack({ 128,224,32,32 });
-	jumpR.PushBack({ 160,224,32,32 });
-	jumpR.PushBack({ 192,224,32,32 });
-	jumpR.PushBack({ 224,224,32,32 });
 	jumpR.loop = false;
 	jumpR.speed = 0.2;
+
+	fallR.PushBack({ 160,224,32,32 });
+	fallR.PushBack({ 192,224,32,32 });
+	fallR.PushBack({ 224,224,32,32 });
+	fallR.loop = false;
+	fallR.speed = 0.2;
 
 	//push ->
 	pushR.PushBack({ 0,256,32,32 });
@@ -185,11 +188,15 @@ Player::Player(App* application, bool start_enabled) : Module(application, start
 	jumpL.PushBack({ 160,640,32,32 });
 	jumpL.PushBack({ 128,640,32,32 });
 	jumpL.PushBack({ 96,640,32,32 });
-	jumpL.PushBack({ 64,640,32,32 });
-	jumpL.PushBack({ 32,640,32,32 });
-	jumpL.PushBack({ 0,640,32,32 });
 	jumpL.loop = true;
 	jumpL.speed = 0.3;
+
+
+	fallL.PushBack({ 64,640,32,32 });
+	fallL.PushBack({ 32,640,32,32 });
+	fallL.PushBack({ 0,640,32,32 });
+	fallL.loop = true;
+	fallL.speed = 0.3;
 
 	//push <-
 	pushL.PushBack({ 224,672,32,32 });
@@ -264,9 +271,9 @@ bool Player:: Start()
 	currentAnimation = &idleR;
 
 	app->player->position.x = 32;
-	app->player->position.y = 432;
+	app->player->position.y = 428;
 
-	collider = app->collision->AddCollider({ position.x, position.y+2, 30, 30 }, Collider::Type::PLAYER, this);
+	collider = app->collision->AddCollider({ position.x, position.y+2, 30, 32 }, Collider::Type::PLAYER, this);
 
 
 	app->render->camera.x = 0;
@@ -282,7 +289,7 @@ bool Player::Update(float dt)
 {
 	bool ret = true;
 
-	fall = 1;
+	falling == true;
 
 	collider->SetPos(position.x, position.y+2);
 	//run ->
@@ -355,7 +362,7 @@ bool Player::Update(float dt)
 	}
 
 	//Jump
-	if ((app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && falling == false))
+	if ((app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT && falling == false))
 	{
 		if (jump == 0)
 		{
@@ -363,6 +370,7 @@ bool Player::Update(float dt)
 		}
 		else
 		{
+			falling == false;
 			position.y -= jump;
 			jump -= gravetat;
 		}
@@ -376,6 +384,11 @@ bool Player::Update(float dt)
 		fall += gravetat;
 	}
 
+	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE) {
+
+		falling = true;
+	}
+
 	//idle
 	if ((app->input->GetKey(SDL_SCANCODE_S) == KEY_IDLE
 		&& app->input->GetKey(SDL_SCANCODE_W) == KEY_IDLE
@@ -384,9 +397,6 @@ bool Player::Update(float dt)
 		&& app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE
 		&& app->input->GetKey(SDL_SCANCODE_O) == KEY_IDLE))
 	{
-		if (jump != 0 && jump != 4) {
-			falling = true;
-		}
 		if (currentAnimation != &idleR && Player_Position == true)
 		{
 			idleR.Reset();
@@ -402,7 +412,13 @@ bool Player::Update(float dt)
 		}
 	}
 
-	
+	if (position.y > 640) {
+		death = true;
+	}
+
+	if (position.x < 48 && position.y < 64) {
+		win = true;
+	}
 
 	currentAnimation->Update();
 
