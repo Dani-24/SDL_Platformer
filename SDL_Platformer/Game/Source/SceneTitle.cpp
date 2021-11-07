@@ -46,6 +46,7 @@ bool SceneTitle::Start()
 	app->audio->PlayMusic("Assets/audio/music/music_title.ogg");
 
 	fxEnter = app->audio->LoadFx("Assets/audio/fx/enter.wav");
+	app->render->camera.x = 0; app->render->camera.y = 0;
 
 	return true;
 }
@@ -71,6 +72,10 @@ bool SceneTitle::Update(float dt)
 		if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
 			app->audio->PlayFx(fxEnter);
 			app->fade->StartFadeToBlack(this, (Module*)app->scene, 0);
+		}
+
+		if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {
+			return false; // QUIT
 		}
 	}
 

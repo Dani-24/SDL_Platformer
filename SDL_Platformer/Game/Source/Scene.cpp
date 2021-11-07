@@ -63,6 +63,10 @@ bool Scene::Start()
 // Called each loop iteration
 bool Scene::PreUpdate()
 {
+	LOG("pos y: %d", app->player->position.y);
+	if (app->player->position.y > 590) {
+		app->player->death = true;
+	}
 	return true;
 }
 
@@ -108,6 +112,11 @@ bool Scene::Update(float dt)
 	// Back
 	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {
 		app->fade->StartFadeToBlack(this, (Module*)app->sceneTitle, 10);
+	}
+
+
+	if (app->player->death == true) {
+		app->fade->StartFadeToBlack(this, (Module*)app->ending, 10);
 	}
 
 	return true;
@@ -169,7 +178,6 @@ bool Scene::CleanUp()
 {
 	LOG("Freeing scene");
 
-	app->render->camera.x = 0; app->render->camera.y = 0;
 	app->collision->debug = false;
 
 	app->tex->UnLoad(img);

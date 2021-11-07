@@ -8,6 +8,7 @@
 #include "Scene.h"
 #include "SceneTitle.h"
 #include "SceneLogo.h"
+#include "SceneEnding.h"
 #include "Map.h"
 #include "FadeToBlack.h"
 #include "Defs.h"
@@ -33,6 +34,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	player = new Player(this, false);
 	map = new Map(this);
 	collision = new Collision(this);
+	ending = new SceneEnding(this, false);
 	
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -45,6 +47,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(sceneLogo);
 	AddModule(sceneTitle);
 	AddModule(scene);
+	AddModule(ending);
 	AddModule(map);
 
 	AddModule(player);

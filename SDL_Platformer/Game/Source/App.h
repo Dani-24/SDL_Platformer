@@ -22,6 +22,7 @@ class SceneLogo;
 class Map;
 class FadeToBlack;
 class Collision;
+class SceneEnding;
 
 class App
 {
@@ -39,6 +40,7 @@ public:
 	SceneTitle* sceneTitle;
 	SceneLogo* sceneLogo;
 	Collision* collision;
+	SceneEnding* ending;
 
 	Map* map;
 
