@@ -354,19 +354,19 @@ bool Player::Update(float dt)
 		}
 	}
 
-	if ((app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN))
+	//Jump
+	if ((app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && falling == false))
 	{
-		while (falling == false) {
-			if (jump == 0)
-			{
-				falling == true;
-			}
-			else
-			{
-				position.y -= jump;
-				jump -= gravetat;
-			}
+		if (jump == 0)
+		{
+			falling == true;
 		}
+		else
+		{
+			position.y -= jump;
+			jump -= gravetat;
+		}
+	
 
 	}
 	
