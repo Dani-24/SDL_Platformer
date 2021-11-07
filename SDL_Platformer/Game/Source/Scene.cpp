@@ -107,8 +107,6 @@ bool Scene::Update(float dt)
 
 	// Back
 	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {
-		app->render->camera.x = 0; app->render->camera.y = 0;
-		app->collision->debug = false;
 		app->fade->StartFadeToBlack(this, (Module*)app->sceneTitle, 10);
 	}
 
@@ -170,6 +168,9 @@ bool Scene::PostUpdate()
 bool Scene::CleanUp()
 {
 	LOG("Freeing scene");
+
+	app->render->camera.x = 0; app->render->camera.y = 0;
+	app->collision->debug = false;
 
 	app->tex->UnLoad(img);
 	app->tex->UnLoad(egg);
