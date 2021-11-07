@@ -137,7 +137,7 @@ void Map::CreateCollisions()
 							&r);
 						int i = 0;
 						//app->collision->colliders[i] = app->collision->AddCollider({ pos.x, pos.y, 16, 16 }, Collider::Type::GROUND);
-						MapColliders[i] = app->collision->AddCollider({ pos.x, pos.y, 16, 16 }, Collider::Type::GROUND);
+						MapColliders[i] = app->collision->AddCollider({ pos.x, pos.y, 16, 16 }, Collider::Type::GROUND, this);
 						i++;
 						
 					}

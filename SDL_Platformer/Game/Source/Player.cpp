@@ -266,7 +266,7 @@ bool Player:: Start()
 	app->player->position.x = 32;
 	app->player->position.y = 432;
 
-	collider = app->collision->AddCollider({ position.x, position.y+2, 30, 30 }, Collider::Type::PLAYER);
+	collider = app->collision->AddCollider({ position.x, position.y+2, 30, 30 }, Collider::Type::PLAYER, this);
 
 
 	app->render->camera.x = 0;
@@ -354,11 +354,9 @@ bool Player::Update(float dt)
 		}
 	}
 
-	if ((app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT))
+	if ((app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN))
 	{
-
-		if (falling == false)
-		{
+		while (falling == false) {
 			if (jump == 0)
 			{
 				falling == true;
