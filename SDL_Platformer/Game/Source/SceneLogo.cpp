@@ -33,7 +33,7 @@ bool SceneLogo::Start()
 	count = 0;
 	logo = app->tex->Load("Assets/textures/logo.png");
 
-	app->audio->PlayMusic("Assets/audio/music/logoMusic.ogg");
+	app->audio->PlayMusic("Assets/audio/music/music_logo.ogg");
 
 	return true;
 }
@@ -47,7 +47,7 @@ bool SceneLogo::PreUpdate()
 // Called each loop iteration
 bool SceneLogo::Update(float dt)
 {
-	if (count > 500 || app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
+	if (count > 100) {
 		app->fade->StartFadeToBlack(this, (Module*)app->sceneTitle, 60);
 	}
 	else {

@@ -33,7 +33,21 @@ public:
 	bool CleanUp();
 
 private:
-	SDL_Texture* img;
+
+	// Textures 
+
+	SDL_Texture* bg;
+	SDL_Texture* bgSky;
+
+	float scroller[4];
+
+	SDL_Texture* titleText;
+	float titleY; bool titleMove;
+
+	SDL_Texture* pressEnter;
+
+	uint fxEnter;
+
 };
 
 #endif // __SCENETITLE_H__
