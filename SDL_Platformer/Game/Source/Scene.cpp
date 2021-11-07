@@ -109,7 +109,7 @@ bool Scene::Update(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {
 		app->render->camera.x = 0; app->render->camera.y = 0;
 		app->collision->debug = false;
-		app->fade->StartFadeToBlack(this, (Module*)app->sceneTitle, 60);
+		app->fade->StartFadeToBlack(this, (Module*)app->sceneTitle, 10);
 	}
 
 	return true;
