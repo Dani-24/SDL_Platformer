@@ -13,6 +13,7 @@ struct Collider
 		NONE = -1,
 		PLAYER,
 		GROUND,
+		FALL,
 
 		MAX
 	};

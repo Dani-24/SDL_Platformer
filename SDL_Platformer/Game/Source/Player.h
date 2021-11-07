@@ -45,6 +45,7 @@ public:
 
 	iPoint position;
 	bool death;
+	bool win = false;
 
 
 
@@ -76,6 +77,7 @@ private:
 		hitR, hitL,
 		idleR, idleL,
 		jumpR, jumpL,
+		fallR, fallL,
 		pushR, pushL,
 		runR, runL,
 		throwR, throwL,

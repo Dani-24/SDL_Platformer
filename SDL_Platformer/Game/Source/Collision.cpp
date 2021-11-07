@@ -13,9 +13,15 @@ Collision::Collision(App* application, bool start_enabled) : Module(application,
 
 	matrix[Collider::Type::PLAYER][Collider::Type::PLAYER] = false;
 	matrix[Collider::Type::PLAYER][Collider::Type::GROUND] = true;
+	matrix[Collider::Type::PLAYER][Collider::Type::FALL] = true;
 
 	matrix[Collider::Type::GROUND][Collider::Type::GROUND] = false;
 	matrix[Collider::Type::GROUND][Collider::Type::PLAYER] = true;
+	matrix[Collider::Type::GROUND][Collider::Type::FALL] = false;
+
+	matrix[Collider::Type::FALL][Collider::Type::FALL] = false;
+	matrix[Collider::Type::FALL][Collider::Type::PLAYER] = true;
+	matrix[Collider::Type::FALL][Collider::Type::GROUND] = false;
 }
 
 // Destructor
@@ -195,6 +201,9 @@ void Collision::DebugDraw()
 			break;
 		case Collider::Type::GROUND: // red
 			app->render->DrawRectangle(colliders[i]->rect, 255, 0, 0, alpha);
+			break;
+		case Collider::Type::FALL: // green
+			app->render->DrawRectangle(colliders[i]->rect, 0, 255, 0, alpha);
 			break;
 		}
 	}
