@@ -58,6 +58,8 @@ private:
 	float jump = 4;
 	float gravetat = 0.2;
 	bool falling = false;
+	bool LockR = false;
+	bool LockL = false;
 
 	bool Player_Position;
 
@@ -86,6 +88,8 @@ private:
 
 	// The player's collider
 	Collider* collider;
+	Collider* colliderR;
+	Collider* colliderL;
 
 	// A flag to detect when the player has been destroyed
 	bool destroyed = false;

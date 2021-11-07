@@ -12,16 +12,36 @@ Collision::Collision(App* application, bool start_enabled) : Module(application,
 		colliders[i] = nullptr;
 
 	matrix[Collider::Type::PLAYER][Collider::Type::PLAYER] = false;
+	matrix[Collider::Type::PLAYER][Collider::Type::PLAYERD] = false;
+	matrix[Collider::Type::PLAYER][Collider::Type::PLAYERL] = false;
 	matrix[Collider::Type::PLAYER][Collider::Type::GROUND] = true;
-	matrix[Collider::Type::PLAYER][Collider::Type::FALL] = true;
+	//matrix[Collider::Type::PLAYER][Collider::Type::FALL] = true;
+
+	matrix[Collider::Type::PLAYERD][Collider::Type::PLAYER] = false;
+	matrix[Collider::Type::PLAYERD][Collider::Type::PLAYERD] = false;
+	matrix[Collider::Type::PLAYERD][Collider::Type::PLAYERL] = false;
+	matrix[Collider::Type::PLAYERD][Collider::Type::GROUND] = true;
+	//matrix[Collider::Type::PLAYERDRETA][Collider::Type::FALL] = true;
+
+
+	matrix[Collider::Type::PLAYERL][Collider::Type::PLAYERD] = false;
+	matrix[Collider::Type::PLAYERL][Collider::Type::PLAYERL] = false;
+	matrix[Collider::Type::PLAYERL][Collider::Type::PLAYER] = false;
+	matrix[Collider::Type::PLAYERL][Collider::Type::GROUND] = true;
+	//matrix[Collider::Type::PLAYERUP][Collider::Type::FALL] = true;
 
 	matrix[Collider::Type::GROUND][Collider::Type::GROUND] = false;
 	matrix[Collider::Type::GROUND][Collider::Type::PLAYER] = true;
-	matrix[Collider::Type::GROUND][Collider::Type::FALL] = false;
+	//matrix[Collider::Type::GROUND][Collider::Type::FALL] = false;
+	matrix[Collider::Type::GROUND][Collider::Type::PLAYERD] = true;
+	matrix[Collider::Type::GROUND][Collider::Type::PLAYERL] = true;
 
-	matrix[Collider::Type::FALL][Collider::Type::FALL] = false;
+	/*matrix[Collider::Type::FALL][Collider::Type::FALL] = false;
 	matrix[Collider::Type::FALL][Collider::Type::PLAYER] = true;
 	matrix[Collider::Type::FALL][Collider::Type::GROUND] = false;
+	matrix[Collider::Type::PLAYERUP][Collider::Type::PLAYERDRETA] = false;
+	matrix[Collider::Type::PLAYERUP][Collider::Type::PLAYERESQ] = false;
+	matrix[Collider::Type::PLAYERUP][Collider::Type::PLAYERUP] = false;*/
 }
 
 // Destructor
@@ -199,12 +219,18 @@ void Collision::DebugDraw()
 		case Collider::Type::PLAYER: // blue
 			app->render->DrawRectangle(colliders[i]->rect, 0, 0, 255, alpha);
 			break;
+		case Collider::Type::PLAYERD: // GREEN
+			app->render->DrawRectangle(colliders[i]->rect, 0, 255, 0, alpha);
+			break;
+		case Collider::Type::PLAYERL: // blue
+			app->render->DrawRectangle(colliders[i]->rect, 0, 255, 255, alpha);
+			break;
 		case Collider::Type::GROUND: // red
 			app->render->DrawRectangle(colliders[i]->rect, 255, 0, 0, alpha);
 			break;
-		case Collider::Type::FALL: // green
-			app->render->DrawRectangle(colliders[i]->rect, 0, 255, 0, alpha);
-			break;
+		//case Collider::Type::FALL: // green
+		//	app->render->DrawRectangle(colliders[i]->rect, 0, 255, 0, alpha);
+		//	break;
 		}
 	}
 }

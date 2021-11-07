@@ -12,8 +12,10 @@ struct Collider
 	{
 		NONE = -1,
 		PLAYER,
+		PLAYERD,
+		PLAYERL,
 		GROUND,
-		FALL,
+		//FALL,
 
 		MAX
 	};

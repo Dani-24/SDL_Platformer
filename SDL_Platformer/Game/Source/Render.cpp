@@ -71,6 +71,8 @@ bool Render::PreUpdate()
 
 bool Render::Update(float dt)
 {
+
+
 	return true;
 }
 

@@ -273,11 +273,13 @@ bool Player:: Start()
 	app->player->position.x = 32;
 	app->player->position.y = 428;
 
-	collider = app->collision->AddCollider({ position.x, position.y+2, 30, 32 }, Collider::Type::PLAYER, this);
+	collider = app->collision->AddCollider({ position.x+5, position.y+30, 25, 10 }, Collider::Type::PLAYER, this);
+	colliderR = app->collision->AddCollider({ position.x+22, position.y+2, 10, 20 }, Collider::Type::PLAYERD, this);
+	colliderL = app->collision->AddCollider({ position.x+5, position.y + 2, 10, 20 }, Collider::Type::PLAYERL, this);
 
 
-	app->render->camera.x = 0;
-	app->render->camera.y = -432;
+	/*app->render->camera.x = 0;
+	app->render->camera.y = -432;*/
 
 	Player_Position = true;
 
@@ -290,14 +292,40 @@ bool Player::Update(float dt)
 	bool ret = true;
 
 	falling == true;
+	LockL = false;
+	LockR = false;
 
-	collider->SetPos(position.x, position.y+2);
+	collider->SetPos(position.x+5, position.y+26);
+	colliderR->SetPos(position.x + 22, position.y + 2);
+	colliderL->SetPos(position.x + 5, position.y + 2);
+	//Camera
+	app->render->camera.x = -((app->player->position.x * 2) - 1280 / 2);
+	app->render->camera.y = -((app->player->position.y * 2) - 720 / 2);
+
+	//Keep the camera in bounds.
+	/*if (app->render->camera.x < 0)
+	{
+		app->render->camera.x = 0;
+	}
+	if (app->render->camera.y < 0)
+	{
+		app->render->camera.y = 0;
+	}
+	if (app->render->camera.x > 1600 - app->render->camera.w)
+	{
+		app->render->camera.x = 1600 - app->render->camera.w;
+	}
+	if (app->render->camera.y > 640 - app->render->camera.h)
+	{
+		app->render->camera.y = 640 - app->render->camera.h;
+	}*/
 	//run ->
-	if ((app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT))
+	if ((app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) && LockR == false)
 	{
 		//walk ->
 		if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
 			position.x += lowSpeed;
+
 			if (currentAnimation != &walkR)
 			{
 				walkR.Reset();
@@ -317,7 +345,7 @@ bool Player::Update(float dt)
 	}
 
 	//run <-
-	if ((app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT))
+	if ((app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) && LockL == false)
 	{
 		//walk <-
 		if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
@@ -441,6 +469,14 @@ void Player::OnCollision(Collider* c1, Collider* c2)
 		falling = false;
 		jump = 4;
 		fall = 4;
+	}
+
+	if (c1->type == Collider::Type::PLAYERD && c2->type == Collider::Type::GROUND) {
+		LockR = true;
+	}
+
+	if (c1->type == Collider::Type::PLAYERL && c2->type == Collider::Type::GROUND) {
+		LockL = true;
 	}
 }
 
