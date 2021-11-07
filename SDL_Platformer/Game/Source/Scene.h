@@ -42,7 +42,8 @@ public:
 	SDL_Texture* egg;
 	SDL_Texture* pandereta;
 	SDL_Texture* Background;
-	SDL_Texture* Background2;
+
+	float bgScrollX[5];
 
 	bool easterEgg;
 

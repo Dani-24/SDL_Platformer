@@ -48,7 +48,8 @@ bool Scene::Start()
 	app->audio->PlayMusic("Assets/audio/music/music_bg.ogg");
 
 	Background = app->tex->Load("Assets/maps/Background.png");
-	Background2 = app->tex->Load("Assets/maps/Background2.png");
+	bgScrollX[0] = 0; bgScrollX[1] = 886; bgScrollX[2] = 886 * 2; bgScrollX[3] = 886 * 3;
+	bgScrollX[4] = 886 * 4; bgScrollX[5] = 886 * 5;
 
 	// Easter Egg - Press 5 when playing :D
 	easterEgg = false;
@@ -68,13 +69,14 @@ bool Scene::PreUpdate()
 // Called each loop iteration
 bool Scene::Update(float dt)
 {
-    // L02: DONE 3: Request Load / Save when pressing L/S
+    // Request Load / Save when pressing L/S
 	if(app->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
 		app->LoadGameRequest();
 
 	if(app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN)
 		app->SaveGameRequest();
 
+	// Camera Movement
 	if(app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
 		app->render->camera.y += 20;
 
@@ -87,11 +89,13 @@ bool Scene::Update(float dt)
 	if(app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 		app->render->camera.x -= 20;
 
+	// EasterEGG()
 	if (app->input->GetKey(SDL_SCANCODE_5) == KEY_DOWN) {
 		easterEgg = !easterEgg;
 		EasterEgg();
 	}
 
+	// Debug
 	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN) {
 		if (app->collision->debug == true) {
 			app->collision->debug = false;
@@ -106,22 +110,6 @@ bool Scene::Update(float dt)
 		app->fade->StartFadeToBlack(this, (Module*)app->sceneLogo, 60);
 	}
 
-
-	app->render->DrawTexture(Background, 0, 0); 
-	app->render->DrawTexture(Background2, 886, 0);
-
-	// Draw map
-	app->map->Draw();
-
-
-	// L03: DONE 7: Set the window title with map/tileset info
-	SString title("Map:%dx%d Tiles:%dx%d Tilesets:%d",
-				   app->map->mapData.width, app->map->mapData.height,
-				   app->map->mapData.tileWidth, app->map->mapData.tileHeight,
-				   app->map->mapData.tilesets.count());
-
-	app->win->SetTitle(title.GetString());
-
 	return true;
 }
 
@@ -130,6 +118,15 @@ bool Scene::PostUpdate()
 {
 	bool ret = true;
 
+	for (int i = 0; i < 5; i++) {
+		if (bgScrollX[i] < -886) {
+			bgScrollX[i] = 886 *  4;
+		}
+		else {
+			bgScrollX[i] -= 0.5f;
+			app->render->DrawTexture(Background, bgScrollX[i], 0);
+		}
+	}
 
 	if (easterEgg == true) {
 
@@ -153,6 +150,17 @@ bool Scene::PostUpdate()
 		}
 	}
 
+	// Draw map
+	app->map->Draw();
+
+	// L03: DONE 7: Set the window title with map/tileset info
+	SString title("Map:%dx%d Tiles:%dx%d Tilesets:%d",
+		app->map->mapData.width, app->map->mapData.height,
+		app->map->mapData.tileWidth, app->map->mapData.tileHeight,
+		app->map->mapData.tilesets.count());
+
+	app->win->SetTitle(title.GetString());
+
 	return ret;
 }
 
@@ -165,7 +173,6 @@ bool Scene::CleanUp()
 	app->tex->UnLoad(egg);
 	app->tex->UnLoad(pandereta);
 	app->tex->UnLoad(Background);
-	app->tex->UnLoad(Background2);
 	
 	eggAnim.DeleteAnim();
 	panderetAnim.DeleteAnim();

@@ -59,18 +59,19 @@ bool SceneTitle::PreUpdate()
 // Called each loop iteration
 bool SceneTitle::Update(float dt)
 {
-	// De momento no hay nada asi q pasa a la scene
-	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
-		app->audio->PlayFx(fxEnter);
-		app->fade->StartFadeToBlack(this, (Module*)app->scene, 0);
-	}
-
+	// Movimiento del titulo
 	if (titleY < 50) {
 		titleY += 1;
 		titleMove = true;
 	}
 	else {
 		titleMove = false;
+
+		// pasar de escena cuando se pare el titulo si pulsas enter
+		if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
+			app->audio->PlayFx(fxEnter);
+			app->fade->StartFadeToBlack(this, (Module*)app->scene, 0);
+		}
 	}
 
 	return true;
