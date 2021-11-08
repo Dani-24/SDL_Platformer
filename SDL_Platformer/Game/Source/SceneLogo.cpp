@@ -30,10 +30,14 @@ bool SceneLogo::Awake()
 // Called before the first frame
 bool SceneLogo::Start()
 {
+	// Textures
 	count = 0;
 	logo = app->tex->Load("Assets/textures/logo.png");
 
+
+	// Audio
 	app->audio->PlayMusic("Assets/audio/music/music_logo.ogg");
+	fxEnter = app->audio->LoadFx("Assets/audio/fx/enter.wav");
 
 	return true;
 }
@@ -59,17 +63,23 @@ bool SceneLogo::Update(float dt)
 		return false;
 	}
 
+	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
+		app->audio->PlayFx(fxEnter);
+		app->fade->StartFadeToBlack(this, (Module*)app->scene, 0);
+		LOG("aaaaa");
+	}
+
 	return true;
 }
 
 // Called each loop iteration
 bool SceneLogo::PostUpdate()
 {
-
-	app->render->DrawTexture(logo, 0,0);
-
 	bool ret = true;
 
+	app->render->DrawTexture(logo, 0,0);
+	fxEnter = 0;
+	
 	return ret;
 }
 

@@ -48,8 +48,8 @@ bool Scene::Start()
 	app->audio->PlayMusic("Assets/audio/music/music_bg.ogg");
 
 	Background = app->tex->Load("Assets/maps/Background.png");
-	bgScrollX[0] = 0; bgScrollX[1] = 886; bgScrollX[2] = 886 * 2; bgScrollX[3] = 886 * 3;
-	bgScrollX[4] = 886 * 4; bgScrollX[5] = 886 * 5;
+	bgScrollX[0] = -886; bgScrollX[1] = 0; bgScrollX[2] = 886; bgScrollX[3] = 886 * 2;
+	bgScrollX[4] = 886 * 3; bgScrollX[5] = 886 * 4;
 
 	// Easter Egg - Press 5 when playing :D
 	easterEgg = false;
@@ -128,12 +128,12 @@ bool Scene::PostUpdate()
 	bool ret = true;
 
 	for (int i = 0; i < 5; i++) {
-		if (bgScrollX[i] < -886) {
-			bgScrollX[i] = 886 *  4;
+		if (bgScrollX[i] <= -(886*2)) {
+			bgScrollX[i] = 886 * 3;
 		}
 		else {
 			bgScrollX[i] -= 0.5f;
-			app->render->DrawTexture(Background, bgScrollX[i], 0);
+			app->render->DrawTexture(Background, bgScrollX[i], 50);
 		}
 	}
 

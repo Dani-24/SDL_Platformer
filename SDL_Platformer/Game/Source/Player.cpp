@@ -12,12 +12,20 @@
 
 Player::Player(App* application, bool start_enabled) : Module(application, start_enabled)
 {
+}
+
+Player::~Player()
+{
+
+}
+
+void Player::playerStartAnims() {
 
 	//player
 	playerR.PushBack({ 0, 0, 32, 32 });
 
 	//atack ->
-	punchR.PushBack({ 0,32,32,32});
+	punchR.PushBack({ 0,32,32,32 });
 	punchR.PushBack({ 32,32,32,32 });
 	punchR.PushBack({ 64,32,32,32 });
 	punchR.PushBack({ 96,32,32,32 });
@@ -247,11 +255,6 @@ Player::Player(App* application, bool start_enabled) : Module(application, start
 	walkPunchL.speed = 0.3;
 }
 
-Player::~Player()
-{
-
-}
-
 bool Player:: Start()
 {
 	bool ret = true;
@@ -267,11 +270,15 @@ bool Player:: Start()
 	collider = nullptr;
 
 	// Load assets
+	playerStartAnims(); 
+
 	texture = app->tex->Load("Assets/textures/player.png");
 	currentAnimation = &idleR;
 
-	app->player->position.x = 32;
-	app->player->position.y = 428;
+	position.x = 32;
+	position.y = 400;
+
+	app->render->camera.x = -((app->player->position.x));
 
 	collider = app->collision->AddCollider({ position.x+5, position.y+30, 25, 10 }, Collider::Type::PLAYER, this);
 	colliderR = app->collision->AddCollider({ position.x+22, position.y+2, 10, 20 }, Collider::Type::PLAYERD, this);
@@ -299,26 +306,13 @@ bool Player::Update(float dt)
 	colliderR->SetPos(position.x + 22, position.y + 2);
 	colliderL->SetPos(position.x + 5, position.y + 2);
 	//Camera
-	app->render->camera.x = -((app->player->position.x * 2) - 1280 / 2);
-	app->render->camera.y = -((app->player->position.y * 2) - 720 / 2);
+	if (position.x > 352 && position.x < 1280) {
+		app->render->camera.x = -((app->player->position.x * 2) - 1280 / 2);
+	}
+	if (position.y < 460) {
+		app->render->camera.y = -((app->player->position.y * 2) - 720 / 2);
+	}
 
-	//Keep the camera in bounds.
-	/*if (app->render->camera.x < 0)
-	{
-		app->render->camera.x = 0;
-	}
-	if (app->render->camera.y < 0)
-	{
-		app->render->camera.y = 0;
-	}
-	if (app->render->camera.x > 1600 - app->render->camera.w)
-	{
-		app->render->camera.x = 1600 - app->render->camera.w;
-	}
-	if (app->render->camera.y > 640 - app->render->camera.h)
-	{
-		app->render->camera.y = 640 - app->render->camera.h;
-	}*/
 	//run ->
 	if ((app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) && LockR == false)
 	{
@@ -402,8 +396,6 @@ bool Player::Update(float dt)
 			position.y -= jump;
 			jump -= gravetat;
 		}
-	
-
 	}
 	
 	if (falling == true) 
@@ -513,6 +505,9 @@ bool Player::CleanUp() {
 
 	// Textures
 	app->tex->UnLoad(texture);
+
+	// Reset variables
+	jump = 4;
 
 	return true;
 }
