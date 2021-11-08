@@ -30,7 +30,7 @@ public:
 	{
 		currentFrame = 0;
 	}
-	
+
 	bool HasFinished()
 	{
 		return !loop && !pingpong && loopCount > 0;
@@ -56,6 +56,14 @@ public:
 			actualFrame = totalFrames - currentFrame;
 
 		return frames[actualFrame];
+	}
+
+	int GetCurrentFrameINT(){
+	int actualFrame = currentFrame;
+	if (pingpongDirection == -1)
+		actualFrame = totalFrames - currentFrame;
+
+	return actualFrame;
 	}
 
 	void DeleteAnim() {

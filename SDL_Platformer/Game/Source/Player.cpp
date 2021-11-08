@@ -24,12 +24,12 @@ void Player::playerStartAnims() {
 	//player
 	playerR.PushBack({ 0, 0, 32, 32 });
 
-	//atack ->
+	//attack ->
 	punchR.PushBack({ 0,32,32,32 });
 	punchR.PushBack({ 32,32,32,32 });
 	punchR.PushBack({ 64,32,32,32 });
 	punchR.PushBack({ 96,32,32,32 });
-	punchR.loop = true;
+	punchR.loop = false;
 	punchR.speed = 0.1;
 
 	//doble attack ->
@@ -144,12 +144,12 @@ void Player::playerStartAnims() {
 	//player <-
 	playerL.PushBack({ 224, 416, 32, 32 });
 
-	//atack <-
+	//attack <-
 	punchL.PushBack({ 224,448,32,32 });
 	punchL.PushBack({ 192,448,32,32 });
 	punchL.PushBack({ 160,448,32,32 });
 	punchL.PushBack({ 128,448,32,32 });
-	punchL.loop = true;
+	punchL.loop = false;
 	punchL.speed = 0.1;
 
 	//doble attack <-
@@ -425,7 +425,7 @@ bool Player::Update(float dt)
 		&& app->input->GetKey(SDL_SCANCODE_D) == KEY_IDLE
 		&& app->input->GetKey(SDL_SCANCODE_A) == KEY_IDLE
 		&& app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE
-		&& app->input->GetKey(SDL_SCANCODE_O) == KEY_IDLE))
+		&& currentAnimation != &punchL && currentAnimation != &punchR))
 	{
 		if (currentAnimation != &idleR && Player_Position == true)
 		{
@@ -442,6 +442,23 @@ bool Player::Update(float dt)
 		}
 	}
 
+	if (currentAnimation == &punchL && currentAnimation->GetCurrentFrameINT() == 3) {
+		idleL.Reset();
+		currentAnimation = &idleL;
+	}
+	else {
+		punchL.Update();
+	}
+	if (currentAnimation == &punchR && currentAnimation->GetCurrentFrameINT() == 3) {
+		idleR.Reset();
+		currentAnimation = &idleR;
+	}
+	else {
+		punchR.Update();
+	}
+
+	currentAnimation->Update();
+
 	if (position.y > 640) {
 		death = true;
 	}
@@ -450,7 +467,6 @@ bool Player::Update(float dt)
 		win = true;
 	}
 
-	currentAnimation->Update();
 
 	return ret;
 }
