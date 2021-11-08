@@ -294,9 +294,12 @@ bool Player:: Start()
 	return ret;
 }
 
-
 bool Player::Update(float dt)
 {
+	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN) {
+		godMode = !godMode;
+	}
+
 	bool ret = true;
 
 	falling == true;
@@ -316,157 +319,212 @@ bool Player::Update(float dt)
 		app->render->camera.y = -((app->player->position.y * 2) - 720 / 2);
 	}
 
-	//run ->
-	if ((app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) && LockR == false)
-	{
-		//walk ->
-		if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
-			position.x += lowSpeed;
+	if (godMode != true) {
+		//run ->
+		if ((app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) && LockR == false)
+		{
+			//walk ->
+			if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
+				position.x += lowSpeed;
 
-			if (currentAnimation != &walkR)
-			{
-				walkR.Reset();
-				currentAnimation = &walkR;
-				Player_Position = true;
+				if (currentAnimation != &walkR)
+				{
+					walkR.Reset();
+					currentAnimation = &walkR;
+					Player_Position = true;
+				}
+			}
+			else {
+				position.x += speed;
+				if (currentAnimation != &runR)
+				{
+					runR.Reset();
+					currentAnimation = &runR;
+					Player_Position = true;
+				}
 			}
 		}
-		else {
-			position.x += speed;
-			if (currentAnimation != &runR)
-			{
-				runR.Reset();
-				currentAnimation = &runR;
-				Player_Position = true;
+
+		//run <-
+		if ((app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) && LockL == false)
+		{
+			//walk <-
+			if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
+				position.x -= lowSpeed;
+				if (currentAnimation != &walkL)
+				{
+					walkL.Reset();
+					currentAnimation = &walkL;
+					Player_Position = false;
+				}
+			}
+			else {
+				position.x -= speed;
+				if (currentAnimation != &runL)
+				{
+					runL.Reset();
+					currentAnimation = &runL;
+					Player_Position = false;
+				}
 			}
 		}
-	}
 
-	//run <-
-	if ((app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) && LockL == false)
-	{
-		//walk <-
-		if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
-			position.x -= lowSpeed;
-			if (currentAnimation != &walkL)
+		//attack
+		if (app->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN)
+		{
+			if (Player_Position == true) {
+				if (currentAnimation != &punchR)
+				{
+					punchR.Reset();
+					currentAnimation = &punchR;
+					Player_Position = true;
+				}
+			}
+			else {
+				if (currentAnimation != &punchL)
+				{
+					punchL.Reset();
+					currentAnimation = &punchL;
+					Player_Position = false;
+				}
+			}
+		}
+
+		if (LockHead == false) {
+			//Jump
+			if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT && falling == false && LockHead == false)
 			{
-				walkL.Reset();
-				currentAnimation = &walkL;
+				if (jump == 0)
+				{
+					falling == true;
+				}
+				else
+				{
+					falling == false;
+					position.y -= jump;
+					jump -= gravetat;
+				}
+			}
+		}
+
+		if (falling == true)
+		{
+			position.y += fall;
+			fall += gravetat;
+		}
+
+		if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE) {
+
+			falling = true;
+		}
+
+		/*if (LockHead == true) {
+			position.y += fall;
+			fall += gravetat;
+		}*/
+
+		//idle
+		if ((app->input->GetKey(SDL_SCANCODE_S) == KEY_IDLE
+			&& app->input->GetKey(SDL_SCANCODE_W) == KEY_IDLE
+			&& app->input->GetKey(SDL_SCANCODE_D) == KEY_IDLE
+			&& app->input->GetKey(SDL_SCANCODE_A) == KEY_IDLE
+			&& app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE
+			&& currentAnimation != &punchL && currentAnimation != &punchR))
+		{
+			if (currentAnimation != &idleR && Player_Position == true)
+			{
+				idleR.Reset();
+				currentAnimation = &idleR;
+				Player_Position = true;
+			}
+
+			if (currentAnimation != &idleL && Player_Position == false)
+			{
+				idleL.Reset();
+				currentAnimation = &idleL;
 				Player_Position = false;
 			}
 		}
-		else {
-			position.x -= speed;
-			if (currentAnimation != &runL)
-			{
-				runL.Reset();
-				currentAnimation = &runL;
-				Player_Position = false;
-			}
-		}
-	}
 
-	//attack
-	if (app->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN)
-	{
-		if (Player_Position == true) {
-			if (currentAnimation != &punchR)
-			{
-				punchR.Reset();
-				currentAnimation = &punchR;
-				Player_Position = true;
-			}
-		}
-		else {
-			if (currentAnimation != &punchL)
-			{
-				punchL.Reset();
-				currentAnimation = &punchL;
-				Player_Position = false;
-			}
-		}
-	}
-
-	if (LockHead == false) {
-		//Jump
-		if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT && falling == false && LockHead == false)
-		{
-			if (jump == 0)
-			{
-				falling == true;
-			}
-			else
-			{
-				falling == false;
-				position.y -= jump;
-				jump -= gravetat;
-			}
-		}
-	}
-	
-	if (falling == true) 
-	{
-		position.y += fall;
-		fall += gravetat;
-	}
-
-	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE) {
-
-		falling = true;
-	}
-
-	/*if (LockHead == true) {
-		position.y += fall;
-		fall += gravetat;
-	}*/
-
-	//idle
-	if ((app->input->GetKey(SDL_SCANCODE_S) == KEY_IDLE
-		&& app->input->GetKey(SDL_SCANCODE_W) == KEY_IDLE
-		&& app->input->GetKey(SDL_SCANCODE_D) == KEY_IDLE
-		&& app->input->GetKey(SDL_SCANCODE_A) == KEY_IDLE
-		&& app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE
-		&& currentAnimation != &punchL && currentAnimation != &punchR))
-	{
-		if (currentAnimation != &idleR && Player_Position == true)
-		{
-			idleR.Reset();
-			currentAnimation = &idleR;
-			Player_Position = true;
-		}
-
-		if (currentAnimation != &idleL && Player_Position == false)
-		{
+		if (currentAnimation == &punchL && currentAnimation->GetCurrentFrameINT() == 3) {
 			idleL.Reset();
 			currentAnimation = &idleL;
-			Player_Position = false;
+		}
+		else {
+			punchL.Update();
+		}
+		if (currentAnimation == &punchR && currentAnimation->GetCurrentFrameINT() == 3) {
+			idleR.Reset();
+			currentAnimation = &idleR;
+		}
+		else {
+			punchR.Update();
+		}
+
+		currentAnimation->Update();
+
+		if (position.y > 640) {
+			death = true;
+		}
+
+		if (position.x < 48 && position.y < 64) {
+			win = true;
 		}
 	}
-
-	if (currentAnimation == &punchL && currentAnimation->GetCurrentFrameINT() == 3) {
-		idleL.Reset();
-		currentAnimation = &idleL;
-	}
 	else {
-		punchL.Update();
-	}
-	if (currentAnimation == &punchR && currentAnimation->GetCurrentFrameINT() == 3) {
-		idleR.Reset();
-		currentAnimation = &idleR;
-	}
-	else {
-		punchR.Update();
-	}
+		if ((app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) && LockR == false)
+		{
+			//walk ->
+			if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
+				position.x += lowSpeed;
 
-	currentAnimation->Update();
-
-	if (position.y > 640) {
-		death = true;
+				if (currentAnimation != &walkR)
+				{
+					walkR.Reset();
+					currentAnimation = &walkR;
+					Player_Position = true;
+				}
+			}
+			else {
+				position.x += speed;
+				if (currentAnimation != &runR)
+				{
+					runR.Reset();
+					currentAnimation = &runR;
+					Player_Position = true;
+				}
+			}
+		}
+		//run <-
+		if ((app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) && LockL == false)
+		{
+			//walk <-
+			if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
+				position.x -= lowSpeed;
+				if (currentAnimation != &walkL)
+				{
+					walkL.Reset();
+					currentAnimation = &walkL;
+					Player_Position = false;
+				}
+			}
+			else {
+				position.x -= speed;
+				if (currentAnimation != &runL)
+				{
+					runL.Reset();
+					currentAnimation = &runL;
+					Player_Position = false;
+				}
+			}
+		}
+		if ((app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)) {
+			position.y -= speed;
+		}
+		if ((app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)) {
+			position.y += speed;
+		}
 	}
-
-	if (position.x < 48 && position.y < 64) {
-		win = true;
-	}
-
 
 	return ret;
 }
@@ -539,6 +597,8 @@ bool Player::CleanUp() {
 
 	// Reset variables
 	jump = 4;
+
+	godMode = false;
 
 	return true;
 }

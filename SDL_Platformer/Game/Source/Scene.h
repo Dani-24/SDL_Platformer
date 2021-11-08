@@ -41,7 +41,8 @@ public:
 	Animation panderetAnim;
 	SDL_Texture* egg;
 	SDL_Texture* pandereta;
-	SDL_Texture* Background;
+	SDL_Texture* background;
+	SDL_Texture* sky;
 
 	float bgScrollX[5];
 

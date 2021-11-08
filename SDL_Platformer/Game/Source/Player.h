@@ -40,7 +40,7 @@ public:
 
 	void jump_action();
 
-	void GodMode();
+	bool godMode = false;
 	// Position of the player in the map
 
 	bool CleanUp() override;

@@ -47,7 +47,8 @@ bool Scene::Start()
 
 	app->audio->PlayMusic("Assets/audio/music/music_bg.ogg");
 
-	Background = app->tex->Load("Assets/maps/Background.png");
+	background = app->tex->Load("Assets/maps/Background.png");
+	sky = app->tex->Load("Assets/maps/Background parts/5 - Sky_color.png");
 	bgScrollX[0] = -886; bgScrollX[1] = 0; bgScrollX[2] = 886; bgScrollX[3] = 886 * 2;
 	bgScrollX[4] = 886 * 3; bgScrollX[5] = 886 * 4;
 
@@ -133,8 +134,13 @@ bool Scene::PostUpdate()
 		}
 		else {
 			bgScrollX[i] -= 0.5f;
-			app->render->DrawTexture(Background, bgScrollX[i], 50);
+			app->render->DrawTexture(background, bgScrollX[i], 50);
 		}
+	}
+
+	for (int i = 0; i < 6;i++) {
+		app->render->DrawTexture(sky, i * 288, -150);
+		app->render->DrawTexture(sky, i * 288, -358);
 	}
 
 	if (easterEgg == true) {
@@ -183,7 +189,7 @@ bool Scene::CleanUp()
 	app->tex->UnLoad(img);
 	app->tex->UnLoad(egg);
 	app->tex->UnLoad(pandereta);
-	app->tex->UnLoad(Background);
+	app->tex->UnLoad(background);
 	
 	eggAnim.DeleteAnim();
 	panderetAnim.DeleteAnim();
