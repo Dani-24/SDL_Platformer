@@ -34,9 +34,14 @@ public:
 
 private:
 
+	// Texture
 	SDL_Texture* logo;
 
 	int count;
+
+	// fx
+	uint fxEnter;
+
 };
 
 #endif // __SCENELOGO_H__
