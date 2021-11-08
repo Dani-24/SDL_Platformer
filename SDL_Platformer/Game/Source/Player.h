@@ -62,6 +62,7 @@ private:
 	bool falling = false;
 	bool LockR = false;
 	bool LockL = false;
+	bool LockHead = false;
 
 	bool Player_Position;
 
@@ -92,6 +93,7 @@ private:
 	Collider* collider;
 	Collider* colliderR;
 	Collider* colliderL;
+	Collider* colliderHead;
 
 	// A flag to detect when the player has been destroyed
 	bool destroyed = false;

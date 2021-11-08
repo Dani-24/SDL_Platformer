@@ -14,6 +14,7 @@ struct Collider
 		PLAYER,
 		PLAYERD,
 		PLAYERL,
+		PLAYERHEAD,
 		GROUND,
 		//FALL,
 

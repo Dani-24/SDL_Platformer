@@ -283,6 +283,7 @@ bool Player:: Start()
 	collider = app->collision->AddCollider({ position.x+5, position.y+30, 25, 10 }, Collider::Type::PLAYER, this);
 	colliderR = app->collision->AddCollider({ position.x+22, position.y+2, 10, 20 }, Collider::Type::PLAYERD, this);
 	colliderL = app->collision->AddCollider({ position.x+5, position.y + 2, 10, 20 }, Collider::Type::PLAYERL, this);
+	colliderHead = app->collision->AddCollider({ position.x + 5, position.y + 2, 25, 10 }, Collider::Type::PLAYERHEAD, this);
 
 
 	/*app->render->camera.x = 0;
@@ -301,10 +302,12 @@ bool Player::Update(float dt)
 	falling == true;
 	LockL = false;
 	LockR = false;
+	LockHead = false;
 
 	collider->SetPos(position.x+5, position.y+26);
 	colliderR->SetPos(position.x + 22, position.y + 2);
 	colliderL->SetPos(position.x + 5, position.y + 2);
+	colliderHead->SetPos(position.x + 5, position.y );
 	//Camera
 	if (position.x > 352 && position.x < 1280) {
 		app->render->camera.x = -((app->player->position.x * 2) - 1280 / 2);
@@ -363,7 +366,7 @@ bool Player::Update(float dt)
 	}
 
 	//attack
-	if ((app->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN))
+	if (app->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN)
 	{
 		if (Player_Position == true) {
 			if (currentAnimation != &punchR)
@@ -383,18 +386,20 @@ bool Player::Update(float dt)
 		}
 	}
 
-	//Jump
-	if ((app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT && falling == false))
-	{
-		if (jump == 0)
+	if (LockHead == false) {
+		//Jump
+		if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT && falling == false && LockHead == false)
 		{
-			falling == true;
-		}
-		else
-		{
-			falling == false;
-			position.y -= jump;
-			jump -= gravetat;
+			if (jump == 0)
+			{
+				falling == true;
+			}
+			else
+			{
+				falling == false;
+				position.y -= jump;
+				jump -= gravetat;
+			}
 		}
 	}
 	
@@ -408,6 +413,11 @@ bool Player::Update(float dt)
 
 		falling = true;
 	}
+
+	/*if (LockHead == true) {
+		position.y += fall;
+		fall += gravetat;
+	}*/
 
 	//idle
 	if ((app->input->GetKey(SDL_SCANCODE_S) == KEY_IDLE
@@ -461,6 +471,7 @@ void Player::OnCollision(Collider* c1, Collider* c2)
 		falling = false;
 		jump = 4;
 		fall = 4;
+		LockHead = false;
 	}
 
 	if (c1->type == Collider::Type::PLAYERD && c2->type == Collider::Type::GROUND) {
@@ -469,6 +480,10 @@ void Player::OnCollision(Collider* c1, Collider* c2)
 
 	if (c1->type == Collider::Type::PLAYERL && c2->type == Collider::Type::GROUND) {
 		LockL = true;
+	}
+
+	if (c1->type == Collider::Type::PLAYERHEAD && c2->type == Collider::Type::GROUND) {
+		LockHead = true;
 	}
 }
 
