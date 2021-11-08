@@ -4057,7 +4057,7 @@
    <tile gid="129"/>
   </data>
  </layer>
- <layer id="3" name="Terra" width="100" height="40" visible="0">
+ <layer id="3" name="Terra" width="100" height="40">
   <properties>
    <property name="Draw" type="int" value="0"/>
    <property name="Navigation" type="int" value="1"/>
