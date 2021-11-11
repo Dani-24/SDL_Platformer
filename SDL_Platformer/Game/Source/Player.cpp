@@ -259,14 +259,15 @@ bool Player::Start()
 	bool ret = true;
 
 	// Inicializar variables
+	win = false;
 	Player_Position = true;
 	death = false;
 	speed = 2;
 	lowSpeed = 1;
-	god = false;
 	HP = Max_HP;
 	destroyed = false;
-	collider = nullptr;
+	godMode = false;
+	canJump = false;
 
 	// Load assets
 	PlayerStartAnims();
@@ -292,22 +293,17 @@ bool Player::Update(float dt)
 
 	bool ret = true;
 
-	falling == true;
-	LockL = false;
-	LockR = false;
-	LockHead = false;
-
 	//Camera
-	//if (position.x > 352 && position.x < 1280) {		Limitar movimiento camara
-		app->render->camera.x = 0; //-((app->player->position.x * 2) - 1280 / 2);
-//}
-//if (position.y < 460) {
-		app->render->camera.y = 0; // -((app->player->position.y * 2) - 720 / 2);
-	//}
+	if (position.x > 352 && position.x < 1280) {		//Limitar movimiento camara
+		app->render->camera.x = 0 -((app->player->position.x * 2) - 1280 / 2);
+	}
+	if (position.y < 460) {
+		app->render->camera.y = 0 -((app->player->position.y * 2) - 720 / 2);
+	}
 
 	if (godMode != true) {
 		//run ->
-		if ((app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) && LockR == false)
+		if ((app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT))
 		{
 			//walk ->
 			if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
@@ -332,7 +328,7 @@ bool Player::Update(float dt)
 		}
 
 		//run <-
-		if ((app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) && LockL == false)
+		if ((app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT))
 		{
 			//walk <-
 			if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
@@ -426,7 +422,7 @@ bool Player::Update(float dt)
 		}
 	}
 	else {
-		if ((app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) && LockR == false)
+		if ((app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT))
 		{
 			//walk ->
 			if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
@@ -450,7 +446,7 @@ bool Player::Update(float dt)
 			}
 		}
 		//run <-
-		if ((app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) && LockL == false)
+		if ((app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT))
 		{
 			//walk <-
 			if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
@@ -532,7 +528,6 @@ bool Player::CleanUp() {
 	app->tex->UnLoad(texture);
 
 	// Reset variables
-	jump = 4;
 
 	godMode = false;
 

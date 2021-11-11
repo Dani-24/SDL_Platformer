@@ -38,33 +38,25 @@ public:
 
 	void PlayerStartAnims();
 
-	void jump_action();
-
-	bool godMode = false;
+	bool godMode;
 	// Position of the player in the map
 
 	bool CleanUp() override;
 
 	iPoint position;
 	bool death;
-	bool win = false;
-
-
+	bool win;
+	int HP;
+	PhysBody* playerPhysics;
 
 private:
 
 	// The speed in which we move the player (pixels per frame)
 	float speed;
 	float lowSpeed;
-	float fall = 4;
-	float jump = 4;
-	float gravetat = 0.2;
-	bool falling = false;
-	bool LockR = false;
-	bool LockL = false;
-	bool LockHead = false;
 
 	bool Player_Position;
+	bool canJump;
 
 	// The player spritesheet loaded into an SDL_Texture
 	SDL_Texture* texture = nullptr;
@@ -89,12 +81,6 @@ private:
 		walkR, walkL,
 		walkPunchR, walkPunchL;
 
-	// The player's collider
-	Collider* collider;
-	Collider* colliderR;
-	Collider* colliderL;
-	Collider* colliderHead;
-
 	// A flag to detect when the player has been destroyed
 	bool destroyed = false;
 
@@ -102,10 +88,6 @@ private:
 	uint PlayerAttackFx = 0;
 	uint AttackQuoteFx = 0;
 
-
-	bool god;
-
-	int HP;
 };
 
 #endif //!__PLAYER_H__

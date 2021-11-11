@@ -10,6 +10,7 @@
 #include "Defs.h"
 #include "Log.h"
 #include "Player.h"
+#include "Physics.h"
 
 Scene::Scene(App* application, bool start_enabled) : Module(application, start_enabled)
 {
@@ -36,6 +37,7 @@ bool Scene::Start()
 	if (app->player->active != true) {
 		app->player->Enable();
 	}
+	app->physics->Enable();
 
 	// Load map
 	app->map->Load("hello.tmx");
@@ -61,7 +63,6 @@ bool Scene::Start()
 // Called each loop iteration
 bool Scene::PreUpdate()
 {
-	LOG("pos y: %d", app->player->position.y);
 	if (app->player->position.y > 590) {
 		app->player->death = true;
 	}
@@ -156,12 +157,12 @@ bool Scene::PostUpdate()
 	app->map->Draw();
 
 	// L03: DONE 7: Set the window title with map/tileset info
-	SString title("Map:%dx%d Tiles:%dx%d Tilesets:%d",
+	/*SString title("Map:%dx%d Tiles:%dx%d Tilesets:%d",
 		app->map->mapData.width, app->map->mapData.height,
 		app->map->mapData.tileWidth, app->map->mapData.tileHeight,
 		app->map->mapData.tilesets.count());
 
-	app->win->SetTitle(title.GetString());
+	app->win->SetTitle(title.GetString());*/
 
 	return ret;
 }
@@ -180,6 +181,7 @@ bool Scene::CleanUp()
 	panderetAnim.DeleteAnim();
 
 	app->player->Disable();
+	app->physics->Disable();
 
 	return true;
 }
