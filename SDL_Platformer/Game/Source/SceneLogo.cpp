@@ -33,8 +33,7 @@ bool SceneLogo::Start()
 	// Textures
 	count = 0;
 	logo = app->tex->Load("Assets/textures/logo.png");
-
-
+	
 	// Audio
 	app->audio->PlayMusic("Assets/audio/music/music_logo.ogg");
 	fxEnter = app->audio->LoadFx("Assets/audio/fx/enter.wav");
@@ -52,7 +51,7 @@ bool SceneLogo::PreUpdate()
 bool SceneLogo::Update(float dt)
 {
 	if (count > 100) {
-		app->fade->StartFadeToBlack(this, (Module*)app->sceneTitle, 60);
+		app->fade->StartFadeToBlack(this, (Module*)app->sceneTitle, 0);
 	}
 	else {
 		count++;
@@ -77,9 +76,9 @@ bool SceneLogo::PostUpdate()
 {
 	bool ret = true;
 
-	app->render->DrawTexture(logo, 0,0);
+	app->render->DrawTexture(logo, 0, 0);
 	fxEnter = 0;
-	
+
 	return ret;
 }
 

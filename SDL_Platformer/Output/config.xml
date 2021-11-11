@@ -3,6 +3,7 @@
   <app>
     <title>SDL Platformer Game</title>
     <organization>UPC</organization>
+	<frcap value = "16"/>
   </app>
 
   <renderer>
@@ -10,14 +11,15 @@
   </renderer>
 
   <window>
-    <resolution width="1280" height="720" scale="2"/>
+    <resolution width="1280" height="720" scale="1"/>
     <fullscreen value="false"/>
     <borderless value="false"/>
     <resizable value="false"/>
     <fullscreen_window value="false"/>
   </window>
 
+  <!-- Added maps folder as config option -->
   <map>
-    <folder>Assets/maps/</folder> <!-- Map directory -->
+    <folder>Assets/maps/</folder>
   </map>
 </config>

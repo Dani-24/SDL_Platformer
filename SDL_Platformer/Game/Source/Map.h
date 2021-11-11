@@ -7,8 +7,6 @@
 
 #include "PugiXml\src\pugixml.hpp"
 
-#define MAX_COLLIDERS 1000
-
 // L03: DONE 2: Create a struct to hold information for a TileSet
 // Ignore Terrain Types and Tile Types for now, but we want the image!
 struct TileSet
@@ -17,18 +15,16 @@ struct TileSet
 	int	firstgid;
 	int margin;
 	int	spacing;
-	int	tile_width;
-	int	tile_height;
+	int	tileWidth;
+	int	tileHeight;
 
 	SDL_Texture* texture;
 	int	texWidth;
 	int	texHeight;
 	int	tilecount;
 	int	columns;
-	//int	offsetX;
-	//int	offsetY;
 
-	// L04: TODO 7: Create a method that receives a tile id and returns it's Rectfind the Rect associated with a specific tile id
+	// L04: DONE 7: Create a method that receives a tile id and returns it's Rectfind the Rect associated with a specific tile id
 	SDL_Rect GetTileRect(int id) const;
 };
 
@@ -38,10 +34,11 @@ enum MapTypes
 {
 	MAPTYPE_UNKNOWN = 0,
 	MAPTYPE_ORTHOGONAL,
-	//MAPTYPE_ISOMETRIC,
+	MAPTYPE_ISOMETRIC,
 	MAPTYPE_STAGGERED
 };
 
+// L06: DONE 5: Create a generic structure to hold properties
 struct Properties
 {
 	struct Property
@@ -50,7 +47,7 @@ struct Properties
 		SString name;
 		int value;
 	};
-
+	
 	~Properties()
 	{
 		//...
@@ -66,13 +63,13 @@ struct Properties
 		list.clear();
 	}
 
-	// L06: TODO 7: Method to ask for the value of a custom property
+	// L06: DONE 7: Method to ask for the value of a custom property
 	int GetProperty(const char* name, int default_value = 0) const;
 
 	List<Property*> list;
 };
 
-// L04: TODO 1: Create a struct for the map layer
+// L04: DONE 1: Create a struct for the map layer
 struct MapLayer
 {
 	SString	name;
@@ -80,6 +77,7 @@ struct MapLayer
 	int height;
 	uint* data;
 
+	// L06: DONE 1: Support custom properties
 	Properties properties;
 
 	MapLayer() : data(NULL)
@@ -90,10 +88,10 @@ struct MapLayer
 		RELEASE(data);
 	}
 
-	// L04: TODO 6: Short function to get the gid value of x,y
+	// L04: DONE 6: Short function to get the value of x,y
 	inline uint Get(int x, int y) const
 	{
-		return data[(y*width)+x];
+		return data[(y * width) + x];
 	}
 };
 
@@ -108,8 +106,8 @@ struct MapData
 	MapTypes type;
 	List<TileSet*> tilesets;
 
-	// L04: TODO 2: Add a list/array of layers to the map
-	List<MapLayer*> maplayers;
+	// L04: DONE 2: Add a list/array of layers to the map
+	List<MapLayer*> layers;
 };
 
 class Map : public Module
@@ -120,17 +118,12 @@ public:
 
     // Destructor
     virtual ~Map();
-	
 
     // Called before render is available
     bool Awake(pugi::xml_node& conf);
 
-	//bool Start();
-
     // Called each loop iteration
     void Draw();
-
-	void CreateCollisions();
 
     // Called before quitting
     bool CleanUp();
@@ -141,11 +134,13 @@ public:
 	// L04: DONE 8: Create a method that translates x,y coordinates from map positions to world positions
 	iPoint MapToWorld(int x, int y) const;
 
+	// L05: DONE 2: Add orthographic world to map coordinates
+	iPoint WorldToMap(int x, int y) const;
+
 private:
 
-	bool LoadMap(pugi::xml_node mapFile);
-
 	// L03: Methods to load all required map data
+	bool LoadMap(pugi::xml_node mapFile);
 	bool LoadTileSets(pugi::xml_node mapFile);
 	bool LoadTilesetDetails(pugi::xml_node& tileset_node, TileSet* set);
 	bool LoadTilesetImage(pugi::xml_node& tileset_node, TileSet* set);
@@ -154,8 +149,10 @@ private:
 	bool LoadLayer(pugi::xml_node& node, MapLayer* layer);
 	bool LoadAllLayers(pugi::xml_node mapNode);
 
+	// L06: DONE 6: Load a group of properties 
 	bool LoadProperties(pugi::xml_node& node, Properties& properties);
 
+	// L06: DONE 3: Pick the right Tileset based on a tile id
 	TileSet* GetTilesetFromTileId(int id) const;
 
 public:
@@ -165,7 +162,6 @@ public:
 
 private:
 
-	Collider* MapColliders[MAX_COLLIDERS] = { nullptr };
     SString folder;
     bool mapLoaded;
 };

@@ -101,6 +101,7 @@ typedef enum
     /* Mouse events */
     SDL_MOUSEMOTION    = 0x400, /**< Mouse moved */
     SDL_MOUSEBUTTONDOWN,        /**< Mouse button pressed */
+    SDL_MOUSEBUTTONREPEAT,
     SDL_MOUSEBUTTONUP,          /**< Mouse button released */
     SDL_MOUSEWHEEL,             /**< Mouse wheel motion */
 

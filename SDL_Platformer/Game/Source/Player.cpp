@@ -7,8 +7,7 @@
 #include "Audio.h"
 #include "Input.h"
 #include "Animation.h"
-#include "Collision.h"
-#include "Collider.h"
+#include "Physics.h"
 
 Player::Player(App* application, bool start_enabled) : Module(application, start_enabled)
 {
@@ -19,7 +18,7 @@ Player::~Player()
 
 }
 
-void Player::playerStartAnims() {
+void Player::PlayerStartAnims() {
 
 	//player
 	playerR.PushBack({ 0, 0, 32, 32 });
@@ -255,7 +254,7 @@ void Player::playerStartAnims() {
 	walkPunchL.speed = 0.3;
 }
 
-bool Player:: Start()
+bool Player::Start()
 {
 	bool ret = true;
 
@@ -270,7 +269,7 @@ bool Player:: Start()
 	collider = nullptr;
 
 	// Load assets
-	playerStartAnims(); 
+	PlayerStartAnims();
 
 	texture = app->tex->Load("Assets/textures/player.png");
 	currentAnimation = &idleR;
@@ -279,15 +278,6 @@ bool Player:: Start()
 	position.y = 400;
 
 	app->render->camera.x = -((app->player->position.x));
-
-	collider = app->collision->AddCollider({ position.x+5, position.y+30, 25, 10 }, Collider::Type::PLAYER, this);
-	colliderR = app->collision->AddCollider({ position.x+22, position.y+2, 10, 20 }, Collider::Type::PLAYERD, this);
-	colliderL = app->collision->AddCollider({ position.x+5, position.y + 2, 10, 20 }, Collider::Type::PLAYERL, this);
-	colliderHead = app->collision->AddCollider({ position.x + 5, position.y + 2, 25, 10 }, Collider::Type::PLAYERHEAD, this);
-
-
-	/*app->render->camera.x = 0;
-	app->render->camera.y = -432;*/
 
 	Player_Position = true;
 
@@ -307,17 +297,13 @@ bool Player::Update(float dt)
 	LockR = false;
 	LockHead = false;
 
-	collider->SetPos(position.x+5, position.y+26);
-	colliderR->SetPos(position.x + 22, position.y + 2);
-	colliderL->SetPos(position.x + 5, position.y + 2);
-	colliderHead->SetPos(position.x + 5, position.y );
 	//Camera
-	if (position.x > 352 && position.x < 1280) {
-		app->render->camera.x = -((app->player->position.x * 2) - 1280 / 2);
-	}
-	if (position.y < 460) {
-		app->render->camera.y = -((app->player->position.y * 2) - 720 / 2);
-	}
+	//if (position.x > 352 && position.x < 1280) {		Limitar movimiento camara
+		app->render->camera.x = 0; //-((app->player->position.x * 2) - 1280 / 2);
+//}
+//if (position.y < 460) {
+		app->render->camera.y = 0; // -((app->player->position.y * 2) - 720 / 2);
+	//}
 
 	if (godMode != true) {
 		//run ->
@@ -390,39 +376,7 @@ bool Player::Update(float dt)
 			}
 		}
 
-		if (LockHead == false) {
-			//Jump
-			if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT && falling == false && LockHead == false)
-			{
-				if (jump == 0)
-				{
-					falling == true;
-				}
-				else
-				{
-					falling == false;
-					position.y -= jump;
-					jump -= gravetat;
-				}
-			}
-		}
-
-		if (falling == true)
-		{
-			position.y += fall;
-			fall += gravetat;
-		}
-
-		if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE) {
-
-			falling = true;
-		}
-
-		/*if (LockHead == true) {
-			position.y += fall;
-			fall += gravetat;
-		}*/
-
+		
 		//idle
 		if ((app->input->GetKey(SDL_SCANCODE_S) == KEY_IDLE
 			&& app->input->GetKey(SDL_SCANCODE_W) == KEY_IDLE
@@ -533,32 +487,14 @@ bool Player::PostUpdate() {
 	bool ret = true;
 
 	SDL_Rect rect = currentAnimation->GetCurrentFrame();
-	app->render->DrawTexture(texture, position.x, position.y, &rect, 1.0f, 0,0,0);//draw player
-		
+	app->render->DrawTexture(texture, position.x, position.y, &rect, 1.0f, 0, 0, 0);//draw player
+
 	return ret;
 }
 
-void Player::OnCollision(Collider* c1, Collider* c2)
+void Player::OnCollision(PhysBody* c1, PhysBody* c2)
 {
-	if (c1->type == Collider::Type::PLAYER && c2->type == Collider::Type::GROUND) {
-
-		falling = false;
-		jump = 4;
-		fall = 4;
-		LockHead = false;
-	}
-
-	if (c1->type == Collider::Type::PLAYERD && c2->type == Collider::Type::GROUND) {
-		LockR = true;
-	}
-
-	if (c1->type == Collider::Type::PLAYERL && c2->type == Collider::Type::GROUND) {
-		LockL = true;
-	}
-
-	if (c1->type == Collider::Type::PLAYERHEAD && c2->type == Collider::Type::GROUND) {
-		LockHead = true;
-	}
+	
 }
 
 bool Player::CleanUp() {
@@ -566,30 +502,30 @@ bool Player::CleanUp() {
 
 	// Animations
 	currentAnimation = nullptr;
-	playerR.DeleteAnim(); 
+	playerR.DeleteAnim();
 	playerL.DeleteAnim();
-	punchR.DeleteAnim(); 
+	punchR.DeleteAnim();
 	punchL.DeleteAnim();
-	doublePunchR.DeleteAnim(); 
+	doublePunchR.DeleteAnim();
 	doublePunchL.DeleteAnim();
 	climb.DeleteAnim();
-	deathR.DeleteAnim(); 
+	deathR.DeleteAnim();
 	deathL.DeleteAnim();
-	hitR.DeleteAnim(); 
+	hitR.DeleteAnim();
 	hitL.DeleteAnim();
-	idleR.DeleteAnim(); 
+	idleR.DeleteAnim();
 	idleL.DeleteAnim();
-	jumpR.DeleteAnim(); 
+	jumpR.DeleteAnim();
 	jumpL.DeleteAnim();
-	pushR.DeleteAnim(); 
+	pushR.DeleteAnim();
 	pushL.DeleteAnim();
-	runR.DeleteAnim(); 
+	runR.DeleteAnim();
 	runL.DeleteAnim();
-	throwR.DeleteAnim(); 
+	throwR.DeleteAnim();
 	throwL.DeleteAnim();
-	walkR.DeleteAnim(); 
+	walkR.DeleteAnim();
 	walkL.DeleteAnim();
-	walkPunchR.DeleteAnim(); 
+	walkPunchR.DeleteAnim();
 	walkPunchL.DeleteAnim();
 
 	// Textures

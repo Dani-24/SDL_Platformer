@@ -12,7 +12,10 @@
 FadeToBlack::FadeToBlack(App* application, bool start_enabled) : Module(application, start_enabled)
 {
 	if (app != nullptr) {
-		screenRect = { 0,0,app->win->width * app->win->scale,app->win->height * app->win->scale };
+		int x, y, scale;
+		app->win->GetWindowSize(x, y);
+		scale = app->win->GetScale();
+		screenRect = { 0,0, x * y * scale };
 	}
 }
 FadeToBlack::~FadeToBlack()
@@ -30,8 +33,8 @@ bool FadeToBlack::Start()
 
 bool FadeToBlack::Update(float dt)
 {
-	if (currentStep == Fade_Step::NONE) 
-	{ 
+	if (currentStep == Fade_Step::NONE)
+	{
 		return true;
 	}
 
@@ -49,7 +52,7 @@ bool FadeToBlack::Update(float dt)
 	else
 	{
 		--frameCount;
-		if(frameCount<=0)
+		if (frameCount <= 0)
 		{
 			currentStep = Fade_Step::NONE;
 		}
@@ -59,7 +62,7 @@ bool FadeToBlack::Update(float dt)
 
 bool FadeToBlack::PostUpdate()
 {
-	if(currentStep == Fade_Step::NONE)
+	if (currentStep == Fade_Step::NONE)
 	{
 		return true;
 	}

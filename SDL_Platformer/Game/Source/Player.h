@@ -34,9 +34,9 @@ public:
 	bool PostUpdate();
 
 	// Collision callback, called when the player intersects with another collider
-	void OnCollision(Collider* c1, Collider* c2) override;
+	void OnCollision(PhysBody* c1, PhysBody* c2) override;
 
-	void playerStartAnims();
+	void PlayerStartAnims();
 
 	void jump_action();
 
@@ -87,7 +87,7 @@ private:
 		runR, runL,
 		throwR, throwL,
 		walkR, walkL,
-		walkPunchR, walkPunchL;	
+		walkPunchR, walkPunchL;
 
 	// The player's collider
 	Collider* collider;

@@ -10,8 +10,6 @@
 #include "Defs.h"
 #include "Log.h"
 #include "Player.h"
-#include "Collider.h"
-#include "Collision.h"
 
 Scene::Scene(App* application, bool start_enabled) : Module(application, start_enabled)
 {
@@ -41,8 +39,7 @@ bool Scene::Start()
 
 	// Load map
 	app->map->Load("hello.tmx");
-	app->map->CreateCollisions();
-	
+
 	// Load Assets
 
 	app->audio->PlayMusic("Assets/audio/music/music_bg.ogg");
@@ -56,7 +53,7 @@ bool Scene::Start()
 	easterEgg = false;
 	loadEgg = false;
 	EasterEgg();
-	
+
 
 	return true;
 }
@@ -74,40 +71,30 @@ bool Scene::PreUpdate()
 // Called each loop iteration
 bool Scene::Update(float dt)
 {
-    // Request Load / Save when pressing L/S
-	if(app->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
+	// Request Load / Save when pressing L/S
+	if (app->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
 		app->LoadGameRequest();
 
-	if(app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN)
+	if (app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN)
 		app->SaveGameRequest();
 
 	// Camera Movement
-	if(app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
+	if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
 		app->render->camera.y += 20;
 
-	if(app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+	if (app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
 		app->render->camera.y -= 20;
 
-	if(app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
+	if (app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
 		app->render->camera.x += 20;
 
-	if(app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
+	if (app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 		app->render->camera.x -= 20;
 
 	// EasterEGG()
 	if (app->input->GetKey(SDL_SCANCODE_5) == KEY_DOWN) {
 		easterEgg = !easterEgg;
 		EasterEgg();
-	}
-
-	// Debug
-	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN) {
-		if (app->collision->debug == true) {
-			app->collision->debug = false;
-		}
-		else {
-			app->collision->debug = true;
-		}
 	}
 
 	// Back
@@ -117,7 +104,7 @@ bool Scene::Update(float dt)
 
 
 	if (app->player->death == true) {
-		app->fade->StartFadeToBlack(this, (Module*)app->ending, 10);
+		app->fade->StartFadeToBlack(this, (Module*)app->sceneEnding, 10);
 	}
 
 	return true;
@@ -129,7 +116,7 @@ bool Scene::PostUpdate()
 	bool ret = true;
 
 	for (int i = 0; i < 5; i++) {
-		if (bgScrollX[i] <= -(886*2)) {
+		if (bgScrollX[i] <= -(886 * 2)) {
 			bgScrollX[i] = 886 * 3;
 		}
 		else {
@@ -138,7 +125,7 @@ bool Scene::PostUpdate()
 		}
 	}
 
-	for (int i = 0; i < 6;i++) {
+	for (int i = 0; i < 6; i++) {
 		app->render->DrawTexture(sky, i * 288, -150);
 		app->render->DrawTexture(sky, i * 288, -358);
 	}
@@ -184,13 +171,11 @@ bool Scene::CleanUp()
 {
 	LOG("Freeing scene");
 
-	app->collision->debug = false;
-
 	app->tex->UnLoad(img);
 	app->tex->UnLoad(egg);
 	app->tex->UnLoad(pandereta);
 	app->tex->UnLoad(background);
-	
+
 	eggAnim.DeleteAnim();
 	panderetAnim.DeleteAnim();
 
@@ -223,11 +208,11 @@ void Scene::EasterEgg() {
 		loadEgg = true;
 	}
 	else if (eggMusic != true) {
-		app->audio->PlayMusic("Assets/audio/music/music_spy.ogg");
+		app->audio->PlayMusic("Assets/audio/music/music_spy.ogg", 10);
 		eggMusic = true;
 	}
 	else {
-		app->audio->PlayMusic("Assets/audio/music/music_bg.ogg");
+		app->audio->PlayMusic("Assets/audio/music/music_bg.ogg", 10);
 		eggMusic = false;
 	}
 }

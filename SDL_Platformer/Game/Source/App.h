@@ -2,6 +2,9 @@
 #define __APP_H__
 
 #include "Module.h"
+#include "PerfTimer.h"
+#include "Timer.h"
+
 #include "List.h"
 
 #include "PugiXml/src/pugixml.hpp"
@@ -15,51 +18,17 @@ class Input;
 class Render;
 class Textures;
 class Audio;
-class Player;
-class Scene;
-class SceneTitle;
 class SceneLogo;
-class Map;
-class FadeToBlack;
-class Collision;
+class SceneTitle;
 class SceneEnding;
+class Scene;
+class Player;
+class Map;
+class Physics;
+class FadeToBlack;
 
 class App
 {
-public:
-
-	// Modules
-	Window* win;
-	Input* input;
-	Render* render;
-	Textures* tex;
-	Audio* audio;
-	FadeToBlack* fade;
-	Player* player;
-	Scene* scene;
-	SceneTitle* sceneTitle;
-	SceneLogo* sceneLogo;
-	Collision* collision;
-	SceneEnding* ending;
-
-	Map* map;
-
-private:
-
-	int argc;
-	char** args;
-	SString title;
-	SString organization;
-
-	List<Module*> modules;
-
-	uint frames;
-	float dt;
-
-	// L02: DONE 1: Create variables to control when to execute the request load / save
-	mutable bool saveGameRequested;
-	bool loadGameRequested;
-
 public:
 
 	// Constructor
@@ -89,25 +58,87 @@ public:
 	const char* GetTitle() const;
 	const char* GetOrganization() const;
 
-    // L02: DONE 1: Create methods to request Load / Save
+	// L02: DONE 1: Create methods to request Load / Save
 	void LoadGameRequest();
 	void SaveGameRequest() const;
 
 private:
 
 	// Load config file
+	// NOTE: It receives config document
 	pugi::xml_node LoadConfig(pugi::xml_document&) const;
 
 	// Call modules before each loop iteration
 	void PrepareUpdate();
+
+	// Call modules before each loop iteration
 	void FinishUpdate();
+
+	// Call modules before each loop iteration
 	bool PreUpdate();
+
+	// Call modules on each loop iteration
 	bool DoUpdate();
+
+	// Call modules after each loop iteration
 	bool PostUpdate();
 
 	// Load / Save
 	bool LoadGame();
 	bool SaveGame() const;
+
+public:
+
+	// Modules
+	Window* win;
+	Input* input;
+	Render* render;
+	Textures* tex;
+	Audio* audio;
+	SceneLogo* sceneLogo;
+	SceneTitle* sceneTitle;
+	Scene* scene;
+	SceneEnding* sceneEnding;
+	Player* player;
+	Map* map;
+	Physics* physics;
+	FadeToBlack* fade;
+
+private:
+
+	int argc;
+	char** args;
+	SString title;
+	SString organization;
+
+	List<Module*> modules;
+
+	// L01: DONE 2: Create new variables from pugui namespace
+	// NOTE: Redesigned LoadConfig() to avoid storing this variables
+	//pugi::xml_document configFile;
+	//pugi::xml_node config;
+	//pugi::xml_node configApp;
+
+	mutable bool saveGameRequested;
+	bool loadGameRequested;
+
+	// L07: DONE 4: Calculate some timing measures
+	// required variables are provided:
+	PerfTimer *ptimer;
+	PerfTimer *frameDuration; 
+
+	Timer startupTime;
+	Timer frameTime;
+	Timer lastSecFrameTime;
+
+	uint64 frameCount = 0;
+	uint32 framesPerSecond = 0;
+	uint32 lastSecFrameCount = 0;
+
+	float averageFps = 0.0f;
+	float dt = 0.0f;
+
+	uint32 maxFrameRate = 0;
 };
 
 extern App* app;

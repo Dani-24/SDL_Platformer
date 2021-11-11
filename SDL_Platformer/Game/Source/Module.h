@@ -2,11 +2,11 @@
 #define __MODULE_H__
 
 #include "SString.h"
-#include "Collider.h"
 
 #include "PugiXml/src/pugixml.hpp"
 
 class App;
+class PhysBody;
 
 class Module
 {
@@ -65,12 +65,12 @@ public:
 		return true;
 	}
 
-	virtual void OnCollision(Collider* c1, Collider* c2) 
+	virtual void OnCollision(PhysBody* c1, PhysBody* c2)
 	{
 
 	}
 
-    // L02: DONE 2: Create new virtual methods to Load / Save state
+	// L02: DONE 2: Create new virtual methods to Load / Save state
 	virtual bool LoadState(pugi::xml_node&)
 	{
 		return true;
@@ -99,5 +99,6 @@ public:
 		return active;
 	}
 };
+
 
 #endif // __MODULE_H__

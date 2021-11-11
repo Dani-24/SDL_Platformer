@@ -58,18 +58,18 @@ public:
 		return frames[actualFrame];
 	}
 
-	int GetCurrentFrameINT(){
-	int actualFrame = currentFrame;
-	if (pingpongDirection == -1)
-		actualFrame = totalFrames - currentFrame;
+	int GetCurrentFrameINT() {
+		int actualFrame = currentFrame;
+		if (pingpongDirection == -1)
+			actualFrame = totalFrames - currentFrame;
 
-	return actualFrame;
+		return actualFrame;
 	}
 
 	void DeleteAnim() {
 		totalFrames = 0;
 	}
-		
+
 };
 
 #endif

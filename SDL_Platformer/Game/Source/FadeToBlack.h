@@ -10,7 +10,7 @@ public:
 	FadeToBlack(App* application, bool start_enabled = true);
 
 	~FadeToBlack();
-	
+
 	bool Start();
 
 	bool Update(float dt);
@@ -25,7 +25,7 @@ private:
 		NONE,
 		TO_BLACK,
 		FROM_BLACK
-	}currentStep= Fade_Step::NONE;
+	}currentStep = Fade_Step::NONE;
 
 	//frame count
 	Uint32 frameCount = 0;
