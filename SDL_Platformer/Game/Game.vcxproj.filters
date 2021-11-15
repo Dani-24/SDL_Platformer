@@ -138,6 +138,9 @@
     <ClInclude Include="Source\Map.h">
       <Filter>Platformer\Scenes</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="External">
@@ -176,5 +179,18 @@
     <Filter Include="Platformer\Modules\Extra">
       <UniqueIdentifier>{10930d00-28f0-4e03-8b5a-1bc5968a2655}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{19f1a10f-2f65-4e1f-b90d-a9c8882c104a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico">
+      <Filter>Resources</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SDL_Platformer.rc">
+      <Filter>Resources</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>
