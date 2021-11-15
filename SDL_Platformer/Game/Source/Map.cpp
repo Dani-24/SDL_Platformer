@@ -124,7 +124,7 @@ void Map::Blocks()
 						SDL_Rect r = tileset->GetTileRect(gid);
 						iPoint pos = MapToWorld(x, y);
 
-						app->physics->CreateRectangle(pos.x, pos.y, 16, 16);
+						app->physics->CreateRectangle(pos.x+8, pos.y+8, 16, 16);
 					}
 
 				}

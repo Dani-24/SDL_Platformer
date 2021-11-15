@@ -275,12 +275,8 @@ bool Player::Start()
 	// Physics
 	position.x = 32;
 	position.y = 400;
-	playerBody = app->physics->CreateRectangle(position.x, position.y, 32, 32);
+	playerBody = app->physics->CreateRectangle(position.x, position.y, 30, 30);
 	playerBody->body->SetType(b2_dynamicBody);
-
-	PhysBody* prueba;
-	prueba = app->physics->CreateRectangle(0, 450, 500, 10);
-	prueba->body->SetType(b2_staticBody);
 
 	// Texture & Animation
 	texture = app->tex->Load("Assets/textures/player.png");
@@ -399,48 +395,6 @@ bool Player::Update(float dt)
 			}
 		}
 
-		// --- idle amimation ---
-		if ((app->input->GetKey(SDL_SCANCODE_S) == KEY_IDLE
-			&& app->input->GetKey(SDL_SCANCODE_W) == KEY_IDLE
-			&& app->input->GetKey(SDL_SCANCODE_D) == KEY_IDLE
-			&& app->input->GetKey(SDL_SCANCODE_A) == KEY_IDLE
-			&& app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE
-			&& currentAnimation != &punchL && currentAnimation != &punchR))
-		{
-			if (currentAnimation != &idleR && Player_Dir == true)
-			{
-				idleR.Reset();
-				currentAnimation = &idleR;
-				Player_Dir = true;
-			}
-
-			if (currentAnimation != &idleL && Player_Dir == false)
-			{
-				idleL.Reset();
-				currentAnimation = &idleL;
-				Player_Dir = false;
-			}
-		}
-
-		// Reset punch animation:
-		if (currentAnimation == &punchL && currentAnimation->GetCurrentFrameINT() == 3) {
-			idleL.Reset();
-			currentAnimation = &idleL;
-		}
-		else {
-			punchL.Update();
-		}
-		if (currentAnimation == &punchR && currentAnimation->GetCurrentFrameINT() == 3) {
-			idleR.Reset();
-			currentAnimation = &idleR;
-		}
-		else {
-			punchR.Update();
-		}
-
-		// Update Animation each frame
-		currentAnimation->Update();
-
 		// If you fall you die
 		if (position.y > 640) {
 			death = true;
@@ -462,22 +416,66 @@ void Player::GodMode() {
 	// --- GOD MODE ---
 	if ((app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT))
 	{
-		position.x -= speed;
+		playerBody->body->SetLinearVelocity(b2Vec2(5, 0));
 	}
 	if ((app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT))
 	{
-		position.x += speed;
+		playerBody->body->SetLinearVelocity(b2Vec2(-5, 0));
 	}
-	if ((app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)) {
-		position.y -= speed;
+	if ((app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)) 
+	{
+		playerBody->body->SetLinearVelocity(b2Vec2(0, -5));
 	}
-	if ((app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)) {
-		position.y += speed;
+	if ((app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)) 
+	{
+		playerBody->body->SetLinearVelocity(b2Vec2(0, 5));
 	}
 }
 
 bool Player::PostUpdate() {
 	bool ret = true;
+
+	// --- idle amimation ---
+	if ((app->input->GetKey(SDL_SCANCODE_S) == KEY_IDLE
+		&& app->input->GetKey(SDL_SCANCODE_W) == KEY_IDLE
+		&& app->input->GetKey(SDL_SCANCODE_D) == KEY_IDLE
+		&& app->input->GetKey(SDL_SCANCODE_A) == KEY_IDLE
+		&& app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE
+		&& currentAnimation != &punchL && currentAnimation != &punchR))
+	{
+		if (currentAnimation != &idleR && Player_Dir == true)
+		{
+			idleR.Reset();
+			currentAnimation = &idleR;
+			Player_Dir = true;
+		}
+
+		if (currentAnimation != &idleL && Player_Dir == false)
+		{
+			idleL.Reset();
+			currentAnimation = &idleL;
+			Player_Dir = false;
+		}
+	}
+
+	// Reset punch animation:
+	if (currentAnimation == &punchL && currentAnimation->GetCurrentFrameINT() == 3) {
+		idleL.Reset();
+		currentAnimation = &idleL;
+	}
+	else {
+		punchL.Update();
+	}
+	if (currentAnimation == &punchR && currentAnimation->GetCurrentFrameINT() == 3) {
+		idleR.Reset();
+		currentAnimation = &idleR;
+	}
+	else {
+		punchR.Update();
+	}
+
+	// Update Animation each frame
+	currentAnimation->Update();
 
 	// Ask for player X/Y
 	playerBody->GetPosition(position.x, position.y);
