@@ -21,33 +21,24 @@ public:
 	// Destructor
 	~Player();
 
-	// Called when the module is activated
-	// Loads the necessary textures for the player
 	bool Start();
-
-	// Called at the middle of the application loop
-	// Processes new input and handles player movement
+	bool PreUpdate();
 	bool Update(float dt);
-
-	// Called at the end of the application loop
-	// Performs the render call of the player sprite
 	bool PostUpdate();
+	bool CleanUp() override;
 
-	// Collision callback, called when the player intersects with another collider
 	void OnCollision(PhysBody* c1, PhysBody* c2) override;
 
 	void PlayerStartAnims();
 
+	void GodMode();
+
 	bool godMode;
-	// Position of the player in the map
-
-	bool CleanUp() override;
-
 	iPoint position;
 	bool death;
 	bool win;
 	int HP;
-	PhysBody* playerPhysics;
+	PhysBody* playerBody;
 
 private:
 
@@ -55,7 +46,7 @@ private:
 	float speed;
 	float lowSpeed;
 
-	bool Player_Position;
+	bool Player_Dir;
 	bool canJump;
 
 	// The player spritesheet loaded into an SDL_Texture

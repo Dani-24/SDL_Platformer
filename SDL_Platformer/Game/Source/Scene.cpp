@@ -33,6 +33,8 @@ bool Scene::Awake()
 // Called before the first frame
 bool Scene::Start()
 {
+	LOG("Start Scene and load assets");
+
 	// Check if player is enabled:
 	if (app->player->active != true) {
 		app->player->Enable();
@@ -73,10 +75,10 @@ bool Scene::PreUpdate()
 bool Scene::Update(float dt)
 {
 	// Request Load / Save when pressing L/S
-	if (app->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
+	if (app->input->GetKey(SDL_SCANCODE_0) == KEY_DOWN)
 		app->LoadGameRequest();
 
-	if (app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN)
+	if (app->input->GetKey(SDL_SCANCODE_9) == KEY_DOWN)
 		app->SaveGameRequest();
 
 	// Camera Movement
@@ -157,6 +159,7 @@ bool Scene::PostUpdate()
 	app->map->Draw();
 
 	// L03: DONE 7: Set the window title with map/tileset info
+
 	/*SString title("Map:%dx%d Tiles:%dx%d Tilesets:%d",
 		app->map->mapData.width, app->map->mapData.height,
 		app->map->mapData.tileWidth, app->map->mapData.tileHeight,

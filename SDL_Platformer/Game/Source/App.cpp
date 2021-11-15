@@ -37,9 +37,9 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	audio = new Audio(this);
 	fade = new FadeToBlack(this);
 
-	sceneLogo = new SceneLogo(this, false);
+	sceneLogo = new SceneLogo(this, true);
 	sceneTitle = new SceneTitle(this, false);
-	scene = new Scene(this, true);
+	scene = new Scene(this, false);
 	sceneEnding = new SceneEnding(this, false);
 	player = new Player(this, false);
 
@@ -53,6 +53,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(input);
 	AddModule(tex);
 	AddModule(audio);
+	AddModule(fade);
 	AddModule(sceneLogo);
 	AddModule(sceneTitle);
 	AddModule(scene);
@@ -297,7 +298,9 @@ bool App::CleanUp()
 
 	while (item != NULL && ret == true)
 	{
-		ret = item->data->CleanUp();
+		if (item->data->isEnabled() == true) {
+			ret = item->data->CleanUp();
+		}
 		item = item->prev;
 	}
 

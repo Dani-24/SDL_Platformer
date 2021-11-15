@@ -67,16 +67,16 @@ bool SceneTitle::Update(float dt)
 	}
 	else {
 		titleMove = false;
+	}
 
-		// pasar de escena cuando se pare el titulo si pulsas enter
-		if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
-			app->audio->PlayFx(fxEnter);
-			app->fade->StartFadeToBlack(this, (Module*)app->scene, 0);
-		}
+	// pasar de escena cuando se pare el titulo si pulsas enter
+	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
+		app->audio->PlayFx(fxEnter);
+		app->fade->StartFadeToBlack(this, (Module*)app->scene, 0);
+	}
 
-		if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {
-			return false; // QUIT
-		}
+	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {
+		return false; // QUIT
 	}
 
 	return true;
