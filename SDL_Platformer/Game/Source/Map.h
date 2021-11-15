@@ -115,7 +115,10 @@ class Map : public Module
 {
 public:
 
+	List<PhysBody*> boxes;
+
     Map(App* application, bool start_enabled = true);
+
 
     // Destructor
     virtual ~Map();
