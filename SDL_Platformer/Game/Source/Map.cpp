@@ -124,9 +124,8 @@ void Map::Blocks()
 						SDL_Rect r = tileset->GetTileRect(gid);
 						iPoint pos = MapToWorld(x, y);
 
-						app->physics->CreateRectangle(pos.x+8, pos.y+8, 16, 16);
+						boxes.add(app->physics->CreateRectangle(pos.x + 8, pos.y + 8, 16, 16));
 					}
-
 				}
 			}
 		}
@@ -303,6 +302,11 @@ bool Map::CleanUp()
 		item2 = item2->next;
 	}
 	mapData.layers.clear();
+
+	/*while (boxes.start->data->body != NULL) {
+		app->physics->world->DestroyBody(boxes.start->data->body);
+		boxes.start->data->body = boxes.start->next->data->body;
+	}*/
 
     return true;
 }

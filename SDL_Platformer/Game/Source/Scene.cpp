@@ -124,7 +124,7 @@ bool Scene::PostUpdate()
 
 	for (int i = 0; i < 5; i++) {
 		if (bgScrollX[i] <= -(886 * 2)) {
-			bgScrollX[i] = 886 * 3;
+			bgScrollX[i] = (886 * 3)-1;
 		}
 		else {
 			bgScrollX[i] -= 0.5f;
