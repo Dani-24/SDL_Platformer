@@ -35,11 +35,8 @@ bool Scene::Start()
 {
 	LOG("Start Scene and load assets");
 
-	// Check if player is enabled:
-	if (app->player->active != true) {
-		app->player->Enable();
-	}
 	app->physics->Enable();
+	app->player->Enable();
 
 	// Load map
 	app->map->Load("hello.tmx");

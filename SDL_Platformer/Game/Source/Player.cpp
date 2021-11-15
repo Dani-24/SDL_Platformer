@@ -272,13 +272,15 @@ bool Player::Start()
 	// Load assets
 	PlayerStartAnims();
 
-	texture = app->tex->Load("Assets/textures/player.png");
-	currentAnimation = &idleR;
-
+	// Physics
 	position.x = 32;
 	position.y = 400;
+	playerBody = app->physics->CreateRectangle(position.x, position.y, 32, 32);
+	playerBody->body->SetType(b2_dynamicBody);
 
-	app->render->camera.x = -((app->player->position.x));
+	// Texture & Animation
+	texture = app->tex->Load("Assets/textures/player.png");
+	currentAnimation = &idleR;
 
 	return ret;
 }
@@ -293,7 +295,8 @@ bool Player::PreUpdate() {
 
 bool Player::Update(float dt)
 {
-	
+	playerBody->GetPosition(position.x, position.y);
+
 	bool ret = true;
 
 	// --- Camera ---
