@@ -4,6 +4,7 @@
 #include "Module.h"
 #include "List.h"
 #include "Point.h"
+#include "Physics.h"
 
 #include "PugiXml\src\pugixml.hpp"
 
@@ -124,6 +125,8 @@ public:
 
     // Called each loop iteration
     void Draw();
+
+	void CreateCollision();
 
     // Called before quitting
     bool CleanUp();
