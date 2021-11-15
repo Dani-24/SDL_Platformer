@@ -278,6 +278,10 @@ bool Player::Start()
 	playerBody = app->physics->CreateRectangle(position.x, position.y, 32, 32);
 	playerBody->body->SetType(b2_dynamicBody);
 
+	/*PhysBody* prueba;
+	prueba = app->physics->CreateRectangle(0, 450, 1000, 50);
+	prueba->body->SetType(b2_staticBody);*/
+
 	// Texture & Animation
 	texture = app->tex->Load("Assets/textures/player.png");
 	currentAnimation = &idleR;
@@ -295,27 +299,29 @@ bool Player::PreUpdate() {
 
 bool Player::Update(float dt)
 {
-	playerBody->GetPosition(position.x, position.y);
-
 	bool ret = true;
 
 	// --- Camera ---
-	if (position.x > 352 && position.x < 1280) {		//Limitar movimiento camara
+	if (position.x > 352 && position.x < 1280) {
 		app->render->camera.x = 0 -((app->player->position.x * 2) - 1280 / 2);
 	}
 	if (position.y < 460) {
 		app->render->camera.y = 0 -((app->player->position.y * 2) - 720 / 2);
 	}
 
+	// --- Player movement ---
 	if (godMode != true) {
 
 		// (Right)
 		//--- run ---
 		if ((app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT))
 		{
+			//position.x += speed;
+		
 			// --- walk ---
 			if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
-				position.x += lowSpeed;
+				playerBody->body->SetTransform(b2Vec2(playerBody->body->GetPosition().x + PIXEL_TO_METERS(lowSpeed), playerBody->body->GetPosition().y), playerBody->body->GetAngle());
+
 
 				if (currentAnimation != &walkR)
 				{
@@ -325,7 +331,9 @@ bool Player::Update(float dt)
 				}
 			}
 			else {
-				position.x += speed;
+
+				playerBody->body->SetTransform(b2Vec2(playerBody->body->GetPosition().x + PIXEL_TO_METERS(speed), playerBody->body->GetPosition().y), playerBody->body->GetAngle());
+
 				if (currentAnimation != &runR)
 				{
 					runR.Reset();
@@ -334,6 +342,9 @@ bool Player::Update(float dt)
 				}
 			}
 		}
+		else {
+			posChange.x = 0;
+		}
 
 		// (Left)
 		// --- he run ---
@@ -341,7 +352,8 @@ bool Player::Update(float dt)
 		{
 			// --- he walk ---
 			if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
-				position.x -= lowSpeed;
+				playerBody->body->SetTransform(b2Vec2(playerBody->body->GetPosition().x - PIXEL_TO_METERS(lowSpeed), playerBody->body->GetPosition().y), playerBody->body->GetAngle());
+
 				if (currentAnimation != &walkL)
 				{
 					walkL.Reset();
@@ -350,7 +362,8 @@ bool Player::Update(float dt)
 				}
 			}
 			else {
-				position.x -= speed;
+				playerBody->body->SetTransform(b2Vec2(playerBody->body->GetPosition().x - PIXEL_TO_METERS(speed), playerBody->body->GetPosition().y), playerBody->body->GetAngle());
+
 				if (currentAnimation != &runL)
 				{
 					runL.Reset();
@@ -359,6 +372,8 @@ bool Player::Update(float dt)
 				}
 			}
 		}
+
+		playerBody->body->SetLinearVelocity(b2Vec2(posChange.x, 9));
 
 		// --- but most importantly, he Attack ---
 		if (app->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN)
@@ -461,8 +476,13 @@ void Player::GodMode() {
 bool Player::PostUpdate() {
 	bool ret = true;
 
+	// Ask for player X/Y
+	playerBody->GetPosition(position.x, position.y);
+
+	// --- Draw Player ---
 	SDL_Rect rect = currentAnimation->GetCurrentFrame();
-	app->render->DrawTexture(texture, position.x, position.y, &rect, 1.0f, 0, 0, 0);//draw player
+	
+	app->render->DrawTexture(texture, position.x, position.y, &rect, 1.0f, playerBody->GetRotation(), 34, 34); 
 
 	return ret;
 }

@@ -35,6 +35,7 @@ public:
 
 	bool godMode;
 	iPoint position;
+	iPoint posChange;
 	bool death;
 	bool win;
 	int HP;
@@ -48,6 +49,7 @@ private:
 
 	bool Player_Dir;
 	bool canJump;
+	bool isJumping;
 
 	// The player spritesheet loaded into an SDL_Texture
 	SDL_Texture* texture = nullptr;
