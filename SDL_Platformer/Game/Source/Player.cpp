@@ -267,7 +267,7 @@ bool Player::Start()
 	HP = Max_HP;
 	destroyed = false;
 	godMode = false;
-	canJump = false;
+	canJump = true;
 
 	// Load assets
 	PlayerStartAnims();
@@ -278,9 +278,9 @@ bool Player::Start()
 	playerBody = app->physics->CreateRectangle(position.x, position.y, 32, 32);
 	playerBody->body->SetType(b2_dynamicBody);
 
-	/*PhysBody* prueba;
-	prueba = app->physics->CreateRectangle(0, 450, 1000, 50);
-	prueba->body->SetType(b2_staticBody);*/
+	PhysBody* prueba;
+	prueba = app->physics->CreateRectangle(0, 450, 500, 10);
+	prueba->body->SetType(b2_staticBody);
 
 	// Texture & Animation
 	texture = app->tex->Load("Assets/textures/player.png");
@@ -373,7 +373,10 @@ bool Player::Update(float dt)
 			}
 		}
 
-		playerBody->body->SetLinearVelocity(b2Vec2(posChange.x, 9));
+		if (canJump == true && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
+			playerBody->body->ApplyForceToCenter(b2Vec2(0, -100), 1);
+			canJump = false;
+		}
 
 		// --- but most importantly, he Attack ---
 		if (app->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN)
@@ -489,7 +492,6 @@ bool Player::PostUpdate() {
 
 void Player::OnCollision(PhysBody* c1, PhysBody* c2)
 {
-	
 }
 
 bool Player::CleanUp() {

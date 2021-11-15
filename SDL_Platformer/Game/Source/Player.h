@@ -41,6 +41,8 @@ public:
 	int HP;
 	PhysBody* playerBody;
 
+	bool canJump;
+
 private:
 
 	// The speed in which we move the player (pixels per frame)
@@ -48,8 +50,6 @@ private:
 	float lowSpeed;
 
 	bool Player_Dir;
-	bool canJump;
-	bool isJumping;
 
 	// The player spritesheet loaded into an SDL_Texture
 	SDL_Texture* texture = nullptr;

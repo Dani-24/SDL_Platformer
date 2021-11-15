@@ -5,6 +5,7 @@
 #include "math.h"
 #include "App.h"
 #include "Window.h"
+#include "Player.h"
 
 Physics::Physics(App* application, bool start_enabled) : Module(application, start_enabled)
 {
@@ -258,6 +259,10 @@ void Physics::BeginContact(b2Contact* contact)
 		physB->listener->OnCollision(physB, physA);
 
 	// Hacer aqui los checkeos de collisiones entre player y cosas
+
+	if (physA == app->player->playerBody) {
+		app->player->canJump = true;
+	}
 }
 
 PhysBody* Physics::CreateChain(int x, int y, int* points, int size) {
