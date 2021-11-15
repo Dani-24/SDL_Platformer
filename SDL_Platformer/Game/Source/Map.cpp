@@ -92,6 +92,7 @@ void Map::Draw()
 	}
 }
 
+
 // Draw the map (all requried layers)
 void Map::Blocks()
 {
@@ -123,9 +124,9 @@ void Map::Blocks()
 						SDL_Rect r = tileset->GetTileRect(gid);
 						iPoint pos = MapToWorld(x, y);
 
-						boxes.add(app->physics->CreateRectangle(x, y, 16, 16));
-
+						app->physics->CreateRectangle(pos.x, pos.y, 16, 16);
 					}
+
 				}
 			}
 		}
@@ -133,7 +134,6 @@ void Map::Blocks()
 		mapLayerItem = mapLayerItem->next;
 	}
 }
-
 
 
 
