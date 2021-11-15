@@ -127,8 +127,6 @@ public:
     void Draw();
 
 	void CreateMap();
-	
-	void Blocks();
 
     // Called before quitting
     bool CleanUp();

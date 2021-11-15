@@ -155,7 +155,6 @@ bool Scene::PostUpdate()
 	// Draw map
 	app->map->Draw();
 	app->map->CreateMap();
-	app->map->Blocks();
 
 	// L03: DONE 7: Set the window title with map/tileset info
 
