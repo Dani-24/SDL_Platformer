@@ -154,7 +154,8 @@ bool Scene::PostUpdate()
 
 	// Draw map
 	app->map->Draw();
-	app->map->CreateCollision();
+	app->map->CreateMap();
+
 
 	// L03: DONE 7: Set the window title with map/tileset info
 

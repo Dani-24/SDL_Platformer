@@ -92,7 +92,9 @@ void Map::Draw()
 	}
 }
 
-void Map::CreateCollision()
+
+
+void Map::CreateMap()
 {
 	// Pivot 0, 0
 	int hello[76] = {
