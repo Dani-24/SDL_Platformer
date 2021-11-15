@@ -264,7 +264,7 @@ void Physics::BeginContact(b2Contact* contact)
 		app->player->canJump = true;
 	}
 	else {
-		app->player->canJump = true;
+		app->player->canJump = false;
 	}
 }
 

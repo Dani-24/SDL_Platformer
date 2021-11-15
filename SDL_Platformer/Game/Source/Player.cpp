@@ -275,8 +275,9 @@ bool Player::Start()
 	// Physics
 	position.x = 32;
 	position.y = 400;
-	playerBody = app->physics->CreateRectangle(position.x, position.y, 30, 30);
+	playerBody = app->physics->CreateRectangle(position.x, position.y, 26, 26);
 	playerBody->body->SetType(b2_dynamicBody);
+	playerBody->body->SetFixedRotation(true);
 
 	// Texture & Animation
 	texture = app->tex->Load("Assets/textures/player.png");
@@ -338,10 +339,6 @@ bool Player::Update(float dt)
 				}
 			}
 		}
-		else {
-			posChange.x = 0;
-		}
-
 		// (Left)
 		// --- he run ---
 		if ((app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT))
@@ -370,8 +367,11 @@ bool Player::Update(float dt)
 		}
 
 		if (canJump == true && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
-			playerBody->body->ApplyForceToCenter(b2Vec2(0, -100), 1);
+			playerBody->body->ApplyForceToCenter(b2Vec2(0, -75), 1);
 			canJump = false;
+		}
+		if(canJump==true) {
+			playerBody->body->ApplyForceToCenter(b2Vec2(0, 1), 1);
 		}
 
 		// --- but most importantly, he Attack ---
@@ -393,16 +393,6 @@ bool Player::Update(float dt)
 					Player_Dir = false;
 				}
 			}
-		}
-
-		// If you fall you die
-		if (position.y > 640) {
-			death = true;
-		}
-
-		// If you arrive to the goal you win
-		if (position.x < 48 && position.y < 64) {
-			win = true;
 		}
 	}
 	else {	
@@ -483,7 +473,7 @@ bool Player::PostUpdate() {
 	// --- Draw Player ---
 	SDL_Rect rect = currentAnimation->GetCurrentFrame();
 	
-	app->render->DrawTexture(texture, position.x, position.y, &rect, 1.0f, playerBody->GetRotation(), 34, 34); 
+	app->render->DrawTexture(texture, position.x-3, position.y-5, &rect, 1.0f, playerBody->GetRotation(), 34, 34); // -3 and -5 are for hitbox adjustments
 
 	return ret;
 }

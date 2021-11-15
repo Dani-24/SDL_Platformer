@@ -35,7 +35,6 @@ public:
 
 	bool godMode;
 	iPoint position;
-	iPoint posChange;
 	bool death;
 	bool win;
 	int HP;

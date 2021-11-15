@@ -67,6 +67,11 @@ bool Scene::PreUpdate()
 	if (app->player->position.y > 590) {
 		app->player->death = true;
 	}
+
+	// If you arrive to the goal you win
+	if (app->player->position.x < 48 && app->player->position.y < 64) {
+		app->player->win = true;
+	}
 	return true;
 }
 
@@ -104,7 +109,7 @@ bool Scene::Update(float dt)
 		app->fade->StartFadeToBlack(this, (Module*)app->sceneTitle, 10);
 	}
 
-
+	// Death
 	if (app->player->death == true) {
 		app->fade->StartFadeToBlack(this, (Module*)app->sceneEnding, 10);
 	}
