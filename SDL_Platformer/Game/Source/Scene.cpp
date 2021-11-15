@@ -40,6 +40,8 @@ bool Scene::Start()
 
 	// Load map
 	app->map->Load("hello.tmx");
+	//app->map->CreateMap();
+	app->map->Blocks();
 
 	// Load Assets
 
@@ -154,7 +156,7 @@ bool Scene::PostUpdate()
 
 	// Draw map
 	app->map->Draw();
-	app->map->CreateMap();
+	
 
 	// L03: DONE 7: Set the window title with map/tileset info
 

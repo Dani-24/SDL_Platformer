@@ -126,7 +126,9 @@ public:
     // Called each loop iteration
     void Draw();
 
-	void CreateMap();
+	//void CreateMap();
+	
+	void Blocks();
 
     // Called before quitting
     bool CleanUp();

@@ -92,56 +92,100 @@ void Map::Draw()
 	}
 }
 
-
-void Map::CreateMap()
+// Draw the map (all requried layers)
+void Map::Blocks()
 {
-	// Pivot 0, 0
-	int hello[80] = {
-		-2, 464,
-		397, 465,
-		397, 638,
-		466, 638,
-		466, 433,
-		669, 433,
-		669, 483,
-		685, 481,
-		685, 638,
-		722, 638,
-		722, 530,
-		765, 530,
-		763, 560,
-		819, 560,
-		817, 545,
-		926, 546,
-		926, 561,
-		978, 561,
-		978, 496,
-		1005, 496,
-		1005, 560,
-		1042, 560,
-		1042, 464,
-		1069, 464,
-		1069, 512,
-		1213, 512,
-		1213, 640,
-		1282, 640,
-		1282, 465,
-		1390, 465,
-		1390, 641,
-		1443, 641,
-		1443, 416,
-		1485, 416,
-		1485, 640,
-		1523, 640,
-		1523, 370,
-		1601, 370,
-		1601, 652,
-		1, 640
-	};
+	if (mapLoaded == false) return;
 
+	// L04: DONE 5: Prepare the loop to draw all tilesets + DrawTexture()
+	ListItem<MapLayer*>* mapLayerItem;
+	mapLayerItem = mapData.layers.start;
 
-	app->physics->CreateSolidChain(0, 0, hello, 80);
+	// L06: DONE 4: Make sure we draw all the layers and not just the first one
+	while (mapLayerItem != NULL) {
+
+		if (mapLayerItem->data->properties.GetProperty("Navigation") == 1) {
+
+			for (int x = 0; x < mapLayerItem->data->width; x++)
+			{
+				for (int y = 0; y < mapLayerItem->data->height; y++)
+				{
+					// L04: DONE 9: Complete the draw function
+					int gid = mapLayerItem->data->Get(x, y);
+
+					if (gid > 0) {
+
+						//L06: DONE 4: Obtain the tile set using GetTilesetFromTileId
+						//now we always use the firt tileset in the list
+						//TileSet* tileset = mapData.tilesets.start->data;
+						TileSet* tileset = GetTilesetFromTileId(gid);
+
+						SDL_Rect r = tileset->GetTileRect(gid);
+						iPoint pos = MapToWorld(x, y);
+
+						app->physics->CreateRectangle(x, y, 16, 16);
+
+					}
+				}
+			}
+		}
+
+		mapLayerItem = mapLayerItem->next;
+	}
 }
+
+
+
+
+//void Map::CreateMap()
+//{
+//	// Pivot 0, 0
+//	int hello[80] = {
+//		-2, 464,
+//		397, 465,
+//		397, 638,
+//		466, 638,
+//		466, 433,
+//		669, 433,
+//		669, 483,
+//		685, 481,
+//		685, 638,
+//		722, 638,
+//		722, 530,
+//		765, 530,
+//		763, 560,
+//		819, 560,
+//		817, 545,
+//		926, 546,
+//		926, 561,
+//		978, 561,
+//		978, 496,
+//		1005, 496,
+//		1005, 560,
+//		1042, 560,
+//		1042, 464,
+//		1069, 464,
+//		1069, 512,
+//		1213, 512,
+//		1213, 640,
+//		1282, 640,
+//		1282, 465,
+//		1390, 465,
+//		1390, 641,
+//		1443, 641,
+//		1443, 416,
+//		1485, 416,
+//		1485, 640,
+//		1523, 640,
+//		1523, 370,
+//		1601, 370,
+//		1601, 652,
+//		1, 640
+//	};
+//
+//
+//	app->physics->CreateSolidChain(0, 0, hello, 80);
+//}
 
 // L04: DONE 8: Create a method that translates x,y coordinates from map positions to world positions
 iPoint Map::MapToWorld(int x, int y) const
