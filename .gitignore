@@ -350,3 +350,5 @@ MigrationBackup/
 .ionide/
 
 Box2D/
+
+Box2D/libx86/
