@@ -6,6 +6,7 @@
 #include "App.h"
 #include "Window.h"
 #include "Player.h"
+#include "Map.h"
 
 Physics::Physics(App* application, bool start_enabled) : Module(application, start_enabled)
 {
@@ -74,104 +75,110 @@ bool Physics::PostUpdate() {
 	// You need to provide your own macro to translate meters to pixels
 	for (b2Body* b = world->GetBodyList(); b; b = b->GetNext())
 	{
-		for (b2Fixture* f = b->GetFixtureList(); f; f = f->GetNext())
-		{
-			switch (f->GetType())
+		// Solo dibujar colliders si estan cerca del player
+		int Xdiff = METERS_TO_PIXELS(b->GetPosition().x) - app->player->position.x;
+		int Ydiff = METERS_TO_PIXELS(b->GetPosition().y) - app->player->position.y;
+		int spawnDist = 96;
+		if (Xdiff <= spawnDist && Ydiff <= spawnDist && Xdiff >= -spawnDist && Ydiff >= -spawnDist) {
+			for (b2Fixture* f = b->GetFixtureList(); f; f = f->GetNext())
 			{
-				// Draw circles ------------------------------------------------
-			case b2Shape::e_circle:
-			{
-				b2CircleShape* shape = (b2CircleShape*)f->GetShape();
-				b2Vec2 pos = f->GetBody()->GetPosition();
-				app->render->DrawCircle(METERS_TO_PIXELS(pos.x), METERS_TO_PIXELS(pos.y), METERS_TO_PIXELS(shape->m_radius), 255, 255, 255);
-			}
-			break;
-
-			// Draw polygons ------------------------------------------------
-			case b2Shape::e_polygon:
-			{
-				b2PolygonShape* polygonShape = (b2PolygonShape*)f->GetShape();
-				int32 count = polygonShape->GetVertexCount();
-				b2Vec2 prev, v;
-
-				for (int32 i = 0; i < count; ++i)
+				switch (f->GetType())
 				{
-					v = b->GetWorldPoint(polygonShape->GetVertex(i));
-					if (i > 0)
-						app->render->DrawLine(METERS_TO_PIXELS(prev.x), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x), METERS_TO_PIXELS(v.y), 255, 255, 255);
+					// Draw circles ------------------------------------------------
+				case b2Shape::e_circle:
+				{
+					b2CircleShape* shape = (b2CircleShape*)f->GetShape();
+					b2Vec2 pos = f->GetBody()->GetPosition();
+					app->render->DrawCircle(METERS_TO_PIXELS(pos.x), METERS_TO_PIXELS(pos.y), METERS_TO_PIXELS(shape->m_radius), 255, 255, 255);
+				}
+				break;
 
-					prev = v;
+				// Draw polygons ------------------------------------------------
+				case b2Shape::e_polygon:
+				{
+					b2PolygonShape* polygonShape = (b2PolygonShape*)f->GetShape();
+					int32 count = polygonShape->GetVertexCount();
+					b2Vec2 prev, v;
+
+					for (int32 i = 0; i < count; ++i)
+					{
+						v = b->GetWorldPoint(polygonShape->GetVertex(i));
+						if (i > 0)
+							app->render->DrawLine(METERS_TO_PIXELS(prev.x), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x), METERS_TO_PIXELS(v.y), 255, 0, 255);
+
+						prev = v;
+					}
+
+					v = b->GetWorldPoint(polygonShape->GetVertex(0));
+					app->render->DrawLine(METERS_TO_PIXELS(prev.x), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x), METERS_TO_PIXELS(v.y), 255, 0, 255);
+				}
+				break;
+
+				// Draw chains contour -------------------------------------------
+				case b2Shape::e_chain:
+				{
+					b2ChainShape* shape = (b2ChainShape*)f->GetShape();
+					b2Vec2 prev, v;
+
+					for (int32 i = 0; i < shape->m_count; ++i)
+					{
+						v = b->GetWorldPoint(shape->m_vertices[i]);
+						if (i > 0)
+							app->render->DrawLine(METERS_TO_PIXELS(prev.x), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x), METERS_TO_PIXELS(v.y), 255, 0, 0);
+						prev = v;
+					}
+
+					v = b->GetWorldPoint(shape->m_vertices[0]);
+					app->render->DrawLine(METERS_TO_PIXELS(prev.x), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x), METERS_TO_PIXELS(v.y), 255, 0, 0);
+				}
+				break;
+
+				// Draw a single segment(edge) ----------------------------------
+				case b2Shape::e_edge:
+				{
+					b2EdgeShape* shape = (b2EdgeShape*)f->GetShape();
+					b2Vec2 v1, v2;
+
+					v1 = b->GetWorldPoint(shape->m_vertex0);
+					v1 = b->GetWorldPoint(shape->m_vertex1);
+					app->render->DrawLine(METERS_TO_PIXELS(v1.x), METERS_TO_PIXELS(v1.y), METERS_TO_PIXELS(v2.x), METERS_TO_PIXELS(v2.y), 100, 100, 255);
+				}
+				break;
 				}
 
-				v = b->GetWorldPoint(polygonShape->GetVertex(0));
-				app->render->DrawLine(METERS_TO_PIXELS(prev.x), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x), METERS_TO_PIXELS(v.y), 255, 255, 255);
-			}
-			break;
-
-			// Draw chains contour -------------------------------------------
-			case b2Shape::e_chain:
-			{
-				b2ChainShape* shape = (b2ChainShape*)f->GetShape();
-				b2Vec2 prev, v;
-
-				for (int32 i = 0; i < shape->m_count; ++i)
+				if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT))
 				{
-					v = b->GetWorldPoint(shape->m_vertices[i]);
-					if (i > 0)
-						app->render->DrawLine(METERS_TO_PIXELS(prev.x), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x), METERS_TO_PIXELS(v.y), 255, 0, 0);
-					prev = v;
-				}
+					// test if the current body contains mouse position
+					int mouseX, mouseY;
+					app->input->GetMousePosition(mouseX, mouseY);
+					b2Vec2 p = { PIXEL_TO_METERS(mouseX), PIXEL_TO_METERS(mouseY) };
+					if (f->GetShape()->TestPoint(b->GetTransform(), p) == true)
+					{
 
-				v = b->GetWorldPoint(shape->m_vertices[0]);
-				app->render->DrawLine(METERS_TO_PIXELS(prev.x), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x), METERS_TO_PIXELS(v.y), 255, 0, 0);
-			}
-			break;
+						// If a body was selected we will attach a mouse joint to it
+						// so we can pull it around
 
-			// Draw a single segment(edge) ----------------------------------
-			case b2Shape::e_edge:
-			{
-				b2EdgeShape* shape = (b2EdgeShape*)f->GetShape();
-				b2Vec2 v1, v2;
+						// The variable "b2Body* mouse_body;" is defined in the header ModulePhysics.h 
+						// We need to keep this body throughout several game frames; you cannot define it as a local variable here. 
+						mouse_body = b;
 
-				v1 = b->GetWorldPoint(shape->m_vertex0);
-				v1 = b->GetWorldPoint(shape->m_vertex1);
-				app->render->DrawLine(METERS_TO_PIXELS(v1.x), METERS_TO_PIXELS(v1.y), METERS_TO_PIXELS(v2.x), METERS_TO_PIXELS(v2.y), 100, 100, 255);
-			}
-			break;
-			}
+						// Get current mouse position
+						b2Vec2 mousePosition;
+						mousePosition.x = p.x;
+						mousePosition.y = p.y;
 
-			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT))
-			{
-				// test if the current body contains mouse position
-				int mouseX, mouseY;
-				app->input->GetMousePosition(mouseX, mouseY);
-				b2Vec2 p = { PIXEL_TO_METERS(mouseX), PIXEL_TO_METERS(mouseY) };
-				if (f->GetShape()->TestPoint(b->GetTransform(), p) == true)
-				{
+						// Define new mouse joint
+						b2MouseJointDef def;
+						def.bodyA = ground; // First body must be a static ground
+						def.bodyB = mouse_body; // Second body will be the body to attach to the mouse
+						def.target = mousePosition; // The second body will be pulled towards this location
+						def.dampingRatio = 0.5f; // Play with this value
+						def.frequencyHz = 2.0f; // Play with this value
+						def.maxForce = 200.0f * mouse_body->GetMass(); // Play with this value
 
-					// If a body was selected we will attach a mouse joint to it
-					// so we can pull it around
-
-					// The variable "b2Body* mouse_body;" is defined in the header ModulePhysics.h 
-					// We need to keep this body throughout several game frames; you cannot define it as a local variable here. 
-					mouse_body = b;
-
-					// Get current mouse position
-					b2Vec2 mousePosition;
-					mousePosition.x = p.x;
-					mousePosition.y = p.y;
-
-					// Define new mouse joint
-					b2MouseJointDef def;
-					def.bodyA = ground; // First body must be a static ground
-					def.bodyB = mouse_body; // Second body will be the body to attach to the mouse
-					def.target = mousePosition; // The second body will be pulled towards this location
-					def.dampingRatio = 0.5f; // Play with this value
-					def.frequencyHz = 2.0f; // Play with this value
-					def.maxForce = 200.0f * mouse_body->GetMass(); // Play with this value
-
-					// Add the new mouse joint into the World
-					mouse_joint = (b2MouseJoint*)world->CreateJoint(&def);
+						// Add the new mouse joint into the World
+						mouse_joint = (b2MouseJoint*)world->CreateJoint(&def);
+					}
 				}
 			}
 		}

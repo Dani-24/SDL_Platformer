@@ -78,12 +78,8 @@ void Map::Draw()
 						SDL_Rect r = tileset->GetTileRect(gid);
 						iPoint pos = MapToWorld(x, y);
 
-						app->render->DrawTexture(tileset->texture,
-							pos.x,
-							pos.y,
-							&r);
+						app->render->DrawTexture(tileset->texture, pos.x, pos.y, &r);
 					}
-
 				}
 			}
 		}
