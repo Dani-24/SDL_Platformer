@@ -78,11 +78,11 @@ bool Scene::PreUpdate()
 // Called each loop iteration
 bool Scene::Update(float dt)
 {
-	// Request Load / Save when pressing L/S
-	if (app->input->GetKey(SDL_SCANCODE_0) == KEY_DOWN)
+	// Request Load / Save when pressing F6/F5
+	if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
 		app->LoadGameRequest();
 
-	if (app->input->GetKey(SDL_SCANCODE_9) == KEY_DOWN)
+	if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
 		app->SaveGameRequest();
 
 	// Camera Movement

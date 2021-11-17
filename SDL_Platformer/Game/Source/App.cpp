@@ -356,11 +356,11 @@ bool App::LoadGame()
 	bool ret = true;
 
 	pugi::xml_document gameStateFile;
-	pugi::xml_parse_result result = gameStateFile.load_file("savegame.xml");
+	pugi::xml_parse_result result = gameStateFile.load_file("save_game.xml");
 
 	if (result == NULL)
 	{
-		LOG("Could not load xml file savegame.xml. pugi error: %s", result.description());
+		LOG("Could not load xml file save_game.xml. pugi error: %s", result.description());
 		ret = false;
 	}
 	else
@@ -397,7 +397,7 @@ bool App::SaveGame() const
 		item = item->next;
 	}
 
-	ret = saveDoc->save_file("savegame.xml");
+	ret = saveDoc->save_file("save_game.xml");
 
 	saveGameRequested = false;
 
