@@ -275,7 +275,20 @@ bool Player::Start()
 	// Physics
 	position.x = 32;
 	position.y = 400;
-	playerBody = app->physics->CreateRectangle(position.x, position.y, 26, 26);
+	int playerChain[16]{
+		0, 2,
+		0, 24,
+		2, 26,
+		24, 26,
+		26, 24,
+		26, 2,
+		24, 0,
+		2, 0
+	};
+
+	
+	//playerBody = app->physics->CreateRectangle(position.x, position.y, 26, 26);
+	playerBody = app->physics->CreateChain(position.x, position.y, playerChain, 16);
 	playerBody->body->SetType(b2_dynamicBody);
 	playerBody->body->SetFixedRotation(true);
 
@@ -317,8 +330,10 @@ bool Player::Update(float dt)
 		
 			// --- walk ---
 			if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
+				
 				playerBody->body->SetTransform(b2Vec2(playerBody->body->GetPosition().x + PIXEL_TO_METERS(lowSpeed), playerBody->body->GetPosition().y), playerBody->body->GetAngle());
 
+				//playerBody->body->SetLinearVelocity(b2Vec2(lowSpeed, playerBody->body->GetLinearVelocity().y));
 
 				if (currentAnimation != &walkR)
 				{
@@ -331,6 +346,8 @@ bool Player::Update(float dt)
 
 				playerBody->body->SetTransform(b2Vec2(playerBody->body->GetPosition().x + PIXEL_TO_METERS(speed), playerBody->body->GetPosition().y), playerBody->body->GetAngle());
 
+				//playerBody->body->SetLinearVelocity(b2Vec2(speed, playerBody->body->GetLinearVelocity().y));
+
 				if (currentAnimation != &runR)
 				{
 					runR.Reset();
@@ -339,13 +356,14 @@ bool Player::Update(float dt)
 				}
 			}
 		}
-		// (Left)
-		// --- he run ---
-		if ((app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT))
+		else if ((app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT))	//LEFT
 		{
 			// --- he walk ---
 			if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
+				
 				playerBody->body->SetTransform(b2Vec2(playerBody->body->GetPosition().x - PIXEL_TO_METERS(lowSpeed), playerBody->body->GetPosition().y), playerBody->body->GetAngle());
+
+				//playerBody->body->SetLinearVelocity(b2Vec2(-lowSpeed, playerBody->body->GetLinearVelocity().y));
 
 				if (currentAnimation != &walkL)
 				{
@@ -353,9 +371,12 @@ bool Player::Update(float dt)
 					currentAnimation = &walkL;
 					Player_Dir = false;
 				}
-			}
+			} // --- He run ---
 			else {
+				
 				playerBody->body->SetTransform(b2Vec2(playerBody->body->GetPosition().x - PIXEL_TO_METERS(speed), playerBody->body->GetPosition().y), playerBody->body->GetAngle());
+
+				//playerBody->body->SetLinearVelocity(b2Vec2(-speed, playerBody->body->GetLinearVelocity().y));
 
 				if (currentAnimation != &runL)
 				{
@@ -365,13 +386,13 @@ bool Player::Update(float dt)
 				}
 			}
 		}
+		else {
+			//playerBody->body->SetLinearVelocity(b2Vec2(0, playerBody->body->GetLinearVelocity().y));
+		}
 
 		if (canJump == true && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
-			playerBody->body->ApplyForceToCenter(b2Vec2(0, -75), 1);
+			playerBody->body->ApplyForceToCenter(b2Vec2(0, -250), 1);
 			canJump = false;
-		}
-		if(canJump==true) {
-			playerBody->body->ApplyForceToCenter(b2Vec2(0, 1), 1);
 		}
 
 		// --- but most importantly, he Attack ---
@@ -480,6 +501,7 @@ bool Player::PostUpdate() {
 
 void Player::OnCollision(PhysBody* c1, PhysBody* c2)
 {
+
 }
 
 bool Player::CleanUp() {
@@ -515,6 +537,9 @@ bool Player::CleanUp() {
 
 	// Textures
 	app->tex->UnLoad(texture);
+
+	// Physbody
+	app->physics->world->DestroyBody(playerBody->body);
 
 	// Reset variables
 

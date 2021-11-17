@@ -50,7 +50,7 @@ bool SceneLogo::PreUpdate()
 // Called each loop iteration
 bool SceneLogo::Update(float dt)
 {
-	if (count > 100) {
+	if (count > 200) {
 		app->fade->StartFadeToBlack(this, (Module*)app->sceneTitle, 0);
 	}
 	else {
