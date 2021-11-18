@@ -181,10 +181,10 @@ bool Scene::CleanUp()
 {
 	LOG("Freeing scene");
 
-	app->tex->UnLoad(img);
 	app->tex->UnLoad(egg);
 	app->tex->UnLoad(pandereta);
 	app->tex->UnLoad(background);
+	app->tex->UnLoad(sky);
 
 	eggAnim.DeleteAnim();
 	panderetAnim.DeleteAnim();
