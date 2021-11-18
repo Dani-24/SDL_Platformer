@@ -129,8 +129,15 @@ void Map::Blocks()
 		mapLayerItem = mapLayerItem->next;
 	}
 }
-
-
+//
+//void Map::MakeChainFromBoxes() {
+//	ListItem<PhysBody*>* c = boxes.start;
+//	ListItem<PhysBody*>* d = c->next;
+//
+//	for (i = 0; i < boxes.count; i++) {
+//
+//	}
+//}
 
 //void Map::CreateMap()
 //{
@@ -299,10 +306,13 @@ bool Map::CleanUp()
 	}
 	mapData.layers.clear();
 
-	/*while (boxes.start->data->body != NULL) {
-		app->physics->world->DestroyBody(boxes.start->data->body);
-		boxes.start->data->body = boxes.start->next->data->body;
-	}*/
+	ListItem<PhysBody*>* c = boxes.start;
+	while (c != NULL) {
+		app->physics->world->DestroyBody(c->data->body);
+		c = c->next;
+	}
+
+	boxes.clear();
 
     return true;
 }

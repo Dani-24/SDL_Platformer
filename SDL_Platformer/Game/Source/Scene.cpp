@@ -37,6 +37,7 @@ bool Scene::Start()
 
 	app->physics->Enable();
 	app->player->Enable();
+	app->map->Enable();
 
 	// Load map
 	app->map->Load("hello.tmx");
@@ -188,6 +189,7 @@ bool Scene::CleanUp()
 	eggAnim.DeleteAnim();
 	panderetAnim.DeleteAnim();
 
+	app->map->Disable();
 	app->player->Disable();
 	app->physics->Disable();
 

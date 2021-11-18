@@ -43,7 +43,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	sceneEnding = new SceneEnding(this, false);
 	player = new Player(this, false);
 
-	map = new Map(this);
+	map = new Map(this, false);
 	physics = new Physics(this, false);
 
 	// Ordered for awake / Start / Update
