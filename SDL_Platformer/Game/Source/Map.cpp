@@ -125,19 +125,9 @@ void Map::Blocks()
 				}
 			}
 		}
-
 		mapLayerItem = mapLayerItem->next;
 	}
 }
-//
-//void Map::MakeChainFromBoxes() {
-//	ListItem<PhysBody*>* c = boxes.start;
-//	ListItem<PhysBody*>* d = c->next;
-//
-//	for (i = 0; i < boxes.count; i++) {
-//
-//	}
-//}
 
 //void Map::CreateMap()
 //{

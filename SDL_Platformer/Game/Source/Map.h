@@ -117,8 +117,6 @@ public:
 
 	List<PhysBody*> boxes;
 
-	void MakeChainFromBoxes();
-
     Map(App* application, bool start_enabled = true);
 
 
