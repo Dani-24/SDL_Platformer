@@ -50,7 +50,7 @@ private:
 	// The speed in which we move the player (pixels per frame)
 	float speed;
 	float lowSpeed;
-	int velMax = 200;
+	int velMax = 150;
 	int velSlowMax = 50;
 	int currentVel;
 

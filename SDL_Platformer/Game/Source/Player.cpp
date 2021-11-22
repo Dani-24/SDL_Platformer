@@ -360,7 +360,7 @@ bool Player::Update(float dt)
 					}
 				}
 			}
-			else if ((app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT))	//LEFT
+			else if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)	//LEFT
 			{
 				// --- he walk ---
 				if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
@@ -403,6 +403,14 @@ bool Player::Update(float dt)
 		if (canJump == true && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
 			playerBody->body->ApplyForceToCenter(b2Vec2(0, -250), 1);
 			canJump = false;
+		}
+		else {
+			if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && Player_Dir == true) {
+				playerBody->body->ApplyLinearImpulse(b2Vec2(-0.4f, 0), b2Vec2(0, 0), 1);
+			}
+			if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT && Player_Dir == false) {
+				playerBody->body->ApplyLinearImpulse(b2Vec2(0.4f, 0), b2Vec2(0, 0), 1);
+			}
 		}
 
 		// --- but most importantly, he Attack ---
