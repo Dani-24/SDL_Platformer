@@ -10,9 +10,9 @@
 	<scene />
 	<sceneEnding />
 	<map />
+	<:anonymous>
+		<camera x="1351" y="437" />
+	</:anonymous>
 	<:anonymous />
-	<:anonymous />
-	<renderer>
-		<camera x="-1916" y="-318" />
-	</renderer>
+	<renderer />
 </save_state>
