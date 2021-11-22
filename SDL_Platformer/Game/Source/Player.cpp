@@ -322,74 +322,84 @@ bool Player::Update(float dt)
 	// --- Player movement ---
 	if (godMode != true) {
 
-		// (Right)
-		//--- run ---
-		if ((app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT))
+		currentVel = METERS_TO_PIXELS(playerBody->body->GetLinearVelocity().x);
+
+		if (currentVel < velMax && currentVel > -velMax)
 		{
-			//position.x += speed;
-		
-			// --- walk ---
-			if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
-				
-				playerBody->body->SetTransform(b2Vec2(playerBody->body->GetPosition().x + PIXEL_TO_METERS(lowSpeed), playerBody->body->GetPosition().y), playerBody->body->GetAngle());
+			// (Right)
+			//--- run ---
+			if ((app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT))
+			{
+				//position.x += speed;
 
-				//playerBody->body->SetLinearVelocity(b2Vec2(lowSpeed, playerBody->body->GetLinearVelocity().y));
+				// --- walk ---
+				if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
+					if (currentVel < velSlowMax && currentVel > -velSlowMax) {
+						playerBody->body->ApplyLinearImpulse(b2Vec2(0.05f, 0), b2Vec2(0, 0), 1);
 
-				if (currentAnimation != &walkR)
-				{
-					walkR.Reset();
-					currentAnimation = &walkR;
-					Player_Dir = true;
+						if (currentAnimation != &walkR)
+						{
+							walkR.Reset();
+							currentAnimation = &walkR;
+							Player_Dir = true;
+						}
+					}
+					else {
+						playerBody->body->ApplyLinearImpulse(b2Vec2(-0.2f, 0), b2Vec2(0, 0), 1);
+					}
+				}
+				else {
+				// --- Run ---	
+					playerBody->body->ApplyLinearImpulse(b2Vec2(0.2f, 0), b2Vec2(0, 0), 1);
+
+					if (currentAnimation != &runR)
+					{
+						runR.Reset();
+						currentAnimation = &runR;
+						Player_Dir = true;
+					}
+				}
+			}
+			else if ((app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT))	//LEFT
+			{
+				// --- he walk ---
+				if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
+
+					if (currentVel < velSlowMax && currentVel > -velSlowMax) {
+						playerBody->body->ApplyLinearImpulse(b2Vec2(-0.05f, 0), b2Vec2(0, 0), 1);
+
+						if (currentAnimation != &walkL)
+						{
+							walkL.Reset();
+							currentAnimation = &walkL;
+							Player_Dir = false;
+						}
+					}
+					else {
+						playerBody->body->ApplyLinearImpulse(b2Vec2(0.2f, 0), b2Vec2(0, 0), 1);
+					}
+				} // --- He run ---
+				else {
+
+					playerBody->body->ApplyLinearImpulse(b2Vec2(-0.2f, 0), b2Vec2(0, 0), 1);
+
+					if (currentAnimation != &runL)
+					{
+						runL.Reset();
+						currentAnimation = &runL;
+						Player_Dir = false;
+					}
 				}
 			}
 			else {
-
-				playerBody->body->SetTransform(b2Vec2(playerBody->body->GetPosition().x + PIXEL_TO_METERS(speed), playerBody->body->GetPosition().y), playerBody->body->GetAngle());
-
-				//playerBody->body->SetLinearVelocity(b2Vec2(speed, playerBody->body->GetLinearVelocity().y));
-
-				if (currentAnimation != &runR)
-				{
-					runR.Reset();
-					currentAnimation = &runR;
-					Player_Dir = true;
+				if (currentVel > 3) {
+					playerBody->body->ApplyLinearImpulse(b2Vec2(-0.4f, 0), b2Vec2(0, 0), 1);
+				}
+				else if (currentVel < -16) {
+					playerBody->body->ApplyLinearImpulse(b2Vec2(0.4f, 0), b2Vec2(0, 0), 1);
 				}
 			}
 		}
-		else if ((app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT))	//LEFT
-		{
-			// --- he walk ---
-			if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
-				
-				playerBody->body->SetTransform(b2Vec2(playerBody->body->GetPosition().x - PIXEL_TO_METERS(lowSpeed), playerBody->body->GetPosition().y), playerBody->body->GetAngle());
-
-				//playerBody->body->SetLinearVelocity(b2Vec2(-lowSpeed, playerBody->body->GetLinearVelocity().y));
-
-				if (currentAnimation != &walkL)
-				{
-					walkL.Reset();
-					currentAnimation = &walkL;
-					Player_Dir = false;
-				}
-			} // --- He run ---
-			else {
-				
-				playerBody->body->SetTransform(b2Vec2(playerBody->body->GetPosition().x - PIXEL_TO_METERS(speed), playerBody->body->GetPosition().y), playerBody->body->GetAngle());
-
-				//playerBody->body->SetLinearVelocity(b2Vec2(-speed, playerBody->body->GetLinearVelocity().y));
-
-				if (currentAnimation != &runL)
-				{
-					runL.Reset();
-					currentAnimation = &runL;
-					Player_Dir = false;
-				}
-			}
-		}
-		else {
-			//playerBody->body->SetLinearVelocity(b2Vec2(0, playerBody->body->GetLinearVelocity().y));
-		}
-
 		if (canJump == true && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
 			playerBody->body->ApplyForceToCenter(b2Vec2(0, -250), 1);
 			canJump = false;

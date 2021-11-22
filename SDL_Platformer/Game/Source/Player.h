@@ -47,6 +47,11 @@ private:
 	// The speed in which we move the player (pixels per frame)
 	float speed;
 	float lowSpeed;
+	int velMax = 200;
+	int velSlowMax = 50;
+	int currentVel;
+
+	bool jumping = false;
 
 	bool Player_Dir;
 
