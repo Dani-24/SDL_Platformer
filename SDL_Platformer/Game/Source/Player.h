@@ -29,6 +29,9 @@ public:
 
 	void OnCollision(PhysBody* c1, PhysBody* c2) override;
 
+	bool LoadState(pugi::xml_node&);
+	bool SaveState(pugi::xml_node&) const;
+
 	void PlayerStartAnims();
 
 	void GodMode();
