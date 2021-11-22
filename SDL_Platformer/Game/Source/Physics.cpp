@@ -231,7 +231,7 @@ void Physics::CreateScenarioGround() {
 	// Get coordinates of the screen center and radius
 	int x, y, diameter;
 	app->win->GetWindowSize(x, y);
-	x = x * 2;
+	x = x * -2;
 	y = y / 1.5f;
 	diameter = x / 2;
 
@@ -270,6 +270,7 @@ void Physics::BeginContact(b2Contact* contact)
 	if (physA == app->player->playerBody) {
 		app->player->canJump = true;
 	}
+	
 }
 
 PhysBody* Physics::CreateChain(int x, int y, int* points, int size) {

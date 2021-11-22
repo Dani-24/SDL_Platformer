@@ -267,14 +267,14 @@ bool Player::Start()
 	HP = Max_HP;
 	destroyed = false;
 	godMode = false;
-	canJump = true;
+	canJump = false;
 
 	// Load assets
 	PlayerStartAnims();
 
 	// Physics
 	position.x = 32;
-	position.y = 400;
+	position.y = 1090;
 	int playerChain[16]{
 		0, 2,
 		0, 24,
@@ -312,10 +312,10 @@ bool Player::Update(float dt)
 	bool ret = true;
 
 	// --- Camera ---
-	if (position.x > 352 && position.x < 1280) {
+	if (position.x > 352 && position.x < 2880) {
 		app->render->camera.x = 0 -((app->player->position.x * 2) - 1280 / 2);
 	}
-	if (position.y < 460) {
+	if (position.y < 1114) {
 		app->render->camera.y = 0 -((app->player->position.y * 2) - 720 / 2);
 	}
 
@@ -445,19 +445,19 @@ void Player::GodMode() {
 	// --- GOD MODE ---
 	if ((app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT))
 	{
-		playerBody->body->SetLinearVelocity(b2Vec2(5, 0));
+		playerBody->body->SetTransform(b2Vec2(playerBody->body->GetPosition().x + 0.1f, playerBody->body->GetPosition().y),playerBody->body->GetAngle());
 	}
 	if ((app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT))
 	{
-		playerBody->body->SetLinearVelocity(b2Vec2(-5, 0));
+		playerBody->body->SetTransform(b2Vec2(playerBody->body->GetPosition().x - 0.1f, playerBody->body->GetPosition().y), playerBody->body->GetAngle());
 	}
 	if ((app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)) 
 	{
-		playerBody->body->SetLinearVelocity(b2Vec2(0, -5));
+		playerBody->body->SetTransform(b2Vec2(playerBody->body->GetPosition().x, playerBody->body->GetPosition().y + -0.1f), playerBody->body->GetAngle());
 	}
 	if ((app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)) 
 	{
-		playerBody->body->SetLinearVelocity(b2Vec2(0, 5));
+		playerBody->body->SetTransform(b2Vec2(playerBody->body->GetPosition().x, playerBody->body->GetPosition().y + 0.1f), playerBody->body->GetAngle());
 	}
 }
 

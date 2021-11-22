@@ -101,7 +101,7 @@ void Map::Blocks()
 	// L06: DONE 4: Make sure we draw all the layers and not just the first one
 	while (mapLayerItem != NULL) {
 
-		if (mapLayerItem->data->properties.GetProperty("Navigation") == 1) {
+		if (mapLayerItem->data->properties.GetProperty("Navigation") == 1 || mapLayerItem->data->properties.GetProperty("Navigation") == 2 || mapLayerItem->data->properties.GetProperty("Navigation") == 3) { // Colliders
 
 			for (int x = 0; x < mapLayerItem->data->width; x++)
 			{
@@ -120,7 +120,19 @@ void Map::Blocks()
 						SDL_Rect r = tileset->GetTileRect(gid);
 						iPoint pos = MapToWorld(x, y);
 
-						boxes.add(app->physics->CreateRectangle(pos.x + 8, pos.y + 8, 16, 16));
+						switch (mapLayerItem->data->properties.GetProperty("Navigation"))
+						{
+						case 1:
+							groundCollider.add(app->physics->CreateRectangle(pos.x + 8, pos.y + 8, 16, 16));
+							break;
+						case 2:
+							wallCollider.add(app->physics->CreateRectangle(pos.x + 8, pos.y + 8, 16, 16));
+							break;
+						case 3:
+							bricksCollider.add(app->physics->CreateRectangle(pos.x + 8, pos.y + 8, 16, 16));
+							break;
+						}
+
 					}
 				}
 			}
@@ -128,56 +140,6 @@ void Map::Blocks()
 		mapLayerItem = mapLayerItem->next;
 	}
 }
-
-//void Map::CreateMap()
-//{
-//	// Pivot 0, 0
-//	int hello[80] = {
-//		-2, 464,
-//		397, 465,
-//		397, 638,
-//		466, 638,
-//		466, 433,
-//		669, 433,
-//		669, 483,
-//		685, 481,
-//		685, 638,
-//		722, 638,
-//		722, 530,
-//		765, 530,
-//		763, 560,
-//		819, 560,
-//		817, 545,
-//		926, 546,
-//		926, 561,
-//		978, 561,
-//		978, 496,
-//		1005, 496,
-//		1005, 560,
-//		1042, 560,
-//		1042, 464,
-//		1069, 464,
-//		1069, 512,
-//		1213, 512,
-//		1213, 640,
-//		1282, 640,
-//		1282, 465,
-//		1390, 465,
-//		1390, 641,
-//		1443, 641,
-//		1443, 416,
-//		1485, 416,
-//		1485, 640,
-//		1523, 640,
-//		1523, 370,
-//		1601, 370,
-//		1601, 652,
-//		1, 640
-//	};
-//
-//
-//	app->physics->CreateSolidChain(0, 0, hello, 80);
-//}
 
 // L04: DONE 8: Create a method that translates x,y coordinates from map positions to world positions
 iPoint Map::MapToWorld(int x, int y) const
@@ -296,13 +258,26 @@ bool Map::CleanUp()
 	}
 	mapData.layers.clear();
 
-	ListItem<PhysBody*>* c = boxes.start;
+	ListItem<PhysBody*>* c = groundCollider.start;
 	while (c != NULL) {
 		app->physics->world->DestroyBody(c->data->body);
 		c = c->next;
 	}
+	groundCollider.clear();
 
-	boxes.clear();
+	ListItem<PhysBody*>* c2 = wallCollider.start;
+	while (c != NULL) {
+		app->physics->world->DestroyBody(c->data->body);
+		c = c->next;
+	}
+	wallCollider.clear();
+
+	ListItem<PhysBody*>* c3 = bricksCollider.start;
+	while (c != NULL) {
+		app->physics->world->DestroyBody(c->data->body);
+		c = c->next;
+	}
+	bricksCollider.clear();
 
     return true;
 }

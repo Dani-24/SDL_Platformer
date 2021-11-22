@@ -40,8 +40,7 @@ bool Scene::Start()
 	app->map->Enable();
 
 	// Load map
-	app->map->Load("hello.tmx");
-	//app->map->CreateMap();
+	app->map->Load("mapa.tmx");
 	app->map->Blocks();
 
 	// Load Assets
@@ -50,8 +49,12 @@ bool Scene::Start()
 
 	background = app->tex->Load("Assets/maps/Background.png");
 	sky = app->tex->Load("Assets/maps/Background parts/5 - Sky_color.png");
-	bgScrollX[0] = -886; bgScrollX[1] = 0; bgScrollX[2] = 886; bgScrollX[3] = 886 * 2;
-	bgScrollX[4] = 886 * 3; bgScrollX[5] = 886 * 4;
+
+	int N = -886;
+	for (int i = 0; i < 7; i++) {
+		bgScrollX[i] = N;
+		N += 886;
+	}
 
 	// Easter Egg - Press 5 when playing :D
 	easterEgg = false;
@@ -65,14 +68,13 @@ bool Scene::Start()
 // Called each loop iteration
 bool Scene::PreUpdate()
 {
-	if (app->player->position.y > 590) {
+	// Lose condition
+	if (app->player->position.y > 1280) {
 		app->player->death = true;
 	}
 
-	// If you arrive to the goal you win
-	if (app->player->position.x < 48 && app->player->position.y < 64) {
-		app->player->win = true;
-	}
+	// Add win condition
+
 	return true;
 }
 
@@ -123,19 +125,20 @@ bool Scene::PostUpdate()
 {
 	bool ret = true;
 
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < 7; i++) {
 		if (bgScrollX[i] <= -(886 * 2)) {
 			bgScrollX[i] = (886 * 3)-1;
 		}
 		else {
 			bgScrollX[i] -= 0.5f;
-			app->render->DrawTexture(background, bgScrollX[i], 50);
+			app->render->DrawTexture(background, bgScrollX[i], 750);// 50
 		}
 	}
 
-	for (int i = 0; i < 6; i++) {
-		app->render->DrawTexture(sky, i * 288, -150);
-		app->render->DrawTexture(sky, i * 288, -358);
+	for (int i = 0; i < 12; i++) {
+		for (int j = 0; j < 5; j++) {
+			app->render->DrawTexture(sky, i * 288, 750 - j * 208);
+		}
 	}
 
 	if (easterEgg == true) {

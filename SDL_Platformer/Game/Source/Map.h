@@ -115,7 +115,9 @@ class Map : public Module
 {
 public:
 
-	List<PhysBody*> boxes;
+	List<PhysBody*> groundCollider;
+	List<PhysBody*> wallCollider;
+	List<PhysBody*> bricksCollider;
 
     Map(App* application, bool start_enabled = true);
 
