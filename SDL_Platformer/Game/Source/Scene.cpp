@@ -35,6 +35,16 @@ bool Scene::Start()
 {
 	LOG("Start Scene and load assets");
 
+
+	// Player position for Scene 1
+	app->player->position.x = 32;
+	app->player->position.y = 1090;
+	// Camera at player
+	app->render->camera.x = 0 - ((app->player->position.x * 2) - 50);
+	app->render->camera.y = 0 - ((app->player->position.y * 2) - 720 / 2);
+
+	// Enable modules q se usan
+
 	app->physics->Enable();
 	app->player->Enable();
 	app->map->Enable();
@@ -118,7 +128,7 @@ bool Scene::Update(float dt)
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN) {
-		app->fade->StartFadeToBlack(this, (Module*)app->restartLvl1, 10);
+		app->fade->StartFadeToBlack(this, (Module*)app->scene, 10);
 		
 	}
 	return true;

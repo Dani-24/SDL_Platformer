@@ -8,7 +8,6 @@
 #include "SceneTitle.h"
 #include "Scene.h"
 #include "SceneEnding.h"
-#include "RestartLvl1.h"
 #include "Player.h"
 #include "Map.h"
 #include "Physics.h"
@@ -27,7 +26,6 @@
 // L09: TODO 3: Add OPTICK_EVENT() calls to all Update methods
 // Alternatively you can use OPTICK_CATEGORY()
 
-
 // Constructor
 App::App(int argc, char* args[]) : argc(argc), args(args)
 {
@@ -42,7 +40,6 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	sceneTitle = new SceneTitle(this, false);
 	scene = new Scene(this, false);
 	sceneEnding = new SceneEnding(this, false);
-	restartLvl1 = new RestartLvl1(this, false);
 	player = new Player(this, false);
 
 	map = new Map(this, false);
@@ -60,7 +57,6 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(sceneTitle);
 	AddModule(scene);
 	AddModule(sceneEnding);
-	AddModule(restartLvl1);
 	AddModule(map);
 
 	AddModule(player);

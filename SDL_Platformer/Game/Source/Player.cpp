@@ -273,8 +273,7 @@ bool Player::Start()
 	PlayerStartAnims();
 
 	// Physics
-	position.x = 32;
-	position.y = 1090;
+
 	int playerChain[16]{
 		0, 2,
 		0, 24,
@@ -285,8 +284,7 @@ bool Player::Start()
 		24, 0,
 		2, 0
 	};
-
-	
+		
 	//playerBody = app->physics->CreateRectangle(position.x, position.y, 26, 26);
 	playerBody = app->physics->CreateChain(position.x, position.y, playerChain, 16);
 	playerBody->body->SetType(b2_dynamicBody);
@@ -313,13 +311,11 @@ bool Player::Update(float dt)
 
 	// --- Camera ---
 	if (position.x > 352 && position.x < 2880) {
-		app->render->camera.x = 0 -((app->player->position.x * 2) - 1280 / 2);
+		app->render->camera.x = 0 -((position.x * 2) - 1280 / 2);
 	}
 	if (position.y < 1114) {
-		app->render->camera.y = 0 -((app->player->position.y * 2) - 720 / 2);
+		app->render->camera.y = 0 -((position.y * 2) - 720 / 2);
 	}
-
-
 
 	// --- Player movement ---
 	if (godMode != true) {
