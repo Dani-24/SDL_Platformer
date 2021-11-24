@@ -1,6 +1,7 @@
 #include "App.h"
 #include "Window.h"
 #include "Render.h"
+#include "Player.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -171,6 +172,26 @@ bool Render::DrawRectangle(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint
 	}
 
 	return ret;
+}
+
+bool Render::LoadState(pugi::xml_node& data)
+{
+	app->player->position.x = data.child("camera").attribute("x").as_int();
+	app->player->position.y = data.child("camera").attribute("y").as_int();
+
+	return true;
+}
+
+// L02: DONE 8: Create a method to save the state of the renderer
+// Save Game State
+bool Render::SaveState(pugi::xml_node& data) const
+{
+	pugi::xml_node pos = data.append_child("camera");
+
+	pos.append_attribute("x") = app->player->position.x;
+	pos.append_attribute("y") = app->player->position.y;
+
+	return true;
 }
 
 bool Render::DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera) const

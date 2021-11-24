@@ -8,6 +8,7 @@
 #include "SceneTitle.h"
 #include "Scene.h"
 #include "SceneEnding.h"
+#include "RestartLvl1.h"
 #include "Player.h"
 #include "Map.h"
 #include "Physics.h"
@@ -41,6 +42,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	sceneTitle = new SceneTitle(this, false);
 	scene = new Scene(this, false);
 	sceneEnding = new SceneEnding(this, false);
+	restartLvl1 = new RestartLvl1(this, false);
 	player = new Player(this, false);
 
 	map = new Map(this, false);
@@ -58,6 +60,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(sceneTitle);
 	AddModule(scene);
 	AddModule(sceneEnding);
+	AddModule(restartLvl1);
 	AddModule(map);
 
 	AddModule(player);
@@ -203,7 +206,11 @@ void App::PrepareUpdate()
 void App::FinishUpdate()
 {
 	// L02: DONE 1: This is a good place to call Load / Save methods
-	if (loadGameRequested == true) LoadGame();
+	if (loadGameRequested == true) {
+		LoadGame();
+		loadGameRequested == false;
+	}
+	
 	if (saveGameRequested == true) SaveGame();
 
 	// L07: DONE 4: Now calculate:

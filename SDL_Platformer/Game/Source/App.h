@@ -21,6 +21,7 @@ class Audio;
 class SceneLogo;
 class SceneTitle;
 class SceneEnding;
+class RestartLvl1;
 class Scene;
 class Player;
 class Map;
@@ -99,6 +100,7 @@ public:
 	SceneTitle* sceneTitle;
 	Scene* scene;
 	SceneEnding* sceneEnding;
+	RestartLvl1* restartLvl1;
 	Player* player;
 	Map* map;
 	Physics* physics;

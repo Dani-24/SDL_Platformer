@@ -58,6 +58,9 @@
     <ClCompile Include="Source\Map.cpp">
       <Filter>Platformer\Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="Source\RestartLvl1.cpp">
+      <Filter>Platformer\Scenes\Gameloop</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Defs.h">
@@ -140,6 +143,9 @@
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\RestartLvl1.h">
+      <Filter>Platformer\Scenes\Gameloop</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

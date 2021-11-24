@@ -117,6 +117,10 @@ bool Scene::Update(float dt)
 		app->fade->StartFadeToBlack(this, (Module*)app->sceneEnding, 10);
 	}
 
+	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN) {
+		app->fade->StartFadeToBlack(this, (Module*)app->restartLvl1, 10);
+		
+	}
 	return true;
 }
 
