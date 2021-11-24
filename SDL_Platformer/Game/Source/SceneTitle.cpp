@@ -42,6 +42,8 @@ bool SceneTitle::Start()
 	titleY = -200;
 	pressEnter = app->tex->Load("Assets/textures/title2.png");
 
+	enemyFlying = app->tex->Load("Assets/textures/enemy.png");
+
 	// Audio
 	app->audio->PlayMusic("Assets/audio/music/music_title.ogg");
 
@@ -103,6 +105,16 @@ bool SceneTitle::PostUpdate()
 		// Sky
 		app->render->DrawTexture(bgSky, 288 * i, -50);
 	}
+
+	// BAck enemy
+	if (enemyFlyX < -250) {
+		enemyFlyX = 700;
+	}
+	else {
+		enemyFlyX--;
+	}
+	enemyAngle++;
+	app->render->DrawTexture(enemyFlying, enemyFlyX, 100, 0, 1, enemyAngle);
 
 	// Title
 	app->render->DrawTexture(titleText, 180, titleY);

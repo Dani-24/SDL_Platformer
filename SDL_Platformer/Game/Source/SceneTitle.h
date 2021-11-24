@@ -46,6 +46,9 @@ private:
 
 	SDL_Texture* pressEnter;
 
+	SDL_Texture* enemyFlying;
+	int enemyFlyX = 700, enemyAngle = 0; 
+
 	uint fxEnter;
 
 };
