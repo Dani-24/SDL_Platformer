@@ -137,6 +137,7 @@ bool Input::PreUpdate()
 	return true;
 }
 
+
 // Called before quitting
 bool Input::CleanUp()
 {

@@ -63,6 +63,8 @@ public:
 	void LoadGameRequest();
 	void SaveGameRequest() const;
 
+	void setFrameRateCap();
+
 private:
 
 	// Load config file

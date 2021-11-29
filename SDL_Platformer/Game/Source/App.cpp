@@ -19,6 +19,10 @@
 #include <iostream>
 #include <sstream>
 
+#include <sstream>
+#include "SString.h"
+using namespace std;
+
 // L07: DONE 3: Measure the amount of ms that takes to execute:
 // App constructor, Awake, Start and CleanUp
 // LOG the result
@@ -206,15 +210,8 @@ void App::FinishUpdate()
 		LoadGame();
 		loadGameRequested == false;
 	}
-	
-	if (saveGameRequested == true) SaveGame();
 
-	// L07: DONE 4: Now calculate:
-	// Amount of frames since startup
-	// Amount of time since game start (use a low resolution timer)
-	// Amount of ms took the last update
-	// Amount of frames during the last second
-	// Average FPS for the whole game life
+	if (saveGameRequested == true) SaveGame();
 
 	float secondsSinceStartup = startupTime.ReadSec();
 
@@ -225,20 +222,39 @@ void App::FinishUpdate()
 		averageFps = (averageFps + framesPerSecond) / 2;
 	}
 
-	static char title[256];
-	sprintf_s(title, 256, "Av.FPS: %.2f Last sec frames: %i Last dt: %.3f Time since startup: %.3f Frame Count: %I64u ", averageFps, framesPerSecond, dt, secondsSinceStartup, frameCount);
+	static char titleInfo[256];
 
-	// L08: DONE 2: Use SDL_Delay to make sure you get your capped framerate
+	if (app->render->vSyncOn == true) {
+		sprintf_s(titleInfo, 256, "FPS: %i || Av.FPS: %.2f || Last-frame MS: %.3f || Vsync: ON ", framesPerSecond, averageFps, dt);
+	}
+	else {
+		sprintf_s(titleInfo, 256, "FPS: %i || Av.FPS: %.2f || Last-frame MS: %.3f || Vsync: OFF ", framesPerSecond, averageFps, dt);
+	}
+
+	strcat_s(titleInfo, " || ");
+	strcat_s(titleInfo, title.GetString());
+
 	float delay = float(maxFrameRate) - frameDuration->ReadMs();
-	//LOG("F: %f Delay:%f", frameDuration->ReadMs(), delay);
 
-	// L08: DONE 3: Measure accurately the amount of time SDL_Delay() actually waits compared to what was expected
+	// Measure accurately the amount of time SDL_Delay() actually waits compared to what was expected
 	PerfTimer* delayt = new PerfTimer();
 	delayt->Start();
 	if (maxFrameRate > 0 && delay > 0) SDL_Delay(delay);
-	//LOG("Expected %f milliseconds and the real delay is % f", delay, delayt->ReadMs());
 
-	app->win->SetTitle(title);
+	app->win->SetTitle(titleInfo);
+
+	if (app->input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN) {
+		setFrameRateCap();
+	}
+}
+
+void App::setFrameRateCap() {
+	if (maxFrameRate != 34) {
+		maxFrameRate = 34;		// 30 fps
+	}
+	else{
+		maxFrameRate = 16;		// 60 fps
+	}
 }
 
 // Call modules before each loop iteration

@@ -2,7 +2,7 @@
 <config>
   <app>
     <title>SDL Platformer Game</title>
-    <organization>UPC</organization>
+    <organization>MacacoSerapios</organization>
 	<frcap value = "16"/>
   </app>
 
