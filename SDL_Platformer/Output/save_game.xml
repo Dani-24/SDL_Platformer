@@ -9,11 +9,10 @@
 	<sceneTitle />
 	<scene />
 	<sceneEnding />
-	<RestartLvl1 />
 	<map />
 	<:anonymous />
 	<:anonymous />
 	<renderer>
-		<camera x="544" y="1061" />
+		<camera x="507" y="1061" />
 	</renderer>
 </save_state>
