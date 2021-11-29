@@ -138,6 +138,7 @@ bool SceneTitle::CleanUp()
 	app->tex->UnLoad(pressEnter);
 
 	fxEnter = 0;
+	enemyFlyX = 700;
 
 	return true;
 }
