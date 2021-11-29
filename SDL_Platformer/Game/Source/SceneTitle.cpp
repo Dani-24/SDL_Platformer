@@ -31,6 +31,7 @@ bool SceneTitle::Awake()
 bool SceneTitle::Start()
 {
 	// Textures
+
 	bg = app->tex->Load("Assets/maps/Background parts/_Complete_static_BG_(288 x 208).png");
 	bgSky = app->tex->Load("Assets/maps/Background parts/5 - Sky_color.png");
 	scroller[0] = 0;
@@ -94,7 +95,7 @@ bool SceneTitle::PostUpdate()
 	// Background
 
 	for (int i = 0; i < 4; i++) {
-		if (scroller[i] <= -288) {
+		if (scroller[i] <= -287) {
 			scroller[i] = 288 * 3;
 		}
 		else {
