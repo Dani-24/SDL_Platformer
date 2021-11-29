@@ -243,7 +243,7 @@ void Player::PlayerStartAnims() {
 	jumpR.PushBack({ 96,224,32,32 });
 	jumpR.PushBack({ 128,224,32,32 });
 	jumpR.loop = false;
-	jumpR.speed = 0.1;
+	jumpR.speed = 0.1f;
 
 	//jump LEFT
 	jumpL.PushBack({ 224,640,32,32 });
@@ -252,7 +252,7 @@ void Player::PlayerStartAnims() {
 	jumpL.PushBack({ 128,640,32,32 });
 	jumpL.PushBack({ 96,640,32,32 });
 	jumpL.loop = true;
-	jumpL.speed = 0.1;
+	jumpL.speed = 0.1f;
 
 }
 
@@ -410,7 +410,9 @@ bool Player::Update(float dt)
 					jumpR.Reset();
 					currentAnimation = &jumpR;
 				}
-				else if(currentAnimation != &jumpL)
+			}
+			else {
+				if(currentAnimation != &jumpL)
 				{
 					jumpL.Reset();
 					currentAnimation = &jumpL;
@@ -516,19 +518,23 @@ bool Player::PostUpdate() {
 		punchR.Update();
 	}
 	// Jump anim:
-	if (currentAnimation == &jumpL && currentAnimation->GetCurrentFrameINT() == 5) {
+	if (currentAnimation == &jumpL && currentAnimation->GetCurrentFrameINT() == 4) {
 		idleR.Reset();
 		currentAnimation = &idleR;
 	}
 	else {
-		jumpL.Update();
+		if (canJump == false) {
+			jumpL.Update();
+		}
 	}
-	if (currentAnimation == &jumpR && currentAnimation->GetCurrentFrameINT() == 5) {
+	if (currentAnimation == &jumpR && currentAnimation->GetCurrentFrameINT() == 4) {
 		idleR.Reset();
 		currentAnimation = &idleR;
 	}
 	else {
-		jumpR.Update();
+		if (canJump == false) {
+			jumpR.Update();
+		}
 	}
 
 	// Update Animation each frame

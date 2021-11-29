@@ -29,8 +29,6 @@ public:
 
 	void OnCollision(PhysBody* c1, PhysBody* c2) override;
 
-	
-
 	void PlayerStartAnims();
 
 	void GodMode();
