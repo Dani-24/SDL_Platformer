@@ -38,6 +38,12 @@ private:
 	SDL_Texture* pandereta;
 	SDL_Texture* background;
 	SDL_Texture* sky;
+
+	SDL_Texture* dieWindow;
+	Animation dieWindowAnim;
+
+	int cont = 0;
+	int w, h;
 };
 
 #endif // __SCENE_H__

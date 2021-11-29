@@ -311,146 +311,152 @@ bool Player::Update(float dt)
 {
 	bool ret = true;
 
-	// --- Camera ---
-	if (position.x > 352 && position.x < 2880) {
-		app->render->camera.x = 0 -((position.x * 2) - 1280 / 2);
-	}
-	if (position.y < 1114) {
-		app->render->camera.y = 0 -((position.y * 2) - 720 / 2);
-	}
+	if (death != true) {
 
-	// --- Player movement ---
-	if (godMode != true) {
+		// --- Camera ---
+		if (position.x > 352 && position.x < 2880) {
+			app->render->camera.x = 0 - ((position.x * 2) - 1280 / 2);
+		}
+		if (position.y < 1114) {
+			app->render->camera.y = 0 - ((position.y * 2) - 720 / 2);
+		}
 
-		currentVel = METERS_TO_PIXELS(playerBody->body->GetLinearVelocity().x);
+		// --- Player movement ---
+		if (godMode != true) {
 
-		if (currentVel < velMax && currentVel > -velMax)
-		{
-			// (Right)
-			//--- run ---
-			if ((app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT))
+			currentVel = METERS_TO_PIXELS(playerBody->body->GetLinearVelocity().x);
+
+			if (currentVel < velMax && currentVel > -velMax)
 			{
-				//position.x += speed;
+				// (Right)
+				//--- run ---
+				if ((app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT))
+				{
+					//position.x += speed;
 
-				// --- walk ---
-				if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
-					if (currentVel < velSlowMax && currentVel > -velSlowMax) {
-						playerBody->body->ApplyLinearImpulse(b2Vec2(0.05f, 0), b2Vec2(0, 0), 1);
+					// --- walk ---
+					if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
+						if (currentVel < velSlowMax && currentVel > -velSlowMax) {
+							playerBody->body->ApplyLinearImpulse(b2Vec2(0.05f, 0), b2Vec2(0, 0), 1);
 
-						if (currentAnimation != &walkR)
+							if (currentAnimation != &walkR)
+							{
+								walkR.Reset();
+								currentAnimation = &walkR;
+								Player_Dir = true;
+							}
+						}
+						else {
+							playerBody->body->ApplyLinearImpulse(b2Vec2(-0.2f, 0), b2Vec2(0, 0), 1);
+						}
+					}
+					else {
+						// --- Run ---	
+						playerBody->body->ApplyLinearImpulse(b2Vec2(0.2f, 0), b2Vec2(0, 0), 1);
+
+						if (currentAnimation != &runR)
 						{
-							walkR.Reset();
-							currentAnimation = &walkR;
+							runR.Reset();
+							currentAnimation = &runR;
 							Player_Dir = true;
 						}
 					}
+				}
+				else if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)	//LEFT
+				{
+					// --- he walk ---
+					if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
+
+						if (currentVel < velSlowMax && currentVel > -velSlowMax) {
+							playerBody->body->ApplyLinearImpulse(b2Vec2(-0.05f, 0), b2Vec2(0, 0), 1);
+
+							if (currentAnimation != &walkL)
+							{
+								walkL.Reset();
+								currentAnimation = &walkL;
+								Player_Dir = false;
+							}
+						}
+						else {
+							playerBody->body->ApplyLinearImpulse(b2Vec2(0.2f, 0), b2Vec2(0, 0), 1);
+						}
+					} // --- He run ---
 					else {
+
 						playerBody->body->ApplyLinearImpulse(b2Vec2(-0.2f, 0), b2Vec2(0, 0), 1);
-					}
-				}
-				else {
-				// --- Run ---	
-					playerBody->body->ApplyLinearImpulse(b2Vec2(0.2f, 0), b2Vec2(0, 0), 1);
 
-					if (currentAnimation != &runR)
-					{
-						runR.Reset();
-						currentAnimation = &runR;
-						Player_Dir = true;
-					}
-				}
-			}
-			else if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)	//LEFT
-			{
-				// --- he walk ---
-				if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
-
-					if (currentVel < velSlowMax && currentVel > -velSlowMax) {
-						playerBody->body->ApplyLinearImpulse(b2Vec2(-0.05f, 0), b2Vec2(0, 0), 1);
-
-						if (currentAnimation != &walkL)
+						if (currentAnimation != &runL)
 						{
-							walkL.Reset();
-							currentAnimation = &walkL;
+							runL.Reset();
+							currentAnimation = &runL;
 							Player_Dir = false;
 						}
 					}
-					else {
-						playerBody->body->ApplyLinearImpulse(b2Vec2(0.2f, 0), b2Vec2(0, 0), 1);
-					}
-				} // --- He run ---
+				}
 				else {
+					if (currentVel > 3) {
+						playerBody->body->ApplyLinearImpulse(b2Vec2(-0.4f, 0), b2Vec2(0, 0), 1);
+					}
+					else if (currentVel < -16) {
+						playerBody->body->ApplyLinearImpulse(b2Vec2(0.4f, 0), b2Vec2(0, 0), 1);
+					}
+				}
+			}
+			if (canJump == true && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
+				playerBody->body->ApplyForceToCenter(b2Vec2(0, -250), 1);
+				canJump = false;
 
-					playerBody->body->ApplyLinearImpulse(b2Vec2(-0.2f, 0), b2Vec2(0, 0), 1);
-
-					if (currentAnimation != &runL)
+				if (Player_Dir == true) {
+					if (currentAnimation != &jumpR)
 					{
-						runL.Reset();
-						currentAnimation = &runL;
+						jumpR.Reset();
+						currentAnimation = &jumpR;
+					}
+				}
+				else {
+					if (currentAnimation != &jumpL)
+					{
+						jumpL.Reset();
+						currentAnimation = &jumpL;
+					}
+				}
+			}
+			else {
+				if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && Player_Dir == true) {
+					playerBody->body->ApplyLinearImpulse(b2Vec2(-0.4f, 0), b2Vec2(0, 0), 1);
+				}
+				if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT && Player_Dir == false) {
+					playerBody->body->ApplyLinearImpulse(b2Vec2(0.4f, 0), b2Vec2(0, 0), 1);
+				}
+			}
+
+			// --- but most importantly, he Attack ---
+			if (app->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN)
+			{
+				if (Player_Dir == true) {
+					if (currentAnimation != &punchR)
+					{
+						punchR.Reset();
+						currentAnimation = &punchR;
+						Player_Dir = true;
+					}
+				}
+				else {
+					if (currentAnimation != &punchL)
+					{
+						punchL.Reset();
+						currentAnimation = &punchL;
 						Player_Dir = false;
 					}
 				}
 			}
-			else {
-				if (currentVel > 3) {
-					playerBody->body->ApplyLinearImpulse(b2Vec2(-0.4f, 0), b2Vec2(0, 0), 1);
-				}
-				else if (currentVel < -16) {
-					playerBody->body->ApplyLinearImpulse(b2Vec2(0.4f, 0), b2Vec2(0, 0), 1);
-				}
-			}
-		}
-		if (canJump == true && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
-			playerBody->body->ApplyForceToCenter(b2Vec2(0, -250), 1);
-			canJump = false;
-
-			if (Player_Dir == true) {
-				if (currentAnimation != &jumpR)
-				{
-					jumpR.Reset();
-					currentAnimation = &jumpR;
-				}
-			}
-			else {
-				if(currentAnimation != &jumpL)
-				{
-					jumpL.Reset();
-					currentAnimation = &jumpL;
-				}
-			}
 		}
 		else {
-			if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && Player_Dir == true) {
-				playerBody->body->ApplyLinearImpulse(b2Vec2(-0.4f, 0), b2Vec2(0, 0), 1);
-			}
-			if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT && Player_Dir == false) {
-				playerBody->body->ApplyLinearImpulse(b2Vec2(0.4f, 0), b2Vec2(0, 0), 1);
-			}
-		}
-
-		// --- but most importantly, he Attack ---
-		if (app->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN)
-		{
-			if (Player_Dir == true) {
-				if (currentAnimation != &punchR)
-				{
-					punchR.Reset();
-					currentAnimation = &punchR;
-					Player_Dir = true;
-				}
-			}
-			else {
-				if (currentAnimation != &punchL)
-				{
-					punchL.Reset();
-					currentAnimation = &punchL;
-					Player_Dir = false;
-				}
-			}
+			GodMode();
 		}
 	}
-	else {	
-		GodMode();
+	else {
+	app->physics->pause = true;
 	}
 
 	return ret;

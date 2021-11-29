@@ -60,6 +60,14 @@ bool Scene::Start()
 	background = app->tex->Load("Assets/maps/Background.png");
 	sky = app->tex->Load("Assets/maps/Background parts/5 - Sky_color.png");
 
+	dieWindow = app->tex->Load("Assets/textures/dieTexture.png");
+
+	for (int z = 0; z < 11; z++) {
+		dieWindowAnim.PushBack({ z * 1280, 0, 1280, 720 });
+	}
+	dieWindowAnim.loop = false;
+	dieWindowAnim.speed = 0.1f;
+
 	int N = -886;
 	for (int i = 0; i < 7; i++) {
 		bgScrollX[i] = N;
@@ -80,7 +88,13 @@ bool Scene::PreUpdate()
 {
 	// Lose condition
 	if (app->player->position.y > 1280) {
+		if (w == NULL && h == NULL) {
+			w = -app->render->camera.x / 2 - 1280 / 4;
+			h = -app->render->camera.y / 2 - 720 / 4;
+		}
+
 		app->player->death = true;
+		dieWindowAnim.Update();
 	}
 
 	// Add win condition
@@ -124,12 +138,17 @@ bool Scene::Update(float dt)
 
 	// Death
 	if (app->player->death == true) {
-		app->fade->StartFadeToBlack(this, (Module*)app->sceneEnding, 10);
+		if (cont > 150) {
+			app->fade->StartFadeToBlack(this, (Module*)app->sceneEnding, 10);
+		}
+		else {
+			cont++;
+		}
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN) {
 		app->fade->StartFadeToBlack(this, (Module*)app->scene, 10);
-		
+
 	}
 	return true;
 }
@@ -141,7 +160,7 @@ bool Scene::PostUpdate()
 
 	for (int i = 0; i < 7; i++) {
 		if (bgScrollX[i] <= -(886 * 2)) {
-			bgScrollX[i] = (886 * 3)-1;
+			bgScrollX[i] = (886 * 3) - 1;
 		}
 		else {
 			bgScrollX[i] -= 0.5f;
@@ -180,6 +199,13 @@ bool Scene::PostUpdate()
 	// Draw map
 	app->map->Draw();
 
+	// Die / Win textures
+
+	SDL_Rect dieWRect = dieWindowAnim.GetCurrentFrame();
+	app->render->DrawTexture(dieWindow, w, h, &dieWRect);
+
+	LOG("%d, %d", w, h);
+
 	return ret;
 }
 
@@ -188,17 +214,23 @@ bool Scene::CleanUp()
 {
 	LOG("Freeing scene");
 
+	dieWindowAnim.Reset();
+
 	app->tex->UnLoad(egg);
 	app->tex->UnLoad(pandereta);
 	app->tex->UnLoad(background);
 	app->tex->UnLoad(sky);
+	app->tex->UnLoad(dieWindow);
 
 	eggAnim.DeleteAnim();
 	panderetAnim.DeleteAnim();
+	dieWindowAnim.DeleteAnim();
 
 	app->map->Disable();
 	app->player->Disable();
 	app->physics->Disable();
+
+	cont = 0;
 
 	return true;
 }

@@ -39,20 +39,22 @@ bool Physics::Start() {
 
 bool Physics::PreUpdate() {
 
-	// Mirar el Step si se tiene que ajustar al framerate del juego
-	// Fixed at 60 fps = 1/60 seconds
-	world->Step(1.0f/ 60.0f, 6, 2);
+	if (pause != true) {
+		// Mirar el Step si se tiene que ajustar al framerate del juego
+		// Fixed at 60 fps = 1/60 seconds
+		world->Step(1.0f / 60.0f, 6, 2);
 
-	for (b2Contact* c = world->GetContactList(); c; c = c->GetNext())
-	{
-		// For each contact detected by Box2D, see if the first one colliding is a sensor
-		if (c->GetFixtureA()->IsSensor() && c->IsTouching())
+		for (b2Contact* c = world->GetContactList(); c; c = c->GetNext())
 		{
-			// If so, we call the OnCollision listener function (only of the sensor), passing as inputs our custom PhysBody classes
-			PhysBody* pb1 = (PhysBody*)c->GetFixtureA()->GetBody()->GetUserData();
-			PhysBody* pb2 = (PhysBody*)c->GetFixtureA()->GetBody()->GetUserData();
-			if (pb1 && pb2 && pb1->listener)
-				pb1->listener->OnCollision(pb1, pb2);
+			// For each contact detected by Box2D, see if the first one colliding is a sensor
+			if (c->GetFixtureA()->IsSensor() && c->IsTouching())
+			{
+				// If so, we call the OnCollision listener function (only of the sensor), passing as inputs our custom PhysBody classes
+				PhysBody* pb1 = (PhysBody*)c->GetFixtureA()->GetBody()->GetUserData();
+				PhysBody* pb2 = (PhysBody*)c->GetFixtureA()->GetBody()->GetUserData();
+				if (pb1 && pb2 && pb1->listener)
+					pb1->listener->OnCollision(pb1, pb2);
+			}
 		}
 	}
 	return true;
@@ -222,6 +224,8 @@ bool Physics::CleanUp() {
 	LOG("Destroying the amazing incredible physics world");
 
 	delete world;
+
+	pause = false;
 
 	return true;
 }
