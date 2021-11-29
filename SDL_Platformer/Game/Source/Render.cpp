@@ -2,6 +2,7 @@
 #include "Window.h"
 #include "Render.h"
 #include "Player.h"
+#include "Physics.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -177,8 +178,10 @@ bool Render::DrawRectangle(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint
 
 bool Render::LoadState(pugi::xml_node& data)
 {
-	app->player->position.x = data.child("camera").attribute("x").as_int();
-	app->player->position.y = data.child("camera").attribute("y").as_int();
+	int x = data.child("camera").attribute("x").as_int();
+	int y = data.child("camera").attribute("y").as_int();
+	LOG("X: %d, Y: %d ajdnaindfiwandiajndijmn", x, y);
+	app->player->playerBody->body->SetTransform(b2Vec2(x, y), app->player->playerBody->body->GetAngle());
 
 	return true;
 }
