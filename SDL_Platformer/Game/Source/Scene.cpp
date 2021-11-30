@@ -79,7 +79,6 @@ bool Scene::Start()
 	loadEgg = false;
 	EasterEgg();
 
-
 	return true;
 }
 
@@ -204,8 +203,6 @@ bool Scene::PostUpdate()
 	SDL_Rect dieWRect = dieWindowAnim.GetCurrentFrame();
 	app->render->DrawTexture(dieWindow, w, h, &dieWRect);
 
-	LOG("%d, %d", w, h);
-
 	return ret;
 }
 
@@ -230,7 +227,7 @@ bool Scene::CleanUp()
 	app->player->Disable();
 	app->physics->Disable();
 
-	cont = 0;
+	cont = w = h = 0;
 
 	return true;
 }

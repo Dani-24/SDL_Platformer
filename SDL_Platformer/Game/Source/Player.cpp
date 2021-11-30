@@ -547,7 +547,23 @@ bool Player::PostUpdate() {
 	currentAnimation->Update();
 
 	// Ask for player X/Y
-	playerBody->GetPosition(position.x, position.y);
+	if (death == false) {
+		playerBody->GetPosition(position.x, position.y);
+	}
+	else {
+		int w, h, width, height;
+		w = -app->render->camera.x / 2 - 1280 / 4;
+		h = -app->render->camera.y / 2 - 720 / 4;
+		width = app->render->camera.w;
+		height = app->render->camera.h;
+
+		if (position.x > w + width / 2) {
+			position.x--;
+		}
+		if (position.x < w + width / 2) {
+			position.x++;
+		}
+	}
 
 	// --- Draw Player ---
 	SDL_Rect rect = currentAnimation->GetCurrentFrame();
