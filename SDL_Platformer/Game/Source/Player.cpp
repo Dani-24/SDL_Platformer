@@ -261,20 +261,17 @@ bool Player::Start()
 	bool ret = true;
 
 	// Inicializar variables
-	win = false;
-	Player_Dir = true;
-	death = false;
 	speed = 2;
 	lowSpeed = 1;
 	HP = Max_HP;
-	destroyed = false;
-	godMode = false;
-	canJump = false;
 
 	// Load assets
 	PlayerStartAnims();
 
 	// Physics
+
+	position.x = initPos.x;
+	position.y = initPos.y;
 
 	int playerChain[16]{
 		0, 2,
@@ -293,17 +290,36 @@ bool Player::Start()
 	playerBody->body->SetFixedRotation(true);
 
 	// Texture & Animation
-	texture = app->tex->Load("Assets/textures/player.png");
+	playerSprite = app->tex->Load("Assets/textures/player.png");
 	currentAnimation = &idleR;
 
 	return ret;
 }
 
 bool Player::PreUpdate() {
-	
+
 	if (app->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN) {
 		godMode = !godMode;
 	}
+
+	if (app->input->GetKey(SDL_SCANCODE_U) == KEY_DOWN) {
+		death = true;
+	}
+
+	if (position.x <= initPos.x) {
+		mapLimitL = true;
+	}
+	else {
+		mapLimitL = false;
+	}
+
+	if (position.x >= -app->render->camera.x + 500 /* Resolution */) {
+		mapLimitR = true;
+	}
+	else {
+		mapLimitR = false;
+	}
+
 	return true;
 }
 
@@ -330,7 +346,7 @@ bool Player::Update(float dt)
 			{
 				// (Right)
 				//--- run ---
-				if ((app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT))
+				if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT && mapLimitR == false)
 				{
 					//position.x += speed;
 
@@ -362,7 +378,7 @@ bool Player::Update(float dt)
 						}
 					}
 				}
-				else if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)	//LEFT
+				else if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && mapLimitL == false)	//LEFT
 				{
 					// --- he walk ---
 					if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
@@ -454,9 +470,30 @@ bool Player::Update(float dt)
 		else {
 			GodMode();
 		}
+		playerBody->GetPosition(position.x, position.y);
 	}
 	else {
-	app->physics->pause = true;
+		app->physics->pause = true;
+	
+		int w, h, width, height;
+		w = -app->render->camera.x / 2 - 1280 / 4;
+		h = -app->render->camera.y / 2 - 720 / 4;
+		width = app->render->camera.w;
+		height = app->render->camera.h;
+
+		if (position.x > w + width / 2 -15) {
+			position.x-= 5;
+		}
+		if (position.x < w + width / 2 -15) {
+			position.x+= 5;
+		}
+		if (position.y > h + height / 2 -15) {
+			position.y-= 5;
+		}
+		if (position.y < h + height / 2 -15) {
+			position.y+= 5;
+		}
+		angle+= 10;
 	}
 
 	return ret;
@@ -546,36 +583,16 @@ bool Player::PostUpdate() {
 	// Update Animation each frame
 	currentAnimation->Update();
 
-	// Ask for player X/Y
-	if (death == false) {
-		playerBody->GetPosition(position.x, position.y);
-	}
-	else {
-		int w, h, width, height;
-		w = -app->render->camera.x / 2 - 1280 / 4;
-		h = -app->render->camera.y / 2 - 720 / 4;
-		width = app->render->camera.w;
-		height = app->render->camera.h;
-
-		if (position.x > w + width / 2) {
-			position.x--;
-		}
-		if (position.x < w + width / 2) {
-			position.x++;
-		}
-	}
-
 	// --- Draw Player ---
 	SDL_Rect rect = currentAnimation->GetCurrentFrame();
 	
-	app->render->DrawTexture(texture, position.x-3, position.y-5, &rect, 1.0f, playerBody->GetRotation(), 34, 34); // -3 and -5 are for hitbox adjustments
+	app->render->DrawTexture(playerSprite, position.x-3, position.y-5, &rect, 1.0f, angle, 34, 34); // -3 and -5 are for hitbox adjustments
 
 	return ret;
 }
 
 void Player::OnCollision(PhysBody* c1, PhysBody* c2)
 {
-
 }
 
 bool Player::CleanUp() {
@@ -610,14 +627,17 @@ bool Player::CleanUp() {
 	walkPunchL.DeleteAnim();
 
 	// Textures
-	app->tex->UnLoad(texture);
+	app->tex->UnLoad(playerSprite);
 
 	// Physbody
 	app->physics->world->DestroyBody(playerBody->body);
 
 	// Reset variables
 
-	godMode = false;
+	position.x = position.y = initPos.x = initPos.y = NULL;
+	godMode = death = win = jumping = mapLimitL = mapLimitR = destroyed = false;
+
+	angle = 0;
 
 	return true;
 }

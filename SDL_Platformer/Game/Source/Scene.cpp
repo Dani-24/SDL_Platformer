@@ -35,12 +35,13 @@ bool Scene::Start()
 {
 	LOG("Start Scene and load assets");
 
-
 	// Player position for Scene 1
-	app->player->position.x = 32;
-	app->player->position.y = 1090;
+	app->player->initPos.x = 32;
+	app->player->initPos.y = 1090;
+
+	app->player->mapLimit.x = 3140;
 	// Camera at player
-	app->render->camera.x = 0 - ((app->player->position.x * 2) - 50);
+	app->render->camera.x = 0 - ((app->player->position.x * 2));
 	app->render->camera.y = 0 - ((app->player->position.y * 2) - 720 / 2);
 
 	// Enable modules q se usan
@@ -66,7 +67,7 @@ bool Scene::Start()
 		dieWindowAnim.PushBack({ z * 1280, 0, 1280, 720 });
 	}
 	dieWindowAnim.loop = false;
-	dieWindowAnim.speed = 0.1f;
+	dieWindowAnim.speed = 0.2f;
 
 	int N = -886;
 	for (int i = 0; i < 7; i++) {
@@ -85,15 +86,16 @@ bool Scene::Start()
 // Called each loop iteration
 bool Scene::PreUpdate()
 {
+	// Request Load / Save when pressing F6/F5
+	if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
+		app->LoadGameRequest();
+
+	if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
+		app->SaveGameRequest();
+
 	// Lose condition
 	if (app->player->position.y > 1280) {
-		if (w == NULL && h == NULL) {
-			w = -app->render->camera.x / 2 - 1280 / 4;
-			h = -app->render->camera.y / 2 - 720 / 4;
-		}
-
 		app->player->death = true;
-		dieWindowAnim.Update();
 	}
 
 	// Add win condition
@@ -104,13 +106,6 @@ bool Scene::PreUpdate()
 // Called each loop iteration
 bool Scene::Update(float dt)
 {
-	// Request Load / Save when pressing F6/F5
-	if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
-		app->LoadGameRequest();
-
-	if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
-		app->SaveGameRequest();
-
 	// Camera Movement
 	if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
 		app->render->camera.y += 20;
@@ -142,12 +137,17 @@ bool Scene::Update(float dt)
 		}
 		else {
 			cont++;
+			dieWindowAnim.Update();
+
+			if (w == NULL && h == NULL) {
+				w = -app->render->camera.x / 2 - 1280 / 4;
+				h = -app->render->camera.y / 2 - 720 / 4;
+			}
 		}
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN) {
 		app->fade->StartFadeToBlack(this, (Module*)app->scene, 10);
-
 	}
 	return true;
 }
@@ -199,9 +199,11 @@ bool Scene::PostUpdate()
 	app->map->Draw();
 
 	// Die / Win textures
-
-	SDL_Rect dieWRect = dieWindowAnim.GetCurrentFrame();
-	app->render->DrawTexture(dieWindow, w, h, &dieWRect);
+	if (app->player->death == true) {
+		SDL_Rect dieWRect = dieWindowAnim.GetCurrentFrame();
+		app->render->DrawTexture(dieWindow, w, h, &dieWRect);
+		LOG("%d %d", w, h);
+	}
 
 	return ret;
 }

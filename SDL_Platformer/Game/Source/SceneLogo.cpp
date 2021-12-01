@@ -55,7 +55,6 @@ bool SceneLogo::Update(float dt)
 	}
 	else {
 		count++;
-		LOG("Count : %d", count);
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_UP) {

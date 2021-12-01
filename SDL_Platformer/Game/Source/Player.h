@@ -35,8 +35,11 @@ public:
 
 	bool godMode;
 	iPoint position;
-	bool death;
-	bool win;
+	int angle = 0;
+	iPoint initPos;
+	iPoint mapLimit;
+	bool death = false;
+	bool win = false;
 	int HP;
 	PhysBody* playerBody;
 
@@ -52,11 +55,12 @@ private:
 	int currentVel;
 
 	bool jumping = false;
-
+	bool mapLimitR = false;
+	bool mapLimitL = false;
 	bool Player_Dir;
 
 	// The player spritesheet loaded into an SDL_Texture
-	SDL_Texture* texture = nullptr;
+	SDL_Texture* playerSprite = nullptr;
 
 	// The pointer to the current player animation
 	// It will be switched depending on the player's movement direction
