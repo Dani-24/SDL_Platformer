@@ -15,7 +15,7 @@ Physics::Physics(App* application, bool start_enabled) : Module(application, sta
 	ground = NULL;
 	mouse_joint = NULL;
 	mouse_body = NULL;
-	debug = true;
+	debug = false;
 }
 
 Physics::~Physics() {

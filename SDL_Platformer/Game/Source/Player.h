@@ -35,7 +35,7 @@ public:
 
 	bool godMode;
 	iPoint position;
-	int angle = 0;
+	int angle = 0, angleV = 1;
 	iPoint initPos;
 	iPoint mapLimit;
 	bool death = false;

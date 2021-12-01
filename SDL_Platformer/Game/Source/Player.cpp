@@ -493,7 +493,8 @@ bool Player::Update(float dt)
 		if (position.y < h + height / 2 -15) {
 			position.y+= 5;
 		}
-		angle+= 10;
+		angle += angleV/2;
+		angleV++;
 	}
 
 	return ret;
@@ -637,7 +638,7 @@ bool Player::CleanUp() {
 	position.x = position.y = initPos.x = initPos.y = NULL;
 	godMode = death = win = jumping = mapLimitL = mapLimitR = destroyed = false;
 
-	angle = 0;
+	angle = angleV = 0;
 
 	return true;
 }
