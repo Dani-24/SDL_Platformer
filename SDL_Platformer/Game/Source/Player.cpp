@@ -306,14 +306,14 @@ bool Player::PreUpdate() {
 		death = true;
 	}
 
-	if (position.x <= initPos.x) {
+	if (position.x <= initPos.x + 50) {
 		mapLimitL = true;
 	}
 	else {
 		mapLimitL = false;
 	}
 
-	if (position.x >= -app->render->camera.x + 500 /* Resolution */) {
+	if (position.x >= -app->render->camera.x + 500) {
 		mapLimitR = true;
 	}
 	else {
@@ -326,6 +326,20 @@ bool Player::PreUpdate() {
 bool Player::Update(float dt)
 {
 	bool ret = true;
+
+	velY = playerBody->body->GetLinearVelocity().y;
+
+	if ( velY == 0 && jumping == false) {
+		canJump = true;
+	}
+	else if (velY == 0 && jumping == true) {
+		jumping = false;
+	}
+	else {
+		canJump = false;
+	}
+
+	LOG("%d", velY);
 
 	if (death != true) {
 
@@ -418,9 +432,11 @@ bool Player::Update(float dt)
 					}
 				}
 			}
-			if (canJump == true && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
+			if (canJump == true && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) 
+			{
 				playerBody->body->ApplyForceToCenter(b2Vec2(0, -250), 1);
-				canJump = false;
+				
+				jumping = true; // well no but actually yes
 
 				if (Player_Dir == true) {
 					if (currentAnimation != &jumpR)

@@ -52,7 +52,7 @@ private:
 	float lowSpeed;
 	int velMax = 150;
 	int velSlowMax = 50;
-	int currentVel;
+	int currentVel, velY;
 
 	bool jumping = false;
 	bool mapLimitR = false;
