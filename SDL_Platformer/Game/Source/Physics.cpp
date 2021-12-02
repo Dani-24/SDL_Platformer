@@ -271,9 +271,9 @@ void Physics::BeginContact(b2Contact* contact)
 
 	// Hacer aqui los checkeos de collisiones entre player y cosas
 
-	/*if (physA == app->player->playerBody) {	// meh, pa que salte se mira si la velocidad en Y es 0
+	if (physA == app->player->playerBody && app->player->velY == 0) {	// meh, pa que salte se mira si la velocidad en Y es 0
 		app->player->canJump = true;
-	}*/
+	}
 }
 
 PhysBody* Physics::CreateChain(int x, int y, int* points, int size) {

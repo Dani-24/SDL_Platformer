@@ -20,7 +20,6 @@ class Textures;
 class Audio;
 class SceneLogo;
 class SceneTitle;
-class SceneEnding;
 class RestartLvl1;
 class Scene;
 class Player;
@@ -101,7 +100,6 @@ public:
 	SceneLogo* sceneLogo;
 	SceneTitle* sceneTitle;
 	Scene* scene;
-	SceneEnding* sceneEnding;
 	RestartLvl1* restartLvl1;
 	Player* player;
 	Map* map;

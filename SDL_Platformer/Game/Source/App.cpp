@@ -7,7 +7,6 @@
 #include "SceneLogo.h"
 #include "SceneTitle.h"
 #include "Scene.h"
-#include "SceneEnding.h"
 #include "Player.h"
 #include "Map.h"
 #include "Physics.h"
@@ -43,7 +42,6 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	sceneLogo = new SceneLogo(this, true);
 	sceneTitle = new SceneTitle(this, false);
 	scene = new Scene(this, false);
-	sceneEnding = new SceneEnding(this, false);
 	player = new Player(this, false);
 
 	map = new Map(this, false);
@@ -60,7 +58,6 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(sceneLogo);
 	AddModule(sceneTitle);
 	AddModule(scene);
-	AddModule(sceneEnding);
 	AddModule(map);
 
 	AddModule(player);

@@ -299,14 +299,6 @@ bool Map::Load(const char* filename)
 	{
 		ret = LoadAllLayers(mapFile.child("map"));
 	}
-    
-    if(ret == true)
-    {
-        // L03: DONE 5: LOG all the data loaded iterate all tilesets and LOG everything
-
-		// L04: DONE 4: LOG the info for each loaded layer
-    }
-
     mapLoaded = ret;
 
     return ret;
@@ -325,13 +317,13 @@ bool Map::LoadMap(pugi::xml_node mapFile)
 	}
 	else
 	{
-		// L03: DONE 3: Load map general properties
+		// Load map general properties
 		mapData.height = map.attribute("height").as_int();
 		mapData.width = map.attribute("width").as_int();
 		mapData.tileHeight = map.attribute("tileheight").as_int();
 		mapData.tileWidth = map.attribute("tilewidth").as_int();
 
-		// L05: DONE 1: Add formula to go from isometric map to world coordinates
+		// Add formula to go from isometric map to world coordinates
 		mapData.type = MAPTYPE_UNKNOWN;
 		if (strcmp(map.attribute("orientation").as_string(), "isometric") == 0)
 		{

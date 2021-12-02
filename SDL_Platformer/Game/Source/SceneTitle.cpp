@@ -32,8 +32,8 @@ bool SceneTitle::Start()
 {
 	// Textures
 
-	bg = app->tex->Load("Assets/maps/Background parts/_Complete_static_BG_(288 x 208).png");
-	bgSky = app->tex->Load("Assets/maps/Background parts/5 - Sky_color.png");
+	bg = app->tex->Load("Assets/maps/BG/BG1.png");
+	bgSky = app->tex->Load("Assets/maps/BG/Sky.png");
 	scroller[0] = 0;
 	scroller[1] = 288;
 	scroller[2] = 288 * 2;

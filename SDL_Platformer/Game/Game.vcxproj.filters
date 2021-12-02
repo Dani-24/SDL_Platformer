@@ -43,9 +43,6 @@
     <ClCompile Include="Source\Scene.cpp">
       <Filter>Platformer\Scenes\Gameplay</Filter>
     </ClCompile>
-    <ClCompile Include="Source\SceneEnding.cpp">
-      <Filter>Platformer\Scenes\Gameloop</Filter>
-    </ClCompile>
     <ClCompile Include="Source\SceneLogo.cpp">
       <Filter>Platformer\Scenes\Gameloop</Filter>
     </ClCompile>
@@ -122,9 +119,6 @@
     </ClInclude>
     <ClInclude Include="Source\Scene.h">
       <Filter>Platformer\Scenes\Gameplay</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\SceneEnding.h">
-      <Filter>Platformer\Scenes\Gameloop</Filter>
     </ClInclude>
     <ClInclude Include="Source\SceneLogo.h">
       <Filter>Platformer\Scenes\Gameloop</Filter>

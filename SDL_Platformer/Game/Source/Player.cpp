@@ -243,7 +243,7 @@ void Player::PlayerStartAnims() {
 	jumpR.PushBack({ 96,224,32,32 });
 	jumpR.PushBack({ 128,224,32,32 });
 	jumpR.loop = false;
-	jumpR.speed = 0.1f;
+	jumpR.speed = 0.15f;
 
 	//jump LEFT
 	jumpL.PushBack({ 224,640,32,32 });
@@ -252,7 +252,7 @@ void Player::PlayerStartAnims() {
 	jumpL.PushBack({ 128,640,32,32 });
 	jumpL.PushBack({ 96,640,32,32 });
 	jumpL.loop = true;
-	jumpL.speed = 0.1f;
+	jumpL.speed = 0.15f;
 
 }
 
@@ -286,6 +286,7 @@ bool Player::Start()
 		
 	//playerBody = app->physics->CreateRectangle(position.x, position.y, 26, 26);
 	playerBody = app->physics->CreateChain(position.x, position.y, playerChain, 16);
+
 	playerBody->body->SetType(b2_dynamicBody);
 	playerBody->body->SetFixedRotation(true);
 
@@ -298,6 +299,7 @@ bool Player::Start()
 
 bool Player::PreUpdate() {
 
+	// DEBUG KEYS Player
 	if (app->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN) {
 		godMode = !godMode;
 	}
@@ -306,6 +308,7 @@ bool Player::PreUpdate() {
 		death = true;
 	}
 
+	// Player move limit LEFT
 	if (position.x <= initPos.x + 50) {
 		mapLimitL = true;
 	}
@@ -313,6 +316,7 @@ bool Player::PreUpdate() {
 		mapLimitL = false;
 	}
 
+	// Player move limit RIGHT
 	if (position.x >= -app->render->camera.x + 500) {
 		mapLimitR = true;
 	}
@@ -327,23 +331,15 @@ bool Player::Update(float dt)
 {
 	bool ret = true;
 
+	// Disable jump if velocity at Y axis is != 0
 	velY = playerBody->body->GetLinearVelocity().y;
-
-	if ( velY == 0 && jumping == false) {
-		canJump = true;
-	}
-	else if (velY == 0 && jumping == true) {
-		jumping = false;
-	}
-	else {
+	if ( velY != 0 ) {
 		canJump = false;
 	}
 
-	LOG("%d", velY);
-
 	if (death != true) {
 
-		// --- Camera ---
+		// --- Camera (Follows player) ---
 		if (position.x > 352 && position.x < 2880) {
 			app->render->camera.x = 0 - ((position.x * 2) - 1280 / 2);
 		}
@@ -362,8 +358,6 @@ bool Player::Update(float dt)
 				//--- run ---
 				if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT && mapLimitR == false)
 				{
-					//position.x += speed;
-
 					// --- walk ---
 					if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
 						if (currentVel < velSlowMax && currentVel > -velSlowMax) {
@@ -435,8 +429,6 @@ bool Player::Update(float dt)
 			if (canJump == true && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) 
 			{
 				playerBody->body->ApplyForceToCenter(b2Vec2(0, -250), 1);
-				
-				jumping = true; // well no but actually yes
 
 				if (Player_Dir == true) {
 					if (currentAnimation != &jumpR)
@@ -497,6 +489,7 @@ bool Player::Update(float dt)
 		width = app->render->camera.w;
 		height = app->render->camera.h;
 
+		// When you die, this makes the player go washingmachine 
 		if (position.x > w + width / 2 -15) {
 			position.x-= 5;
 		}
@@ -512,7 +505,6 @@ bool Player::Update(float dt)
 		angle += angleV/2;
 		angleV++;
 	}
-
 	return ret;
 }
 
@@ -579,8 +571,8 @@ bool Player::PostUpdate() {
 	}
 	// Jump anim:
 	if (currentAnimation == &jumpL && currentAnimation->GetCurrentFrameINT() == 4) {
-		idleR.Reset();
-		currentAnimation = &idleR;
+		runL.Reset();
+		currentAnimation = &runL;
 	}
 	else {
 		if (canJump == false) {
@@ -588,8 +580,8 @@ bool Player::PostUpdate() {
 		}
 	}
 	if (currentAnimation == &jumpR && currentAnimation->GetCurrentFrameINT() == 4) {
-		idleR.Reset();
-		currentAnimation = &idleR;
+		runR.Reset();
+		currentAnimation = &runR;
 	}
 	else {
 		if (canJump == false) {
@@ -651,8 +643,8 @@ bool Player::CleanUp() {
 
 	// Reset variables
 
-	position.x = position.y = initPos.x = initPos.y = NULL;
-	godMode = death = win = jumping = mapLimitL = mapLimitR = destroyed = false;
+	currentVel = velY = position.x = position.y = initPos.x = initPos.y = NULL;
+	godMode = death = win = mapLimitL = mapLimitR = destroyed = false;
 
 	angle = angleV = 0;
 

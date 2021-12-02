@@ -45,6 +45,8 @@ public:
 
 	bool canJump;
 
+	int velY;
+
 private:
 
 	// The speed in which we move the player (pixels per frame)
@@ -52,9 +54,8 @@ private:
 	float lowSpeed;
 	int velMax = 150;
 	int velSlowMax = 50;
-	int currentVel, velY;
+	int currentVel;
 
-	bool jumping = false;
 	bool mapLimitR = false;
 	bool mapLimitL = false;
 	bool Player_Dir;

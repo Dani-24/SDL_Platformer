@@ -40,6 +40,7 @@ bool Scene::Start()
 	app->player->initPos.y = 1090;
 
 	app->player->mapLimit.x = 3140;
+
 	// Camera at player
 	app->render->camera.x = 0 - ((app->player->position.x * 2));
 	app->render->camera.y = 0 - ((app->player->position.y * 2) - 720 / 2);
@@ -59,7 +60,7 @@ bool Scene::Start()
 	app->audio->PlayMusic("Assets/audio/music/music_bg.ogg");
 
 	background = app->tex->Load("Assets/maps/Background.png");
-	sky = app->tex->Load("Assets/maps/Background parts/5 - Sky_color.png");
+	sky = app->tex->Load("Assets/maps/BG/Sky.png");
 
 	dieWindow = app->tex->Load("Assets/textures/dieTexture.png");
 
@@ -133,7 +134,7 @@ bool Scene::Update(float dt)
 	// Death
 	if (app->player->death == true) {
 		if (cont > 150) {
-			app->fade->StartFadeToBlack(this, (Module*)app->sceneEnding, 10);
+			app->fade->StartFadeToBlack(this, (Module*)app->sceneTitle, 10);
 		}
 		else {
 			cont++;
@@ -202,7 +203,6 @@ bool Scene::PostUpdate()
 	if (app->player->death == true) {
 		SDL_Rect dieWRect = dieWindowAnim.GetCurrentFrame();
 		app->render->DrawTexture(dieWindow, w, h, &dieWRect);
-		LOG("%d %d", w, h);
 	}
 
 	return ret;
