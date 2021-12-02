@@ -71634,7 +71634,7 @@
  <layer id="11" name="Walls" width="208" height="86">
   <properties>
    <property name="Draw" type="int" value="0"/>
-   <property name="Navigation" type="int" value="2"/>
+   <property name="Navigation" type="int" value="1"/>
   </properties>
   <data>
    <tile/>
@@ -89529,7 +89529,7 @@
  </layer>
  <layer id="12" name="Bricks" width="208" height="86">
   <properties>
-   <property name="Navigation" type="int" value="3"/>
+   <property name="Navigation" type="int" value="2"/>
   </properties>
   <data>
    <tile/>

@@ -69,10 +69,6 @@ void Map::Draw()
 					int gid = mapLayerItem->data->Get(x, y);
 
 					if (gid > 0) {
-
-						//L06: DONE 4: Obtain the tile set using GetTilesetFromTileId
-						//now we always use the firt tileset in the list
-						//TileSet* tileset = mapData.tilesets.start->data;
 						TileSet* tileset = GetTilesetFromTileId(gid);
 
 						SDL_Rect r = tileset->GetTileRect(gid);
@@ -111,10 +107,6 @@ void Map::Blocks()
 					int gid = mapLayerItem->data->Get(x, y);
 
 					if (gid > 0) {
-
-						//L06: DONE 4: Obtain the tile set using GetTilesetFromTileId
-						//now we always use the firt tileset in the list
-						//TileSet* tileset = mapData.tilesets.start->data;
 						TileSet* tileset = GetTilesetFromTileId(gid);
 
 						SDL_Rect r = tileset->GetTileRect(gid);
@@ -126,9 +118,6 @@ void Map::Blocks()
 							groundCollider.add(app->physics->CreateRectangle(pos.x + 8, pos.y + 8, 16, 16));
 							break;
 						case 2:
-							wallCollider.add(app->physics->CreateRectangle(pos.x + 8, pos.y + 8, 16, 16));
-							break;
-						case 3:
 							bricksCollider.add(app->physics->CreateRectangle(pos.x + 8, pos.y + 8, 16, 16));
 							break;
 						}
@@ -265,17 +254,10 @@ bool Map::CleanUp()
 	}
 	groundCollider.clear();
 
-	ListItem<PhysBody*>* c2 = wallCollider.start;
-	while (c != NULL) {
-		app->physics->world->DestroyBody(c->data->body);
-		c = c->next;
-	}
-	wallCollider.clear();
-
-	ListItem<PhysBody*>* c3 = bricksCollider.start;
-	while (c != NULL) {
-		app->physics->world->DestroyBody(c->data->body);
-		c = c->next;
+	ListItem<PhysBody*>* c2 = bricksCollider.start;
+	while (c2 != NULL) {
+		app->physics->world->DestroyBody(c2->data->body);
+		c2 = c2->next;
 	}
 	bricksCollider.clear();
 

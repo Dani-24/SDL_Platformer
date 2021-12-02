@@ -274,7 +274,6 @@ void Physics::BeginContact(b2Contact* contact)
 	if (physA == app->player->playerBody) {
 		app->player->canJump = true;
 	}
-	
 }
 
 PhysBody* Physics::CreateChain(int x, int y, int* points, int size) {
