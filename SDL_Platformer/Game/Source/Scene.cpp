@@ -11,6 +11,7 @@
 #include "Log.h"
 #include "Player.h"
 #include "Physics.h"
+#include "Enemy.h"
 
 Scene::Scene(App* application, bool start_enabled) : Module(application, start_enabled)
 {
@@ -51,6 +52,8 @@ bool Scene::Start()
 	app->player->Enable();
 	app->map->Enable();
 
+	app->enemy->Enable();
+
 	// Load map
 	app->map->Load("mapa.tmx");
 	app->map->Blocks();
@@ -80,6 +83,10 @@ bool Scene::Start()
 	easterEgg = false;
 	loadEgg = false;
 	EasterEgg();
+
+	// Enemies
+
+	app->enemy->AddEnemy(50, 1090);
 
 	return true;
 }
@@ -228,6 +235,8 @@ bool Scene::CleanUp()
 	app->map->Disable();
 	app->player->Disable();
 	app->physics->Disable();
+
+	app->enemy->Disable();
 
 	cont = w = h = 0;
 

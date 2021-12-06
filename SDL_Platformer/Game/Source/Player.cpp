@@ -294,6 +294,12 @@ bool Player::Start()
 	playerSprite = app->tex->Load("Assets/textures/player.png");
 	currentAnimation = &idleR;
 
+	// Audio
+
+	deathFx = app->audio->LoadFx("Assets/audio/fx/death.wav");
+	killedFx = app->audio->LoadFx("Assets/audio/fx/killedBySus.wav");
+	playerAttackFx = app->audio->LoadFx("Assets/audio/fx/kick.wav");
+
 	return ret;
 }
 
@@ -457,6 +463,7 @@ bool Player::Update(float dt)
 			// --- but most importantly, he Attack ---
 			if (app->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN)
 			{
+				app->audio->PlayFx(playerAttackFx);
 				if (Player_Dir == true) {
 					if (currentAnimation != &punchR)
 					{
@@ -480,7 +487,7 @@ bool Player::Update(float dt)
 		}
 		playerBody->GetPosition(position.x, position.y);
 	}
-	else {
+	else if(death == true){
 		app->physics->pause = true;
 	
 		int w, h, width, height;
@@ -504,6 +511,12 @@ bool Player::Update(float dt)
 		}
 		angle += angleV/2;
 		angleV++;
+
+		// Fx
+		if (DieFxPlayed != true) {
+			DieFxPlayed = true;
+			app->audio->PlayFx(deathFx);
+		}
 	}
 	return ret;
 }
@@ -575,18 +588,14 @@ bool Player::PostUpdate() {
 		currentAnimation = &runL;
 	}
 	else {
-		if (canJump == false) {
-			jumpL.Update();
-		}
+		jumpL.Update();
 	}
 	if (currentAnimation == &jumpR && currentAnimation->GetCurrentFrameINT() == 4) {
 		runR.Reset();
 		currentAnimation = &runR;
 	}
 	else {
-		if (canJump == false) {
-			jumpR.Update();
-		}
+		jumpR.Update();
 	}
 
 	// Update Animation each frame
@@ -644,9 +653,9 @@ bool Player::CleanUp() {
 	// Reset variables
 
 	currentVel = velY = position.x = position.y = initPos.x = initPos.y = NULL;
-	godMode = death = win = mapLimitL = mapLimitR = destroyed = false;
+	godMode = death = win = mapLimitL = mapLimitR = destroyed = DieFxPlayed = false;
 
-	angle = angleV = 0;
+	angle = angleV = killedFx = deathFx = playerAttackFx = 0;
 
 	return true;
 }

@@ -87,8 +87,11 @@ private:
 	bool destroyed = false;
 
 	// Sound effects indices
-	uint PlayerAttackFx = 0;
-	uint AttackQuoteFx = 0;
+	uint playerAttackFx = 0;
+	uint killedFx = 0;
+	uint deathFx = 0;
+
+	bool DieFxPlayed = false;
 
 };
 

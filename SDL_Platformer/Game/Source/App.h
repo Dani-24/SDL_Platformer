@@ -23,6 +23,7 @@ class SceneTitle;
 class RestartLvl1;
 class Scene;
 class Player;
+class Enemy;
 class Map;
 class Physics;
 class FadeToBlack;
@@ -102,6 +103,7 @@ public:
 	Scene* scene;
 	RestartLvl1* restartLvl1;
 	Player* player;
+	Enemy* enemy;
 	Map* map;
 	Physics* physics;
 	FadeToBlack* fade;
@@ -115,17 +117,10 @@ private:
 
 	List<Module*> modules;
 
-	// L01: DONE 2: Create new variables from pugui namespace
-	// NOTE: Redesigned LoadConfig() to avoid storing this variables
-	//pugi::xml_document configFile;
-	//pugi::xml_node config;
-	//pugi::xml_node configApp;
-
 	mutable bool saveGameRequested;
 	bool loadGameRequested;
 
-	// L07: DONE 4: Calculate some timing measures
-	// required variables are provided:
+	// Calculate some timing measures required variables are provided:
 	PerfTimer *ptimer;
 	PerfTimer *frameDuration; 
 

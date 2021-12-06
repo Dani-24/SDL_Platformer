@@ -11,6 +11,7 @@
 #include "Map.h"
 #include "Physics.h"
 #include "FadeToBlack.h"
+#include "Enemy.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -43,6 +44,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	sceneTitle = new SceneTitle(this, false);
 	scene = new Scene(this, false);
 	player = new Player(this, false);
+	enemy = new Enemy(this, false);
 
 	map = new Map(this, false);
 	physics = new Physics(this, false);
@@ -61,6 +63,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(map);
 
 	AddModule(player);
+	AddModule(enemy);
 
 	AddModule(physics);
 	// Render last to swap buffer
