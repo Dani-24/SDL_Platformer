@@ -24,7 +24,6 @@ public:
 	// EasterEgg
 	void EasterEgg();
 
-
 	float bgScrollX[6];
 
 	bool easterEgg;

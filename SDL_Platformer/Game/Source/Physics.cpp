@@ -276,6 +276,10 @@ void Physics::BeginContact(b2Contact* contact)
 	if (physA == app->player->playerBody && app->player->velY == 0) {	// meh, pa que salte se mira si la velocidad en Y es 0
 		app->player->canJump = true;
 	}
+
+	if (physA == app->player->playerBody && physB->body->GetType() == b2_dynamicBody) {
+		app->player->death = true;
+	}
 }
 
 PhysBody* Physics::CreateChain(int x, int y, int* points, int size) {
@@ -455,40 +459,6 @@ PhysBody* Physics::CreateRectangleSensor(int x, int y, int width, int height)
 	// Return our PhysBody class
 	return pbody;
 }
-
-PhysBody* Physics::CreateCircularBumper(int x, int y, int radius) {
-	// Create Bumper BODY at position x,y
-	b2BodyDef bumper;
-	bumper.type = b2_staticBody;
-	bumper.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
-
-	// Add BODY to the world
-	b2Body* b = world->CreateBody(&bumper);
-
-	// Create Bumper SHAPE
-	b2CircleShape bumpershape;
-	bumpershape.m_radius = PIXEL_TO_METERS(radius);
-	bumpershape.m_p.Set(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0));
-
-	// Create Bumper FIXTURE
-	b2FixtureDef fixture;
-	fixture.shape = &bumpershape;
-	fixture.density = 1.0f;
-	fixture.restitution = 1, 1;
-
-	// Add fixture to the Bumper BODY
-	b->CreateFixture(&fixture);
-
-	// Create our custom PhysBody class
-	PhysBody* pbody = new PhysBody();
-	pbody->body = b;
-	b->SetUserData(pbody);
-	pbody->width = pbody->height = radius;
-
-	// Return our PhysBody class
-	return pbody;
-}
-
 
 // PHYSBODY PART -------------------------------------------------------------------------------
 

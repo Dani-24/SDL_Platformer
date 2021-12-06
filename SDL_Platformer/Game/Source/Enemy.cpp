@@ -68,7 +68,8 @@ void Enemy::AddEnemy(int x, int y) {
 	thisEnemy->death = false;
 	thisEnemy->sprite = enemySprite;
 	thisEnemy->speed = 1.0f;
-	thisEnemy->body = app->physics->CreateChain(x, y, enemyChain, 16);
+	//thisEnemy->body = app->physics->CreateChain(x, y, enemyChain, 16);
+	thisEnemy->body = app->physics->CreateRectangle(x, y, 35, 35);
 	thisEnemy->body->body->SetType(b2_dynamicBody);
 	thisEnemy->body->body->SetFixedRotation(true);
 	thisEnemy->position.x = x;
@@ -113,7 +114,7 @@ bool Enemy::Update(float dt) {
 			// ENEMIES ALIVE:
 
 			// Detect player
-			int chaseDistance = 300;
+			int chaseDistance = 300, limitVel = 100;
 
 			if (app->player->position.x - c->data->position.x < chaseDistance && app->player->position.x - c->data->position.x > -chaseDistance && app->player->position.y - c->data->position.y < 50) {
 				// Play sfx
@@ -124,30 +125,27 @@ bool Enemy::Update(float dt) {
 
 				// Chase player
 				int vel = METERS_TO_PIXELS(c->data->body->body->GetLinearVelocity().x);	 // limit velocity
-				if (app->player->position.x < c->data->position.x) {
-					if (vel < 150) {
-						c->data->body->body->ApplyLinearImpulse(b2Vec2(-0.05f, 0), b2Vec2(0, 0), 1);
-					}
 
-					if (c->data->currentAnimation != &animRunL) {
-						c->data->currentAnimation = &animRunL;
+				if (-limitVel < vel && vel < limitVel) {
+					if (app->player->position.x < c->data->position.x) {
+						c->data->body->body->ApplyLinearImpulse(b2Vec2(-0.05f, -0.07f), b2Vec2(0, 0), 1);
+
+						if (c->data->currentAnimation != &animRunL) {
+							c->data->currentAnimation = &animRunL;
+						}
+					}
+					else {
+						c->data->body->body->ApplyLinearImpulse(b2Vec2(0.05f, -0.07f), b2Vec2(0, 0), 1);
+
+						if (c->data->currentAnimation != &animRunR) {
+							c->data->currentAnimation = &animRunR;
+						}
 					}
 				}
-				else {
-					if (vel < 150) {
-						c->data->body->body->ApplyLinearImpulse(b2Vec2(0.05f, 0), b2Vec2(0, 0), 1);
-					}
-
-					if (c->data->currentAnimation != &animRunR) {
-						c->data->currentAnimation = &animRunR;
-					}
-				}
-
 			}
 			else {
 				c->data->playDetectFx = false;
 			}
-
 
 			// Update animation and position
 			c->data->currentAnimation->Update();
@@ -171,7 +169,7 @@ bool Enemy::PostUpdate() {
 	ListItem<Enemies*>* c = enemies.start;
 	while (c != NULL) {
 		SDL_Rect rect = c->data->currentAnimation->GetCurrentFrame();
-		app->render->DrawTexture(c->data->sprite, c->data->position.x - 5, c->data->position.y - 5, &rect, 1, c->data->body->GetRotation());
+		app->render->DrawTexture(c->data->sprite, c->data->position.x - 10, c->data->position.y - 10, &rect, 1, c->data->body->GetRotation());
 		c = c->next;
 	}
 	return true;
