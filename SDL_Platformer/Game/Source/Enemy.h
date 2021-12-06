@@ -34,7 +34,7 @@ struct Enemies {
 
 	iPoint position;
 
-	bool death;
+	bool death, dir, playDetectFx;
 	int speed;
 
 	Animation* currentAnimation = nullptr;
@@ -55,10 +55,9 @@ public:
 	bool PostUpdate();
 	bool CleanUp() override;
 
-	List<Enemies>* enemies = nullptr;
+	List<Enemies*> enemies;
 
 	void AddEnemy(int x, int y);
-	void DelEnemy(int enemyToDel);
 
 private:
 
@@ -71,6 +70,18 @@ private:
 	// Sound effects indices
 	uint detectPlayerFx = 0;
 	uint deathFx = 0;
+
+	// Chain collider
+	int enemyChain[16]{ // Enemy is 40x40
+		0, 2,
+		0, 38,
+		2, 40,
+		38, 40,
+		40, 38,
+		40, 2,
+		38, 0,
+		2, 0
+	};
 
 };
 

@@ -86,7 +86,7 @@ bool Scene::Start()
 
 	// Enemies
 
-	app->enemy->AddEnemy(50, 1090);
+	app->enemy->AddEnemy(650, 1000);
 
 	return true;
 }
@@ -106,6 +106,14 @@ bool Scene::PreUpdate()
 		app->player->death = true;
 	}
 
+	ListItem<Enemies*>* c = app->enemy->enemies.start;
+	while (c != NULL) {
+		if (c->data->position.y > 1280) {
+			c->data->death = true;
+		}
+		c = c->next;
+	}
+
 	// Add win condition
 
 	return true;
@@ -114,19 +122,6 @@ bool Scene::PreUpdate()
 // Called each loop iteration
 bool Scene::Update(float dt)
 {
-	// Camera Movement
-	if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-		app->render->camera.y += 20;
-
-	if (app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-		app->render->camera.y -= 20;
-
-	if (app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-		app->render->camera.x += 20;
-
-	if (app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-		app->render->camera.x -= 20;
-
 	// EasterEGG()
 	if (app->input->GetKey(SDL_SCANCODE_5) == KEY_DOWN) {
 		easterEgg = !easterEgg;
@@ -140,6 +135,13 @@ bool Scene::Update(float dt)
 
 	// Death
 	if (app->player->death == true) {
+
+		// delete elements from scene:
+		if (app->enemy->isEnabled()) {
+			app->enemy->Disable();
+		}
+
+		// Death scene effect:
 		if (cont > 150) {
 			app->fade->StartFadeToBlack(this, (Module*)app->sceneTitle, 10);
 		}
@@ -234,9 +236,12 @@ bool Scene::CleanUp()
 
 	app->map->Disable();
 	app->player->Disable();
-	app->physics->Disable();
 
-	app->enemy->Disable();
+	if (app->enemy->isEnabled()) {
+		app->enemy->Disable();
+	}
+
+	app->physics->Disable();
 
 	cont = w = h = 0;
 

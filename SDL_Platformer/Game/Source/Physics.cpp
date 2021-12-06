@@ -15,7 +15,9 @@ Physics::Physics(App* application, bool start_enabled) : Module(application, sta
 	ground = NULL;
 	mouse_joint = NULL;
 	mouse_body = NULL;
-	debug = false;
+
+	// Change this to show/hide colliders :D
+	debug = true;
 }
 
 Physics::~Physics() {
