@@ -56,8 +56,6 @@ private:
 	int velSlowMax = 50;
 	int currentVel;
 
-	bool mapLimitR = false;
-	bool mapLimitL = false;
 	bool Player_Dir;
 
 	// The player spritesheet loaded into an SDL_Texture

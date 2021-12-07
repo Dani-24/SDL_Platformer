@@ -314,22 +314,6 @@ bool Player::PreUpdate() {
 		death = true;
 	}
 
-	// Player move limit LEFT
-	if (position.x <= initPos.x + 50) {
-		mapLimitL = true;
-	}
-	else {
-		mapLimitL = false;
-	}
-
-	// Player move limit RIGHT
-	if (position.x >= -app->render->camera.x + 500) {
-		mapLimitR = true;
-	}
-	else {
-		mapLimitR = false;
-	}
-
 	return true;
 }
 
@@ -345,14 +329,6 @@ bool Player::Update(float dt)
 
 	if (death != true) {
 
-		// --- Camera (Follows player) ---
-		if (position.x > 352 && position.x < 2880) {
-			app->render->camera.x = 0 - ((position.x * 2) - 1280 / 2);
-		}
-		if (position.y < 1114) {
-			app->render->camera.y = 0 - ((position.y * 2) - 720 / 2);
-		}
-
 		// --- Player movement ---
 		if (godMode != true) {
 
@@ -362,7 +338,7 @@ bool Player::Update(float dt)
 			{
 				// (Right)
 				//--- run ---
-				if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT && mapLimitR == false)
+				if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 				{
 					// --- walk ---
 					if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
@@ -392,7 +368,7 @@ bool Player::Update(float dt)
 						}
 					}
 				}
-				else if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && mapLimitL == false)	//LEFT
+				else if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)	//LEFT
 				{
 					// --- he walk ---
 					if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
@@ -434,7 +410,7 @@ bool Player::Update(float dt)
 			}
 			if (canJump == true && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) 
 			{
-				playerBody->body->ApplyForceToCenter(b2Vec2(0, -250), 1);
+				playerBody->body->ApplyForceToCenter(b2Vec2(0, -325), 1);
 
 				if (Player_Dir == true) {
 					if (currentAnimation != &jumpR)
@@ -490,13 +466,14 @@ bool Player::Update(float dt)
 	else if(death == true){
 		app->physics->pause = true;
 	
+
+		// When you die, this makes the player go washingmachine 
 		int w, h, width, height;
 		w = -app->render->camera.x / 2 - 1280 / 4;
 		h = -app->render->camera.y / 2 - 720 / 4;
 		width = app->render->camera.w;
 		height = app->render->camera.h;
 
-		// When you die, this makes the player go washingmachine 
 		if (position.x > w + width / 2 -15) {
 			position.x-= 5;
 		}
@@ -512,7 +489,7 @@ bool Player::Update(float dt)
 		angle += angleV/2;
 		angleV++;
 
-		// Fx
+		// Die Fx
 		if (DieFxPlayed != true) {
 			DieFxPlayed = true;
 			app->audio->PlayFx(deathFx);
@@ -582,6 +559,7 @@ bool Player::PostUpdate() {
 	else {
 		punchR.Update();
 	}
+
 	// Jump anim:
 	if (currentAnimation == &jumpL && currentAnimation->GetCurrentFrameINT() == 4) {
 		runL.Reset();
@@ -653,10 +631,9 @@ bool Player::CleanUp() {
 	// Reset variables
 
 	currentVel = velY = position.x = position.y = initPos.x = initPos.y = NULL;
-	godMode = death = win = mapLimitL = mapLimitR = destroyed = DieFxPlayed = false;
+	godMode = death = win = destroyed = DieFxPlayed = false;
 
 	angle = angleV = killedFx = deathFx = playerAttackFx = 0;
 
 	return true;
 }
-

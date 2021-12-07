@@ -6,6 +6,7 @@
 #include "App.h"
 #include "Window.h"
 #include "Player.h"
+#include "Enemy.h"
 #include "Map.h"
 
 Physics::Physics(App* application, bool start_enabled) : Module(application, start_enabled)
@@ -42,8 +43,8 @@ bool Physics::Start() {
 bool Physics::PreUpdate() {
 
 	if (pause != true) {
-		// Mirar el Step si se tiene que ajustar al framerate del juego
-		// Fixed at 60 fps = 1/60 seconds
+		
+		// Physics framerate:
 		world->Step(1.0f / 60.0f, 6, 2);
 
 		for (b2Contact* c = world->GetContactList(); c; c = c->GetNext())
@@ -271,14 +272,25 @@ void Physics::BeginContact(b2Contact* contact)
 	if (physB && physB->listener != NULL)
 		physB->listener->OnCollision(physB, physA);
 
-	// Hacer aqui los checkeos de collisiones entre player y cosas
-
-	if (physA == app->player->playerBody && app->player->velY == 0) {	// meh, pa que salte se mira si la velocidad en Y es 0
+	// Jump Collision
+	if (physA == app->player->playerBody && physB->type == "ground") {
 		app->player->canJump = true;
 	}
 
-	if (physA == app->player->playerBody && physB->body->GetType() == b2_dynamicBody) {
+	// Die Collision
+	if (physA == app->player->playerBody && physB->type == "enemy" || physA == app->player->playerBody && physB->type == "death") {
 		app->player->death = true;
+	}
+
+	// Check enemy collision that kills them
+	
+	ListItem<Enemies*>* c = app->enemy->enemies.start;
+	while (c != NULL) {
+		if (physA == c->data->body && physB->type == "death") {
+			LOG("Enemy fall from map");
+			c->data->death = true;
+		}
+		c = c->next;
 	}
 }
 
@@ -393,7 +405,7 @@ PhysBody* Physics::CreateCircle(int x, int y, int radius)
 	return pbody;
 }
 
-PhysBody* Physics::CreateRectangle(int x, int y, int width, int height)
+PhysBody* Physics::CreateRectangle(int x, int y, int width, int height, SString type)
 {
 	// Create BODY at position x,y
 	b2BodyDef body;
@@ -421,6 +433,10 @@ PhysBody* Physics::CreateRectangle(int x, int y, int width, int height)
 	b->SetUserData(pbody);
 	pbody->width = width * 0.5f;
 	pbody->height = height * 0.5f;
+
+	if (type != "default") {
+		pbody->type = type;
+	}
 
 	// Return our PhysBody class
 	return pbody;

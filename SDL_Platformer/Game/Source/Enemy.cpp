@@ -68,8 +68,8 @@ void Enemy::AddEnemy(int x, int y) {
 	thisEnemy->death = false;
 	thisEnemy->sprite = enemySprite;
 	thisEnemy->speed = 1.0f;
-	//thisEnemy->body = app->physics->CreateChain(x, y, enemyChain, 16);
-	thisEnemy->body = app->physics->CreateRectangle(x, y, 35, 35);
+	thisEnemy->body = app->physics->CreateChain(x, y, enemyChain, 16);
+	//thisEnemy->body = app->physics->CreateRectangle(x, y, 35, 35, "enemy");
 	thisEnemy->body->body->SetType(b2_dynamicBody);
 	thisEnemy->body->body->SetFixedRotation(true);
 	thisEnemy->position.x = x;
@@ -77,6 +77,8 @@ void Enemy::AddEnemy(int x, int y) {
 	thisEnemy->currentAnimation = &animRunL;
 	thisEnemy->dir = false;
 	thisEnemy->playDetectFx = false;
+
+	count++;
 
 	enemies.add(thisEnemy);
 }
@@ -114,9 +116,9 @@ bool Enemy::Update(float dt) {
 			// ENEMIES ALIVE:
 
 			// Detect player
-			int chaseDistance = 300, limitVel = 100;
+			int chaseDistance = 250, limitVel = 100;
 
-			if (app->player->position.x - c->data->position.x < chaseDistance && app->player->position.x - c->data->position.x > -chaseDistance && app->player->position.y - c->data->position.y < 50) {
+			if (app->player->position.x - c->data->position.x < chaseDistance && app->player->position.x - c->data->position.x > -chaseDistance /*&& app->player->position.y - c->data->position.y < chaseDistance / 4 && app->player->position.y - c->data->position.y > -chaseDistance / 4*/) {
 				// Play sfx
 				if (c->data->playDetectFx != true) {
 					app->audio->PlayFx(detectPlayerFx);
@@ -128,14 +130,14 @@ bool Enemy::Update(float dt) {
 
 				if (-limitVel < vel && vel < limitVel) {
 					if (app->player->position.x < c->data->position.x) {
-						c->data->body->body->ApplyLinearImpulse(b2Vec2(-0.05f, -0.07f), b2Vec2(0, 0), 1);
+						c->data->body->body->ApplyLinearImpulse(b2Vec2(-0.05f, 0), b2Vec2(0, 0), 1);
 
 						if (c->data->currentAnimation != &animRunL) {
 							c->data->currentAnimation = &animRunL;
 						}
 					}
 					else {
-						c->data->body->body->ApplyLinearImpulse(b2Vec2(0.05f, -0.07f), b2Vec2(0, 0), 1);
+						c->data->body->body->ApplyLinearImpulse(b2Vec2(0.05f, 0), b2Vec2(0, 0), 1);
 
 						if (c->data->currentAnimation != &animRunR) {
 							c->data->currentAnimation = &animRunR;
@@ -153,7 +155,6 @@ bool Enemy::Update(float dt) {
 			c = c->next;
 		}
 		else {
-
 			// ENEMIES DEAD
 
 			LOG("Deleting enemy");
@@ -169,7 +170,7 @@ bool Enemy::PostUpdate() {
 	ListItem<Enemies*>* c = enemies.start;
 	while (c != NULL) {
 		SDL_Rect rect = c->data->currentAnimation->GetCurrentFrame();
-		app->render->DrawTexture(c->data->sprite, c->data->position.x - 10, c->data->position.y - 10, &rect, 1, c->data->body->GetRotation());
+		app->render->DrawTexture(c->data->sprite, c->data->position.x - 5, c->data->position.y - 5, &rect, 1, c->data->body->GetRotation());
 		c = c->next;
 	}
 	return true;
@@ -190,6 +191,8 @@ bool Enemy::CleanUp() {
 	animDieR.DeleteAnim();
 	animRunL.DeleteAnim();
 	animRunR.DeleteAnim();
+
+	count = 0;
 
 	return true;
 }

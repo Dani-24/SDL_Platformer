@@ -23,13 +23,6 @@
 #include "SString.h"
 using namespace std;
 
-// L07: DONE 3: Measure the amount of ms that takes to execute:
-// App constructor, Awake, Start and CleanUp
-// LOG the result
-
-// L09: TODO 3: Add OPTICK_EVENT() calls to all Update methods
-// Alternatively you can use OPTICK_CATEGORY()
-
 // Constructor
 App::App(int argc, char* args[]) : argc(argc), args(args)
 {
@@ -66,6 +59,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(enemy);
 
 	AddModule(physics);
+
 	// Render last to swap buffer
 	AddModule(render);
 
@@ -102,7 +96,7 @@ bool App::Awake()
 
 	bool ret = false;
 
-	// L01: DONE 3: Load config from XML
+	// Load config from XML
 	config = LoadConfig(configFile);
 
 	if (config.empty() == false)
@@ -110,11 +104,11 @@ bool App::Awake()
 		ret = true;
 		configApp = config.child("app");
 
-		// L01: DONE 4: Read the title from the config file
+		// Read the title from the config file
 		title.Create(configApp.child("title").child_value());
 		organization.Create(configApp.child("organization").child_value());
 	
-		// L08: DONE 1: Read from config file your framerate cap
+		// Read from config file your framerate cap
 		maxFrameRate = configApp.child("frcap").attribute("value").as_int();
 
 	}
@@ -178,7 +172,6 @@ bool App::Update()
 }
 
 // Load config from XML file
-// NOTE: Function has been redesigned to avoid storing additional variables on the class
 pugi::xml_node App::LoadConfig(pugi::xml_document& configFile) const
 {
 	pugi::xml_node ret;
@@ -197,7 +190,7 @@ void App::PrepareUpdate()
 	frameCount++;
 	lastSecFrameCount++;
 	
-	// L08: DONE 4: Calculate the dt: differential time since last frame
+	// Calculate the dt: differential time since last frame
 	dt = frameDuration->ReadMs();
 	frameDuration->Start();
 }
@@ -205,7 +198,7 @@ void App::PrepareUpdate()
 // ---------------------------------------------
 void App::FinishUpdate()
 {
-	// L02: DONE 1: This is a good place to call Load / Save methods
+	// Load / Save methods
 	if (loadGameRequested == true) {
 		LoadGame();
 		loadGameRequested == false;
@@ -222,6 +215,7 @@ void App::FinishUpdate()
 		averageFps = (averageFps + framesPerSecond) / 2;
 	}
 
+	// Window Title
 	static char titleInfo[256];
 
 	if (app->render->vSyncOn == true) {
@@ -255,6 +249,10 @@ void App::setFrameRateCap() {
 	else{
 		maxFrameRate = 16;		// 60 fps
 	}
+}
+
+float App::getFrameRate() {
+	return framesPerSecond;
 }
 
 // Call modules before each loop iteration

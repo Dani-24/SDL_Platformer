@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="208" height="86" tilewidth="16" tileheight="16" infinite="0" nextlayerid="13" nextobjectid="1">
+<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="208" height="86" tilewidth="16" tileheight="16" infinite="0" nextlayerid="14" nextobjectid="1">
  <tileset firstgid="1" name="tiles" tilewidth="16" tileheight="16" tilecount="527" columns="31">
   <image source="tiles.png" width="496" height="272"/>
   <wangsets>
@@ -71634,7 +71634,7 @@
  <layer id="11" name="Walls" width="208" height="86">
   <properties>
    <property name="Draw" type="int" value="0"/>
-   <property name="Navigation" type="int" value="1"/>
+   <property name="Navigation" type="int" value="2"/>
   </properties>
   <data>
    <tile/>
@@ -82453,7 +82453,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="546"/>
    <tile/>
    <tile/>
    <tile/>
@@ -82661,7 +82661,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="546"/>
    <tile/>
    <tile/>
    <tile/>
@@ -82869,7 +82869,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="546"/>
    <tile/>
    <tile/>
    <tile/>
@@ -83077,7 +83077,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="546"/>
    <tile/>
    <tile/>
    <tile/>
@@ -83285,7 +83285,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="546"/>
    <tile/>
    <tile/>
    <tile/>
@@ -83493,7 +83493,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="546"/>
    <tile/>
    <tile/>
    <tile/>
@@ -83701,7 +83701,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="546"/>
    <tile/>
    <tile/>
    <tile/>
@@ -83909,7 +83909,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="546"/>
    <tile/>
    <tile/>
    <tile/>
@@ -84117,7 +84117,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="546"/>
    <tile/>
    <tile/>
    <tile/>
@@ -84325,7 +84325,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="546"/>
    <tile/>
    <tile/>
    <tile/>
@@ -84533,7 +84533,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="546"/>
    <tile/>
    <tile/>
    <tile/>
@@ -84741,7 +84741,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="546"/>
    <tile/>
    <tile/>
    <tile/>
@@ -84949,7 +84949,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="546"/>
    <tile/>
    <tile/>
    <tile/>
@@ -85157,7 +85157,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="546"/>
    <tile/>
    <tile/>
    <tile/>
@@ -85365,7 +85365,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="546"/>
    <tile/>
    <tile/>
    <tile/>
@@ -85573,7 +85573,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="546"/>
    <tile/>
    <tile/>
    <tile/>
@@ -85781,7 +85781,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="546"/>
    <tile/>
    <tile/>
    <tile/>
@@ -85989,7 +85989,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="546"/>
    <tile/>
    <tile/>
    <tile/>
@@ -89529,7 +89529,7 @@
  </layer>
  <layer id="12" name="Bricks" width="208" height="86">
   <properties>
-   <property name="Navigation" type="int" value="2"/>
+   <property name="Navigation" type="int" value="3"/>
   </properties>
   <data>
    <tile/>

@@ -65,6 +65,8 @@ public:
 
 	void setFrameRateCap();
 
+	float getFrameRate();
+
 private:
 
 	// Load config file

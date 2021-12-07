@@ -8,7 +8,7 @@
 
 #include "PugiXml\src\pugixml.hpp"
 
-// L03: DONE 2: Create a struct to hold information for a TileSet
+// Create a struct to hold information for a TileSet
 // Ignore Terrain Types and Tile Types for now, but we want the image!
 struct TileSet
 {
@@ -29,7 +29,7 @@ struct TileSet
 	SDL_Rect GetTileRect(int id) const;
 };
 
-// L03: DONE 1: We create an enum for map type, just for convenience,
+// We create an enum for map type, just for convenience,
 // NOTE: Platformer game will be of type ORTHOGONAL
 enum MapTypes
 {
@@ -39,7 +39,7 @@ enum MapTypes
 	MAPTYPE_STAGGERED
 };
 
-// L06: DONE 5: Create a generic structure to hold properties
+// Create a generic structure to hold properties
 struct Properties
 {
 	struct Property
@@ -70,7 +70,7 @@ struct Properties
 	List<Property*> list;
 };
 
-// L04: DONE 1: Create a struct for the map layer
+// Create a struct for the map layer
 struct MapLayer
 {
 	SString	name;
@@ -96,7 +96,7 @@ struct MapLayer
 	}
 };
 
-// L03: DONE 1: Create a struct needed to hold the information to Map node
+// Create a struct needed to hold the information to Map node
 struct MapData
 {
 	int width;
@@ -118,8 +118,9 @@ public:
 	List<PhysBody*> groundCollider;
 	List<PhysBody*> bricksCollider;
 
-    Map(App* application, bool start_enabled = true);
+	List<PhysBody*> deathColliders;
 
+    Map(App* application, bool start_enabled = true);
 
     // Destructor
     virtual ~Map();
@@ -140,10 +141,10 @@ public:
     // Load new map
     bool Load(const char* path);
 
-	// L04: DONE 8: Create a method that translates x,y coordinates from map positions to world positions
+	// Create a method that translates x,y coordinates from map positions to world positions
 	iPoint MapToWorld(int x, int y) const;
 
-	// L05: DONE 2: Add orthographic world to map coordinates
+	// Add orthographic world to map coordinates
 	iPoint WorldToMap(int x, int y) const;
 
 private:
@@ -158,15 +159,15 @@ private:
 	bool LoadLayer(pugi::xml_node& node, MapLayer* layer);
 	bool LoadAllLayers(pugi::xml_node mapNode);
 
-	// L06: DONE 6: Load a group of properties 
+	// Load a group of properties 
 	bool LoadProperties(pugi::xml_node& node, Properties& properties);
 
-	// L06: DONE 3: Pick the right Tileset based on a tile id
+	// Pick the right Tileset based on a tile id
 	TileSet* GetTilesetFromTileId(int id) const;
 
 public:
 
-    // L03: DONE 1: Add your struct for map info
+    // Add your struct for map info
 	MapData mapData;
 
 private:

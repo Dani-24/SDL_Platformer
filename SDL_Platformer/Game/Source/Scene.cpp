@@ -101,20 +101,15 @@ bool Scene::PreUpdate()
 	if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
 		app->SaveGameRequest();
 
-	// Lose condition
-	if (app->player->position.y > 1280) {
-		app->player->death = true;
-	}
-
-	ListItem<Enemies*>* c = app->enemy->enemies.start;
-	while (c != NULL) {
-		if (c->data->position.y > 1280) {
-			c->data->death = true;
+	// --- Camera (Follows player) ---
+	if (app->player->death != true) {
+		if (app->player->position.x > 352 && app->player->position.x < 2880) {
+			app->render->camera.x = 0 - ((app->player->position.x * 2) - 1280 / 2);
 		}
-		c = c->next;
+		if (app->player->position.y < 1114) {
+			app->render->camera.y = 0 - ((app->player->position.y * 2) - 720 / 2);
+		}
 	}
-
-	// Add win condition
 
 	return true;
 }
