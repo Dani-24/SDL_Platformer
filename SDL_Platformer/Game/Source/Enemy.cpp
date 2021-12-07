@@ -28,7 +28,16 @@ bool Enemy::Start() {
 	detectPlayerFx = app->audio->LoadFx("Assets/audio/fx/enemyDetectPlayer.wav");
 	deathFx = app->audio->LoadFx("Assets/audio/fx/enemyDeath.wav");
 
+	alertTexture = app->tex->Load("Assets/textures/alert.png");
+	lostTexture = app->tex->Load("Assets/textures/stopChase.png");
+
 	// Animations
+
+	animIdleL.PushBack({ 150, 100, 50, 50 });
+	animIdleL.loop = false;
+
+	animIdleR.PushBack({ 0, 0, 50, 50 });
+	animIdleR.loop = false;
 
 	animDieL.PushBack({ 50, 150, 50, 50});
 	animDieL.PushBack({ 0, 150, 50, 50 });
@@ -74,11 +83,9 @@ void Enemy::AddEnemy(int x, int y) {
 	thisEnemy->body->body->SetFixedRotation(true);
 	thisEnemy->position.x = x;
 	thisEnemy->position.y = y;
-	thisEnemy->currentAnimation = &animRunL;
+	thisEnemy->currentAnimation = &animIdleL;
 	thisEnemy->dir = false;
 	thisEnemy->playDetectFx = false;
-
-	count++;
 
 	enemies.add(thisEnemy);
 }
@@ -115,14 +122,17 @@ bool Enemy::Update(float dt) {
 
 			// ENEMIES ALIVE:
 
-			// Detect player
-			int chaseDistance = 250, limitVel = 100;
+			// Detect player (Only X axis)
+			int chaseDistance = 200, limitVel = 100;
 
 			if (app->player->position.x - c->data->position.x < chaseDistance && app->player->position.x - c->data->position.x > -chaseDistance /*&& app->player->position.y - c->data->position.y < chaseDistance / 4 && app->player->position.y - c->data->position.y > -chaseDistance / 4*/) {
 				// Play sfx
 				if (c->data->playDetectFx != true) {
 					app->audio->PlayFx(detectPlayerFx);
 					c->data->playDetectFx = true;
+
+					c->data->alert = true;
+					c->data->lost = false;
 				}
 
 				// Chase player
@@ -147,6 +157,29 @@ bool Enemy::Update(float dt) {
 			}
 			else {
 				c->data->playDetectFx = false;
+
+				if (c->data->lost == false && c->data->currentAnimation == &animRunL || c->data->currentAnimation == &animRunR) {
+					c->data->lost = true;
+					c->data->alert = false;
+				}
+
+				if (c->data->currentAnimation == &animRunL) {
+					c->data->currentAnimation = &animIdleL;
+				}
+				if (c->data->currentAnimation == &animRunR) {
+					c->data->currentAnimation = &animIdleR;
+				}
+			}
+
+			// Reset alert/lost effect
+			if (c->data->alert == true || c->data->lost == true) {
+				c->data->cont++;
+			}
+
+			if (c->data->cont > 100) {
+				c->data->alert = false;
+				c->data->lost = false;
+				c->data->cont = false;
 			}
 
 			// Update animation and position
@@ -170,7 +203,15 @@ bool Enemy::PostUpdate() {
 	ListItem<Enemies*>* c = enemies.start;
 	while (c != NULL) {
 		SDL_Rect rect = c->data->currentAnimation->GetCurrentFrame();
-		app->render->DrawTexture(c->data->sprite, c->data->position.x - 5, c->data->position.y - 5, &rect, 1, c->data->body->GetRotation());
+		app->render->DrawTexture(c->data->sprite, c->data->position.x - 5, c->data->position.y - 5, &rect);
+
+		if (c->data->alert == true) {
+			app->render->DrawTexture(alertTexture, c->data->position.x + 5, c->data->position.y - 25);
+		}
+		if (c->data->lost == true) {
+			app->render->DrawTexture(lostTexture, c->data->position.x + 5, c->data->position.y - 25);
+		}
+
 		c = c->next;
 	}
 	return true;
@@ -186,13 +227,13 @@ bool Enemy::CleanUp() {
 	enemies.clear();
 
 	app->tex->UnLoad(enemySprite);
+	app->tex->UnLoad(lostTexture);
+	app->tex->UnLoad(alertTexture);
 
 	animDieL.DeleteAnim();
 	animDieR.DeleteAnim();
 	animRunL.DeleteAnim();
 	animRunR.DeleteAnim();
-
-	count = 0;
 
 	return true;
 }

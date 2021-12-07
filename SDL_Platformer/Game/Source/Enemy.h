@@ -38,6 +38,10 @@ struct Enemies {
 	int speed;
 
 	Animation* currentAnimation = nullptr;
+
+	bool alert = false;
+	bool lost = false;
+	int cont = 0;
 };
 
 class Enemy : public Module
@@ -64,8 +68,11 @@ private:
 	// The player spritesheet loaded into an SDL_Texture
 	SDL_Texture* enemySprite = nullptr;
 
+	SDL_Texture* alertTexture;
+	SDL_Texture* lostTexture;
+
 	// Animations
-	Animation animRunL, animRunR, animDieL, animDieR;
+	Animation animIdleL, animIdleR, animRunL, animRunR, animDieL, animDieR;
 
 	// Sound effects indices
 	uint detectPlayerFx = 0;
@@ -82,8 +89,6 @@ private:
 		38, 0,
 		2, 0
 	};
-
-	int count = 0;
 
 };
 
