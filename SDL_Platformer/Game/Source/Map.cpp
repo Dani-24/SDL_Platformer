@@ -94,7 +94,7 @@ void Map::Blocks()
 	// Make sure we draw all the layers and not just the first one
 	while (mapLayerItem != NULL) {
 
-		if (mapLayerItem->data->properties.GetProperty("Navigation") == 1 || mapLayerItem->data->properties.GetProperty("Navigation") == 2 || mapLayerItem->data->properties.GetProperty("Navigation") == 3 || mapLayerItem->data->properties.GetProperty("Navigation") == 4) { // Colliders
+		if (mapLayerItem->data->properties.GetProperty("Navigation") != NULL) { // Colliders
 
 			for (int x = 0; x < mapLayerItem->data->width; x++)
 			{
@@ -112,16 +112,19 @@ void Map::Blocks()
 						switch (mapLayerItem->data->properties.GetProperty("Navigation"))
 						{
 						case 1:
-							groundCollider.add(app->physics->CreateRectangle(pos.x + 8, pos.y + 8, 16, 16, "ground"));
+							colliders.add(app->physics->CreateRectangle(pos.x + 8, pos.y + 8, 16, 16, "ground"));
 							break;
 						case 2:
-							groundCollider.add(app->physics->CreateRectangle(pos.x + 8, pos.y + 8, 16, 16, "wall"));
+							colliders.add(app->physics->CreateRectangle(pos.x + 8, pos.y + 8, 16, 16, "wall"));
 							break;
 						case 3:
-							bricksCollider.add(app->physics->CreateRectangle(pos.x + 8, pos.y + 8, 16, 16, "brick"));
+							colliders.add(app->physics->CreateRectangle(pos.x + 8, pos.y + 8, 16, 16, "brick"));
 							break;
 						case 4:
-							deathColliders.add(app->physics->CreateRectangle(pos.x + 8, pos.y + 8, 16, 16, "death"));
+							colliders.add(app->physics->CreateRectangle(pos.x + 8, pos.y + 8, 16, 16, "death"));
+							break;
+						case 5:
+							colliders.add(app->physics->CreateRectangle(pos.x + 8, pos.y + 8, 16, 16, "win"));
 							break;
 						}
 					}
@@ -249,26 +252,12 @@ bool Map::CleanUp()
 	}
 	mapData.layers.clear();
 
-	ListItem<PhysBody*>* c = groundCollider.start;
+	ListItem<PhysBody*>* c = colliders.start;
 	while (c != NULL) {
 		app->physics->world->DestroyBody(c->data->body);
 		c = c->next;
 	}
-	groundCollider.clear();
-
-	ListItem<PhysBody*>* c2 = bricksCollider.start;
-	while (c2 != NULL) {
-		app->physics->world->DestroyBody(c2->data->body);
-		c2 = c2->next;
-	}
-	bricksCollider.clear();
-
-	ListItem<PhysBody*>* c4 = deathColliders.start;
-	while (c4 != NULL) {
-		app->physics->world->DestroyBody(c4->data->body);
-		c4 = c4->next;
-	}
-	deathColliders.clear();
+	colliders.clear();
 
     return true;
 }

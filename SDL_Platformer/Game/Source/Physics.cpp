@@ -278,8 +278,10 @@ void Physics::BeginContact(b2Contact* contact)
 	}
 
 	// Die Collision
-	if (physA == app->player->playerBody && physB->type == "enemy" || physA == app->player->playerBody && physB->type == "death") {
-		app->player->death = true;
+	if (app->player->godMode == false) {
+		if (physA == app->player->playerBody && physB->type == "enemy" || physA == app->player->playerBody && physB->type == "death") {
+			app->player->death = true;
+		}
 	}
 
 	// Check enemy collision that kills them
@@ -291,6 +293,11 @@ void Physics::BeginContact(b2Contact* contact)
 			c->data->death = true;
 		}
 		c = c->next;
+	}
+
+	// WIN 
+	if (physA == app->player->playerBody && physB->type == "win") {
+		app->player->win = true;
 	}
 }
 

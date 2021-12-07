@@ -89,7 +89,10 @@ private:
 	uint killedFx = 0;
 	uint deathFx = 0;
 
+	uint winFx = 0;
+
 	bool DieFxPlayed = false;
+	bool WinFxPlayed = false;
 
 };
 

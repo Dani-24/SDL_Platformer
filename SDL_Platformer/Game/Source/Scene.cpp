@@ -111,6 +111,12 @@ bool Scene::PreUpdate()
 		}
 	}
 
+	// win
+	if (app->player->win == true) {
+		app->fade->StartFadeToBlack(this, (Module*)app->sceneTitle, 60);
+	}
+
+
 	return true;
 }
 
@@ -118,7 +124,7 @@ bool Scene::PreUpdate()
 bool Scene::Update(float dt)
 {
 	// EasterEGG()
-	if (app->input->GetKey(SDL_SCANCODE_5) == KEY_DOWN) {
+	if (app->input->GetKey(SDL_SCANCODE_5) == KEY_UP) {
 		easterEgg = !easterEgg;
 		EasterEgg();
 	}
@@ -178,30 +184,32 @@ bool Scene::PostUpdate()
 		}
 	}
 
+	// Draw map
+	app->map->Draw();
+
+	// Draw EasterEGG
 	if (easterEgg == true) {
 
 		int vecesQSeRepiteEnX = 10;
-		int vecesQSeRepiteEnY = 5;
+		int vecesQSeRepiteEnY = 10;
 
 		eggAnim.Update();
-		SDL_Rect rect = eggAnim.GetCurrentFrame();
-
+		SDL_Rect rectEgg = eggAnim.GetCurrentFrame();
 		panderetAnim.Update();
-		SDL_Rect rect1 = panderetAnim.GetCurrentFrame();
+		SDL_Rect rectPand = panderetAnim.GetCurrentFrame();
+
 		for (int i = 0; i < vecesQSeRepiteEnX; i++) {
 			for (int j = 0; j < vecesQSeRepiteEnY; j++) {
 				if (i % 2 == 0 && j % 2 == 0) {
-					app->render->DrawTexture(pandereta, i * 200, j * 200, &rect1);
+					app->render->DrawTexture(pandereta, i * 200, j * 200, &rectPand);
 				}
 				else {
-					app->render->DrawTexture(egg, i * 200, j * 200, &rect);
+					app->render->DrawTexture(egg, i * 200, j * 200, &rectEgg);
 				}
 			}
 		}
 	}
 
-	// Draw map
-	app->map->Draw();
 
 	// Die / Win textures
 	if (app->player->death == true) {
@@ -239,6 +247,8 @@ bool Scene::CleanUp()
 	app->physics->Disable();
 
 	cont = w = h = 0;
+
+	loadEgg = false;
 
 	return true;
 }

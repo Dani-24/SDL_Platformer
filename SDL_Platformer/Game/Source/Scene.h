@@ -43,6 +43,7 @@ private:
 
 	int cont = 0;
 	int w, h;
+
 };
 
 #endif // __SCENE_H__

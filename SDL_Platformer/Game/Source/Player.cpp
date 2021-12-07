@@ -299,6 +299,7 @@ bool Player::Start()
 	deathFx = app->audio->LoadFx("Assets/audio/fx/death.wav");
 	killedFx = app->audio->LoadFx("Assets/audio/fx/killedBySus.wav");
 	playerAttackFx = app->audio->LoadFx("Assets/audio/fx/kick.wav");
+	winFx = app->audio->LoadFx("Assets/audio/fx/winFx.wav");
 
 	return ret;
 }
@@ -327,7 +328,7 @@ bool Player::Update(float dt)
 		canJump = false;
 	}
 
-	if (death != true) {
+	if (death != true && win != true) {
 
 		// --- Player movement ---
 		if (godMode != true) {
@@ -466,7 +467,6 @@ bool Player::Update(float dt)
 	else if(death == true){
 		app->physics->pause = true;
 	
-
 		// When you die, this makes the player go washingmachine 
 		int w, h, width, height;
 		w = -app->render->camera.x / 2 - 1280 / 4;
@@ -495,11 +495,18 @@ bool Player::Update(float dt)
 			app->audio->PlayFx(deathFx);
 		}
 	}
+	else if (win == true) {
+
+		if (WinFxPlayed != true) {
+			WinFxPlayed = true;
+			app->audio->PlayFx(winFx);
+		}
+	}
 	return ret;
 }
 
 void Player::GodMode() {
-	// --- GOD MODE ---
+	// --- GOD MODE Movement ---
 	if ((app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT))
 	{
 		playerBody->body->SetTransform(b2Vec2(playerBody->body->GetPosition().x + 0.4f, playerBody->body->GetPosition().y),playerBody->body->GetAngle());
@@ -631,9 +638,9 @@ bool Player::CleanUp() {
 	// Reset variables
 
 	currentVel = velY = position.x = position.y = initPos.x = initPos.y = NULL;
-	godMode = death = win = destroyed = DieFxPlayed = false;
+	godMode = death = win = destroyed = DieFxPlayed = WinFxPlayed = false;
 
-	angle = angleV = killedFx = deathFx = playerAttackFx = 0;
+	angle = angleV = killedFx = deathFx = playerAttackFx = winFx = 0;
 
 	return true;
 }
