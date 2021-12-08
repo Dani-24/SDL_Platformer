@@ -36,7 +36,7 @@ void Coin::AddCoin(int x, int y) {
 
 	Coins* thisCoin = new Coins();
 
-	thisCoin->live = true;
+	thisCoin->spawn = true;
 	thisCoin->body = app->physics->CreateRectangle(x, y, 16, 16);
 	thisCoin->position.x = x;
 	thisCoin->position.y = y;
@@ -72,10 +72,14 @@ bool Coin::Update(float dt) {
 	
 	ListItem<Coins*>* c = coins.start;
 	while (c != NULL) {
-		/*if (d->data->live == false) {
-			app->physics->world->DestroyBody(d->data->body->body);
-		}*/
-		c = c->next;
+		if (c->data->spawn == false) {
+			app->physics->world->DestroyBody(c->data->body->body);
+			coins.del(c);
+			c = NULL;
+		}
+		else {
+			c = c->next;
+		}
 	}	
 	return true;
 }
@@ -84,7 +88,7 @@ bool Coin::PostUpdate() {
 
 	ListItem<Coins*>* c = coins.start;
 	while (c != NULL) {
-		app->render->DrawTexture(CoinTex, c->data->position.x, c->data->position.y);
+		app->render->DrawTexture(CoinTex, c->data->position.x - 8, c->data->position.y - 8);
 		c = c->next;
 	}
 	return true;
@@ -94,7 +98,9 @@ bool Coin::CleanUp() {
 
 	ListItem<Coins*>* c = coins.start;
 	while (c != NULL) {
-		app->physics->world->DestroyBody(c->data->body->body);
+		if (c->data->body->body != NULL) {
+			app->physics->world->DestroyBody(c->data->body->body);
+		}
 		c = c->next;
 	}
 	coins.clear();

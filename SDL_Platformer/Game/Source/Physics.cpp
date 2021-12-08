@@ -304,7 +304,7 @@ void Physics::BeginContact(b2Contact* contact)
 	while (d != NULL) {
 		if (physA == app->player->playerBody && physB == d->data->body) {
 			app->audio->PlayFx(app->coin->coinFx);
-			d->data->live = false;
+			d->data->spawn = false;
 		}
 		d = d->next;
 	}

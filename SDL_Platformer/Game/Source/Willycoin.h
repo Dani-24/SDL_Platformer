@@ -35,7 +35,7 @@ struct Coins {
 	SDL_Texture* sprite;
 	PhysBody* body;
 
-	bool live;
+	bool spawn;
 	iPoint position;
 };
 

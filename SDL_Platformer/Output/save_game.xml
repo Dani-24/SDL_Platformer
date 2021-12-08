@@ -9,6 +9,7 @@
 	<sceneTitle />
 	<scene>
 		<player x="32" y="1090" hp="3" />
+		<enemies ID="0" x="0" y="0" alive="true" />
 	</scene>
 	<map />
 	<player />
