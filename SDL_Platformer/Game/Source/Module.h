@@ -29,7 +29,7 @@ public:
 	}
 
 	// Called before render is available
-	// L01: DONE 5: Sending config file to all modules
+	// Sending config file to all modules
 	virtual bool Awake(pugi::xml_node&)
 	{
 		return true;
@@ -41,19 +41,19 @@ public:
 		return true;
 	}
 
-	// Called each loop iteration
+	// Check things
 	virtual bool PreUpdate()
 	{
 		return true;
 	}
 
-	// Called each loop iteration
+	// Update things
 	virtual bool Update(float dt)
 	{
 		return true;
 	}
 
-	// Called each loop iteration
+	// Draw things
 	virtual bool PostUpdate()
 	{
 		return true;
@@ -70,7 +70,7 @@ public:
 
 	}
 
-	// L02: DONE 2: Create new virtual methods to Load / Save state
+	// Create new virtual methods to Load / Save state
 	virtual bool LoadState(pugi::xml_node&)
 	{
 		return true;
@@ -99,6 +99,5 @@ public:
 		return active;
 	}
 };
-
 
 #endif // __MODULE_H__

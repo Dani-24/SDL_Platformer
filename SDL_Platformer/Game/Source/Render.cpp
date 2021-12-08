@@ -178,22 +178,19 @@ bool Render::DrawRectangle(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint
 
 bool Render::LoadState(pugi::xml_node& data)
 {
-	int x = data.child("camera").attribute("x").as_int();
-	int y = data.child("camera").attribute("y").as_int();
-	LOG("X: %d, Y: %d ajdnaindfiwandiajndijmn", x, y);
-	app->player->playerBody->body->SetTransform(b2Vec2(x, y), app->player->playerBody->body->GetAngle());
+	/*int x = data.child("camera").attribute("x").as_int();
+	int y = data.child("camera").attribute("y").as_int();*/
 
 	return true;
 }
 
-// L02: DONE 8: Create a method to save the state of the renderer
 // Save Game State
 bool Render::SaveState(pugi::xml_node& data) const
 {
-	pugi::xml_node pos = data.append_child("camera");
+	/*pugi::xml_node pos = data.append_child("camera");
 
 	pos.append_attribute("x") = app->player->position.x;
-	pos.append_attribute("y") = app->player->position.y;
+	pos.append_attribute("y") = app->player->position.y;*/
 
 	return true;
 }

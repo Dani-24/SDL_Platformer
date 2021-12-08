@@ -8,11 +8,9 @@
 	<sceneLogo />
 	<sceneTitle />
 	<scene />
-	<sceneEnding />
 	<map />
 	<:anonymous />
 	<:anonymous />
-	<renderer>
-		<camera x="798" y="1173" />
-	</renderer>
+	<:anonymous />
+	<renderer />
 </save_state>

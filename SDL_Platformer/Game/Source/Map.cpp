@@ -280,7 +280,7 @@ bool Map::Load(const char* filename)
 	// Load general info
     if(ret == true)
     {
-        // L03: DONE 3: Create and call a private function to load and fill all your map data
+        // Create and call a private function to load and fill all your map data
 		ret = LoadMap(mapFile);
 	}
 
