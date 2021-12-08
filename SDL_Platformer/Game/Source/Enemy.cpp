@@ -10,8 +10,9 @@
 #include "Physics.h"
 #include "Player.h"
 
-Enemy::Enemy(App* application, bool start_enabled) : Module(application, start_enabled){
-
+Enemy::Enemy(App* application, bool start_enabled) : Module(application, start_enabled)
+{
+	name.Create("enemy");
 }
 
 Enemy::~Enemy() {

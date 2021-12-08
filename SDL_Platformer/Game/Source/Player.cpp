@@ -11,6 +11,7 @@
 
 Player::Player(App* application, bool start_enabled) : Module(application, start_enabled)
 {
+	name.Create("player");
 }
 
 Player::~Player()

@@ -9,8 +9,8 @@
 	<sceneTitle />
 	<scene />
 	<map />
-	<:anonymous />
-	<:anonymous />
-	<:anonymous />
+	<player />
+	<enemy />
+	<physics />
 	<renderer />
 </save_state>

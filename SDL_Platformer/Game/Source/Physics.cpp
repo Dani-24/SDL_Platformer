@@ -11,6 +11,8 @@
 
 Physics::Physics(App* application, bool start_enabled) : Module(application, start_enabled)
 {
+	name.Create("physics");
+
 	// Initialise all the internal class variables, at least to NULL pointer
 	world = NULL;
 	ground = NULL;
