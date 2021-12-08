@@ -11,7 +11,7 @@
 #include "Player.h"
 
 Coin::Coin(App* application, bool start_enabled) : Module(application, start_enabled){
-
+	name.Create("coin");
 }
 
 Coin::~Coin() {

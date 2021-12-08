@@ -8,12 +8,12 @@
 	<sceneLogo />
 	<sceneTitle />
 	<scene>
-		<player x="32" y="1090" hp="3" />
-		<enemies ID="0" x="0" y="0" alive="true" />
+		<player x="32" y="1093" hp="3" />
 	</scene>
 	<map />
 	<player />
 	<enemy />
+	<coin />
 	<physics />
 	<renderer />
 </save_state>
