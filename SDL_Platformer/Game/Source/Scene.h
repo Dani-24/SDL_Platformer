@@ -21,14 +21,11 @@ public:
 	bool PostUpdate();
 	bool CleanUp();
 
+	/*bool LoadState(pugi::xml_node&);
+	bool SaveState(pugi::xml_node&) const;*/
+
 	// EasterEgg
 	void EasterEgg();
-
-	float bgScrollX[6];
-
-	bool easterEgg;
-
-	bool loadEgg, eggMusic;
 
 private:
 	Animation eggAnim;
@@ -44,6 +41,9 @@ private:
 	int cont = 0;
 	int w, h;
 
+	float bgScrollX[6];
+	bool easterEgg;
+	bool loadEgg, eggMusic;
 };
 
 #endif // __SCENE_H__
