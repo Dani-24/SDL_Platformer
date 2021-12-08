@@ -227,26 +227,3 @@ bool Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, Uin
 
 	return ret;
 }
-
-//bool Render::LoadState(pugi::xml_node& data)
-//{
-//	int x = data.child("camera").attribute("x").as_int();
-//	int y = data.child("camera").attribute("y").as_int();
-//
-//	Basura:
-//  LOG("X: %d, Y: %d ajdnaindfiwandiajndijmn", x, y);
-//	app->player->playerBody->body->SetTransform(b2Vec2(x, y), app->player->playerBody->body->GetAngle());
-
-//	return true;
-//}
-//
-//// Save Game State
-//bool Render::SaveState(pugi::xml_node& data) const
-//{
-//	pugi::xml_node pos = data.append_child("camera");
-//
-//	pos.append_attribute("x") = app->player->position.x;
-//	pos.append_attribute("y") = app->player->position.y;
-//
-//	return true;
-//}
