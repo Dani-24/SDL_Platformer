@@ -12,6 +12,7 @@
 #include "Player.h"
 #include "Physics.h"
 #include "Enemy.h"
+#include "Willycoin.h"
 
 Scene::Scene(App* application, bool start_enabled) : Module(application, start_enabled)
 {
@@ -52,6 +53,7 @@ bool Scene::Start()
 	app->map->Enable();
 
 	app->enemy->Enable();
+	app->coin->Enable();
 
 	// Load map
 	app->map->Load("mapa.tmx");

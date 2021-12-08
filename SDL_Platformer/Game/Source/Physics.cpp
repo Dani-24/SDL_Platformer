@@ -7,6 +7,8 @@
 #include "Window.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "Audio.h"
+#include "Willycoin.h"
 #include "Map.h"
 
 Physics::Physics(App* application, bool start_enabled) : Module(application, start_enabled)
@@ -295,6 +297,16 @@ void Physics::BeginContact(b2Contact* contact)
 			c->data->death = true;
 		}
 		c = c->next;
+	}
+
+	//Coin collision
+	ListItem<Coins*>* d = app->coin->coins.start;
+	while (d != NULL) {
+		if (physA == app->player->playerBody && physB == d->data->body) {
+			app->audio->PlayFx(app->coin->coinFx);
+			d->data->live = false;
+		}
+		d = d->next;
 	}
 
 	// WIN 

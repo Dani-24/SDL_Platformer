@@ -4,6 +4,7 @@
 #include "Textures.h"
 #include "Map.h"
 #include "Physics.h"
+#include "Willycoin.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -125,6 +126,9 @@ void Map::Blocks()
 							break;
 						case 5:
 							colliders.add(app->physics->CreateRectangle(pos.x + 8, pos.y + 8, 16, 16, "win"));
+							break;
+						case 6:
+							app->coin->AddCoin(pos.x, pos.y);
 							break;
 						}
 					}

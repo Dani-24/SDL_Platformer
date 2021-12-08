@@ -37,7 +37,7 @@ void Coin::AddCoin(int x, int y) {
 	Coins* thisCoin = new Coins();
 
 	thisCoin->live = true;
-	thisCoin->body = app->physics->CreateRectangle(x, y, 16, 16, "coin");
+	thisCoin->body = app->physics->CreateRectangle(x, y, 16, 16);
 	thisCoin->position.x = x;
 	thisCoin->position.y = y;
 
