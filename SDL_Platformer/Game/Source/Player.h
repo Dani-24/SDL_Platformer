@@ -27,12 +27,11 @@ public:
 	bool PostUpdate();
 	bool CleanUp() override;
 
-	void OnCollision(PhysBody* c1, PhysBody* c2) override;
-
 	void PlayerStartAnims();
 
 	void GodMode();
 
+public:
 	bool godMode;
 	iPoint position;
 	int angle = 0, angleV = 1;
@@ -48,6 +47,18 @@ public:
 	int velY;
 
 private:
+
+	// Chain for player sprite
+	int playerChain[16]{
+		0, 2,
+		0, 24,
+		2, 26,
+		24, 26,
+		26, 24,
+		26, 2,
+		24, 0,
+		2, 0
+	};
 
 	// The speed in which we move the player (pixels per frame)
 	float speed;

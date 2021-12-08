@@ -273,17 +273,6 @@ bool Player::Start()
 
 	position.x = initPos.x;
 	position.y = initPos.y;
-
-	int playerChain[16]{
-		0, 2,
-		0, 24,
-		2, 26,
-		24, 26,
-		26, 24,
-		26, 2,
-		24, 0,
-		2, 0
-	};
 		
 	//playerBody = app->physics->CreateRectangle(position.x, position.y, 26, 26);
 	playerBody = app->physics->CreateChain(position.x, position.y, playerChain, 16);
@@ -593,10 +582,6 @@ bool Player::PostUpdate() {
 	app->render->DrawTexture(playerSprite, position.x-3, position.y-5, &rect, 1.0f, angle, 34, 34); // -3 and -5 are for hitbox adjustments
 
 	return ret;
-}
-
-void Player::OnCollision(PhysBody* c1, PhysBody* c2)
-{
 }
 
 bool Player::CleanUp() {

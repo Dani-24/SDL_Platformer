@@ -59,9 +59,10 @@ public:
 	bool PostUpdate();
 	bool CleanUp() override;
 
-	List<Enemies*> enemies;
-
 	void AddEnemy(int x, int y);
+
+public:
+	List<Enemies*> enemies;
 
 private:
 
