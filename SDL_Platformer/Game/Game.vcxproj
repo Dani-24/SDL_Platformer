@@ -106,6 +106,7 @@
     <ClCompile Include="Source\SceneTitle.cpp" />
     <ClCompile Include="Source\Textures.cpp" />
     <ClCompile Include="Source\Timer.cpp" />
+    <ClCompile Include="Source\Willycoin.cpp" />
     <ClCompile Include="Source\Window.cpp" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Source\Animation.h" />
@@ -125,6 +126,7 @@
     <ClInclude Include="Source\SceneTitle.h" />
     <ClInclude Include="Source\Textures.h" />
     <ClInclude Include="Source\Timer.h" />
+    <ClInclude Include="Source\Willycoin.h" />
     <ClInclude Include="Source\Window.h" />
     <ClInclude Include="Source\Defs.h" />
     <ClInclude Include="Source\List.h" />

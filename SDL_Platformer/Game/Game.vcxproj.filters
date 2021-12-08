@@ -58,6 +58,9 @@
     <ClCompile Include="Source\Enemy.cpp">
       <Filter>Platformer\Scenes\Gameplay</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Willycoin.cpp">
+      <Filter>Platformer\Scenes\Gameplay</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Defs.h">
@@ -139,6 +142,9 @@
       <Filter>Resources</Filter>
     </ClInclude>
     <ClInclude Include="Source\Enemy.h">
+      <Filter>Platformer\Scenes\Gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Willycoin.h">
       <Filter>Platformer\Scenes\Gameplay</Filter>
     </ClInclude>
   </ItemGroup>
