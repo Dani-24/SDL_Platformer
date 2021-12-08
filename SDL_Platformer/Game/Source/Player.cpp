@@ -264,7 +264,7 @@ bool Player::Start()
 	// Inicializar variables
 	speed = 2;
 	lowSpeed = 1;
-	HP = Max_HP;
+	HP = max_HP;
 
 	// Load assets
 	PlayerStartAnims();

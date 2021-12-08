@@ -7,7 +7,9 @@
 	<FadeToBlack />
 	<sceneLogo />
 	<sceneTitle />
-	<scene />
+	<scene>
+		<player x="32" y="1090" hp="3" />
+	</scene>
 	<map />
 	<player />
 	<enemy />

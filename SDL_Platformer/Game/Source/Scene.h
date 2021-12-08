@@ -21,8 +21,11 @@ public:
 	bool PostUpdate();
 	bool CleanUp();
 
-	/*bool LoadState(pugi::xml_node&);
-	bool SaveState(pugi::xml_node&) const;*/
+	bool LoadState(pugi::xml_node&);
+	bool SaveState(pugi::xml_node&) const;
+	bool DeleteState();
+
+	void ResetCamera();
 
 	// EasterEgg
 	void EasterEgg();
@@ -44,6 +47,10 @@ private:
 	float bgScrollX[6];
 	bool easterEgg;
 	bool loadEgg, eggMusic;
+
+	int initPosX = 32, initPosY = 1090;
+
+	bool delSaveData = false;
 };
 
 #endif // __SCENE_H__

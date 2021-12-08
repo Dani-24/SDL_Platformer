@@ -1,8 +1,6 @@
 #include "App.h"
 #include "Window.h"
 #include "Render.h"
-#include "Player.h"
-#include "Physics.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -176,25 +174,6 @@ bool Render::DrawRectangle(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint
 	return ret;
 }
 
-bool Render::LoadState(pugi::xml_node& data)
-{
-	/*int x = data.child("camera").attribute("x").as_int();
-	int y = data.child("camera").attribute("y").as_int();*/
-
-	return true;
-}
-
-// Save Game State
-bool Render::SaveState(pugi::xml_node& data) const
-{
-	/*pugi::xml_node pos = data.append_child("camera");
-
-	pos.append_attribute("x") = app->player->position.x;
-	pos.append_attribute("y") = app->player->position.y;*/
-
-	return true;
-}
-
 bool Render::DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera) const
 {
 	bool ret = true;
@@ -248,3 +227,26 @@ bool Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, Uin
 
 	return ret;
 }
+
+//bool Render::LoadState(pugi::xml_node& data)
+//{
+//	int x = data.child("camera").attribute("x").as_int();
+//	int y = data.child("camera").attribute("y").as_int();
+//
+//	Basura:
+//  LOG("X: %d, Y: %d ajdnaindfiwandiajndijmn", x, y);
+//	app->player->playerBody->body->SetTransform(b2Vec2(x, y), app->player->playerBody->body->GetAngle());
+
+//	return true;
+//}
+//
+//// Save Game State
+//bool Render::SaveState(pugi::xml_node& data) const
+//{
+//	pugi::xml_node pos = data.append_child("camera");
+//
+//	pos.append_attribute("x") = app->player->position.x;
+//	pos.append_attribute("y") = app->player->position.y;
+//
+//	return true;
+//}

@@ -37,14 +37,13 @@ bool Scene::Start()
 	LOG("Start Scene and load assets");
 
 	// Player position for Scene 1
-	app->player->initPos.x = 32;
-	app->player->initPos.y = 1090;
+	app->player->initPos.x = initPosX;
+	app->player->initPos.y = initPosY;
 
 	app->player->mapLimit.x = 3140;
 
 	// Camera at player
-	app->render->camera.x = 0 - ((app->player->position.x * 2));
-	app->render->camera.y = 0 - ((app->player->position.y * 2) - 720 / 2);
+	ResetCamera();
 
 	// Enable modules q se usan
 
@@ -97,11 +96,17 @@ bool Scene::Start()
 bool Scene::PreUpdate()
 {
 	// Request Load / Save when pressing F6/F5
-	if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
+	if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN){
 		app->LoadGameRequest();
-
-	if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
+	}
+	if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN) {
+		delSaveData = false;
 		app->SaveGameRequest();
+	}
+	if (app->input->GetKey(SDL_SCANCODE_6) == KEY_DOWN) {
+		delSaveData = true;
+		app->SaveGameRequest();
+	}
 
 	// --- Camera (Follows player) ---
 	if (app->player->death != true) {
@@ -117,7 +122,6 @@ bool Scene::PreUpdate()
 	if (app->player->win == true) {
 		app->fade->StartFadeToBlack(this, (Module*)app->sceneTitle, 60);
 	}
-
 
 	return true;
 }
@@ -250,8 +254,55 @@ bool Scene::CleanUp()
 
 	cont = w = h = 0;
 
-	loadEgg = false;
+	loadEgg = delSaveData = false;
 
+	return true;
+}
+
+void Scene::ResetCamera() {
+	app->render->camera.x = 0 - ((app->player->position.x * 2));
+	app->render->camera.y = 0 - ((app->player->position.y * 2) - 720 / 2);
+}
+
+bool Scene::LoadState(pugi::xml_node& data){
+
+	// --------------- LOAD SAVE DATA -----------------
+	LOG("Loading saved data");
+	app->player->Disable();
+
+	pugi::xml_node pNode = data.child("player");
+
+	app->player->initPos.x = pNode.attribute("x").as_int();
+	app->player->initPos.y = pNode.attribute("y").as_int();
+	app->player->HP = pNode.attribute("hp").as_int();
+
+	ResetCamera();
+	app->player->Enable();
+
+	return true;
+}
+
+bool Scene::SaveState(pugi::xml_node& data) const 
+{
+	pugi::xml_node pNode = data.append_child("player");
+
+	if (delSaveData == false) {
+		// ---------------- SAVE DATA -----------------------------
+		LOG("Saving data");
+
+		pNode.append_attribute("x") = app->player->position.x;
+		pNode.append_attribute("y") = app->player->position.y;
+		pNode.append_attribute("hp") = app->player->HP;
+
+	}
+	else {
+		// ---------------- DELETE SAVE DATA ----------------------
+		LOG("Deleting saved data");
+
+		pNode.append_attribute("x") = initPosX;
+		pNode.append_attribute("y") = initPosY;
+		pNode.append_attribute("hp") = app->player->max_HP;
+	}
 	return true;
 }
 

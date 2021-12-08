@@ -10,8 +10,6 @@
 struct SDL_Texture;
 struct Collider;
 
-#define Max_HP 10;
-
 class Player : public Module
 {
 public:
@@ -39,7 +37,7 @@ public:
 	iPoint mapLimit;
 	bool death = false;
 	bool win = false;
-	int HP;
+	int HP, max_HP = 3;
 	PhysBody* playerBody;
 
 	bool canJump;
