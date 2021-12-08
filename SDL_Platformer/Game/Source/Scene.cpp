@@ -87,6 +87,8 @@ bool Scene::Start()
 	// Enemies
 
 	app->enemy->AddEnemy(650, 1000);
+	app->enemy->AddEnemy(2255, 1160);
+	app->enemy->AddEnemy(1800, 100);
 
 	return true;
 }

@@ -122,10 +122,10 @@ bool Enemy::Update(float dt) {
 
 			// ENEMIES ALIVE:
 
-			// Detect player (Only X axis)
+			// Detect player
 			int chaseDistance = 200, limitVel = 100;
 
-			if (app->player->position.x - c->data->position.x < chaseDistance && app->player->position.x - c->data->position.x > -chaseDistance /*&& app->player->position.y - c->data->position.y < chaseDistance / 4 && app->player->position.y - c->data->position.y > -chaseDistance / 4*/) {
+			if (app->player->position.x - c->data->position.x < chaseDistance && app->player->position.x - c->data->position.x > -chaseDistance && app->player->position.y - c->data->position.y < chaseDistance / 4 && app->player->position.y - c->data->position.y > -chaseDistance / 4) {
 				// Play sfx
 				if (c->data->playDetectFx != true) {
 					app->audio->PlayFx(detectPlayerFx);
@@ -191,6 +191,7 @@ bool Enemy::Update(float dt) {
 			// ENEMIES DEAD
 
 			LOG("Deleting enemy");
+			app->physics->world->DestroyBody(c->data->body->body);
 			enemies.del(c);
 			c = NULL;
 		}
@@ -221,7 +222,9 @@ bool Enemy::CleanUp() {
 
 	ListItem<Enemies*>* c = enemies.start;
 	while (c != NULL) {
-		app->physics->world->DestroyBody(c->data->body->body);
+		if (c->data->body->body != NULL) {
+			app->physics->world->DestroyBody(c->data->body->body);
+		}
 		c = c->next;
 	}
 	enemies.clear();
