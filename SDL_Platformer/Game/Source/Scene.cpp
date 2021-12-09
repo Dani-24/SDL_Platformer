@@ -81,6 +81,27 @@ bool Scene::Start()
 	dieWindowAnim.loop = false;
 	dieWindowAnim.speed = 0.2f;
 
+	// Checkpoint
+
+	checkPos.x = 2985;
+	checkPos.y = 1073;
+
+	checkPointSensor = app->physics->CreateRectangleSensor(checkPos.x, checkPos.y, 50, 64);
+
+	checkpointTex = app->tex->Load("Assets/textures/checkpoint.png");
+	checkPfx = app->audio->LoadFx("Assets/audio/fx/checkpoint.wav");
+
+	for (int check = 0; check < 14; check++) {
+		if (check < 7) {
+			checkpointAnim.PushBack({ check * 50, 0, 50, 64 });
+		}
+		else {
+			checkpointAnim.PushBack({ (check-7) * 50, 64, 50, 64});
+		}
+	}
+	checkpointAnim.loop = false;
+	checkpointAnim.speed = 0.5f;
+
 	// Easter Egg - Press 5 when playing :D
 	easterEgg = false;
 	loadEgg = false;
@@ -106,10 +127,12 @@ bool Scene::PreUpdate()
 	}
 	if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN) {
 		delSaveData = false;
+		checkPointSave = false;
 		app->SaveGameRequest();
 	}
 	if (app->input->GetKey(SDL_SCANCODE_6) == KEY_DOWN) {
 		delSaveData = true;
+		checkPointSave = false;
 		app->SaveGameRequest();
 	}
 
@@ -168,6 +191,7 @@ bool Scene::Update(float dt)
 		}
 	}
 
+	// Go back to title
 	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN) {
 		app->fade->StartFadeToBlack(this, (Module*)app->scene, 10);
 	}
@@ -272,6 +296,26 @@ bool Scene::PostUpdate()
 		}
 	}
 
+	// Checkpoints
+	if (checked == true) {
+		checkpointAnim.Update();
+
+		// This will only be played one time:
+		if (checkfxPlayed == false) {
+			// Play fx
+			app->audio->PlayFx(checkPfx);
+			checkfxPlayed = true;
+
+			// Save
+			delSaveData = false;
+			checkPointSave = true;
+			app->SaveGameRequest();
+		}
+	}
+
+	SDL_Rect rectCheck = checkpointAnim.GetCurrentFrame();
+	app->render->DrawTexture(checkpointTex, checkPos.x - 25, checkPos.y - 32, &rectCheck);
+
 	// Die / Win textures
 	if (app->player->death == true) {
 		SDL_Rect dieWRect = dieWindowAnim.GetCurrentFrame();
@@ -300,6 +344,10 @@ bool Scene::CleanUp()
 	app->tex->UnLoad(cloudsUpTex);
 	app->tex->UnLoad(skyTex);
 
+	app->tex->UnLoad(checkpointTex);
+	checkpointAnim.Reset();
+	checkpointAnim.DeleteAnim();
+
 	// Die effect
 	dieWindowAnim.Reset();
 	dieWindowAnim.DeleteAnim();
@@ -316,21 +364,21 @@ bool Scene::CleanUp()
 	app->physics->Disable();
 
 	// Reset Variables
-	cont = w = h = playerPosForScroll = 0;
-	loadEgg = delSaveData = false;
+	cont = w = h = playerPosForScroll = checkPfx = 0;
+	loadEgg = delSaveData = checkPointSave = checked = checkfxPlayed = false;
 
 	return true;
 }
 
 void Scene::ResetCamera() {
-	app->render->camera.x = 0 - ((app->player->position.x * 2));
+	app->render->camera.x = 0 - (app->player->position.x * 2);
 	app->render->camera.y = 0 - ((app->player->position.y * 2) - 720 / 2);
 }
 
 bool Scene::LoadState(pugi::xml_node& data){
-
 	// --------------- LOAD SAVE DATA -----------------
 	LOG("Loading saved data");
+
 	app->player->Disable();
 
 	pugi::xml_node pNode = data.child("player");
@@ -339,8 +387,16 @@ bool Scene::LoadState(pugi::xml_node& data){
 	app->player->initPos.y = pNode.attribute("y").as_int();
 	app->player->HP = pNode.attribute("hp").as_int();
 
-	ResetCamera();
+	LOG("Loaded : X: %d, Y: %d, HP: %d", app->player->initPos.x, app->player->initPos.y, app->player->HP);
+
 	app->player->Enable();
+
+	// Reset Camera
+	app->render->camera.x = 0 - (app->player->position.x * 2);
+	if (app->player->position.x > 2880) {
+		app->render->camera.x = 0 - ((app->player->position.x * 2) - 1280 / 2);
+	}
+	app->render->camera.y = 0 - ((app->player->position.y * 2) - (720 / 2) - 180);
 
 	return true;
 }
@@ -349,22 +405,29 @@ bool Scene::SaveState(pugi::xml_node& data) const
 {
 	pugi::xml_node pNode = data.append_child("player");
 
-	if (delSaveData == false) {
+	if (delSaveData == false && checkPointSave == false) {
 		// ---------------- SAVE DATA -----------------------------
 		LOG("Saving data");
 
 		pNode.append_attribute("x") = app->player->position.x;
 		pNode.append_attribute("y") = app->player->position.y;
 		pNode.append_attribute("hp") = app->player->HP;
-
 	}
-	else {
+	else if(delSaveData == true && checkPointSave == false) {
 		// ---------------- DELETE SAVE DATA ----------------------
 		LOG("Deleting saved data");
 
 		pNode.append_attribute("x") = initPosX;
 		pNode.append_attribute("y") = initPosY;
 		pNode.append_attribute("hp") = app->player->max_HP;
+	}
+	else if (checkPointSave == true && delSaveData == false) {
+		// ---------------- CHECKPOINT SAVE DATA -----------------------------
+		LOG("Saving checkpoint data");
+
+		pNode.append_attribute("x") = checkPos.x - 16;
+		pNode.append_attribute("y") = checkPos.y;
+		pNode.append_attribute("hp") = app->player->HP;
 	}
 	return true;
 }
