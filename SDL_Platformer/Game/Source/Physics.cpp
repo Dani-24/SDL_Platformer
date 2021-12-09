@@ -306,13 +306,25 @@ void Physics::BeginContact(b2Contact* contact)
 	}
 
 	//Coin collision
-	ListItem<Coins*>* d = app->coin->coins.start;
+	ListItem<Items*>* d = app->item->items.start;
 	while (d != NULL) {
-		if (physA == app->player->playerBody && physB == d->data->body) {
-			app->audio->PlayFx(app->coin->coinFx);
-			d->data->spawn = false;
+		switch (d->data->type)
+		{
+		case 1:
+			if (physA == app->player->playerBody && physB == d->data->body) {
+				app->audio->PlayFx(app->item->coinFx);
+				d->data->spawn = false;
+			}
+			d = d->next;
+			break;
+		case 2:
+			if (physA == app->player->playerBody && physB == d->data->body) {
+				app->audio->PlayFx(app->item->willyFx);
+				d->data->spawn = false;
+			}
+			d = d->next;
+			break;
 		}
-		d = d->next;
 	}
 
 	// WIN 

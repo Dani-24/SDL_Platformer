@@ -128,8 +128,10 @@ void Map::Blocks()
 							colliders.add(app->physics->CreateRectangle(pos.x + 8, pos.y + 8, 16, 16, "win"));
 							break;
 						case 6:
-							app->coin->AddCoin(pos.x, pos.y);
+							app->item->AddItem(pos.x, pos.y, 1);
 							break;
+						case 7:
+							app->item->AddItem(pos.x, pos.y, 2);
 						}
 					}
 				}

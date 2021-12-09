@@ -10,46 +10,93 @@
 #include "Physics.h"
 #include "Player.h"
 
-Coin::Coin(App* application, bool start_enabled) : Module(application, start_enabled){
+#include <time.h>    
+
+Item::Item(App* application, bool start_enabled) : Module(application, start_enabled){
 	name.Create("coin");
 }
 
-Coin::~Coin() {
+Item::~Item() {
 
 }
 
-bool Coin::Start() {
+bool Item::Start() {
 
 	LOG("Start Enemy variables");
 
 	// Assets
-	CoinTex = app->tex->Load("Assets/textures/willy_coin.png");
+	Willycoin = app->tex->Load("Assets/textures/willy_coin.png");
+	ItemSprite = app->tex->Load("Assets/textures/coins_sprite.png");
 
 	coinFx = app->audio->LoadFx("Assets/audio/fx/coinSound.wav");
+	willyFx = app->audio->LoadFx("Assets/audio/fx/willy.wav");
+
+	//Animations
+
+	coinIdle.PushBack({ 16,16,16,16 });
+
+	coinSpin.PushBack({ 16,16,16,16 });
+	coinSpin.PushBack({ 32,16,16,16 });
+	coinSpin.PushBack({ 48,16,16,16 });
+	coinSpin.PushBack({ 64,16,16,16 });
+	coinSpin.PushBack({ 80,16,16,16 });
+	coinSpin.PushBack({ 96,16,16,16 });
+	coinSpin.PushBack({ 16,16,16,16 });
+	coinSpin.loop = false;
+	coinSpin.speed = 0.05f;
+
+	coinFlash.PushBack({ 16,112,16,16 });
+	coinFlash.PushBack({ 32,112,16,16 });
+	coinFlash.PushBack({ 48,112,16,16 });
+	coinFlash.PushBack({ 64,112,16,16 });
+	coinFlash.PushBack({ 80,112,16,16 });
+	coinFlash.PushBack({ 96,112,16,16 });
+	coinFlash.PushBack({ 16,112,16,16 });
+	coinFlash.loop = false;
+	coinFlash.speed = 0.05f;
+
 
 	return true;
 }
 
-void Coin::AddCoin(int x, int y) {
+void Item::AddItem(int x, int y, int type) {
 
 	LOG("Adding new COIN at X: %d and Y: %d", x, y);
 
-	Coins* thisCoin = new Coins();
+	Items* thisCoin = new Items();
 
-	thisCoin->spawn = true;
-	thisCoin->body = app->physics->CreateRectangle(x, y, 16, 16);
-	thisCoin->position.x = x;
-	thisCoin->position.y = y;
+	switch (type)
+	{
+	case 1:
+		thisCoin->spawn = true;
+		thisCoin->type = 1;
+		thisCoin->sprite = ItemSprite;
+		thisCoin->body = app->physics->CreateRectangleSensor(x, y, 16, 16);
+		thisCoin->currentAnimation = &coinIdle;
+		thisCoin->position.x = x;
+		thisCoin->position.y = y;
+		break;
 
-	coins.add(thisCoin);
+	case 2:
+		thisCoin->spawn = true;
+		thisCoin->type = 2;
+		thisCoin->body = app->physics->CreateRectangleSensor(x, y, 64, 64);
+		thisCoin->position.x = x;
+		thisCoin->position.y = y;
+		break;
+	}
+	
+
+	items.add(thisCoin);
 }
 
-bool Coin::PreUpdate() {
+bool Item::PreUpdate() {
 	// COIN DEBUG GENERATOR
 
 	if (app->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
 	{
 		int x, y;
+		int	type = 1;
 		
 		app->input->GetMousePosition(x, y);
 	
@@ -62,48 +109,97 @@ bool Coin::PreUpdate() {
 			y = y + app->player->position.y - 720 / 4;
 		}
 
-		AddCoin(x, y);
+		AddItem(x, y, type);
 	}
 
 	return true;
 }
 
-bool Coin::Update(float dt) {
+bool Item::Update(float dt) {
 	
-	ListItem<Coins*>* c = coins.start;
+	ListItem<Items*>* c = items.start;
+	srand(time(NULL));
+	int anim = rand() % 2 + 1;
 	while (c != NULL) {
-		if (c->data->spawn == false) {
-			LOG("Deleting Coin");
-			app->physics->world->DestroyBody(c->data->body->body);
-			coins.del(c);
-			c = NULL;
-		}
-		else {
-			c = c->next;
-		}
+		switch (c->data->type)
+		{
+		case 1:
+			if (c->data->spawn == false) {
+				LOG("Deleting Coin");
+				app->physics->world->DestroyBody(c->data->body->body);
+				items.del(c);
+				c = NULL;
+			}
+			else {
+				if (c->data->cont >= 100) {
+					if (anim == 1)
+					{
+						coinFlash.Reset();
+						c->data->currentAnimation = &coinFlash;
+					}
+					if (anim == 2)
+					{
+						coinSpin.Reset();
+						c->data->currentAnimation = &coinSpin;
+					}
+					c->data->cont = 0;
+				}
+				c->data->currentAnimation->Update();
+				c->data->cont += 1;
+				c = c->next;
+
+			}
+			break;
+		case 2:
+			if (c->data->spawn == false) {
+				LOG("Deleting Coin");
+				app->physics->world->DestroyBody(c->data->body->body);
+				items.del(c);
+				c = NULL;
+			}
+			else {
+				c = c->next;
+			}
+		}	
 	}	
 	return true;
 }
 
-bool Coin::PostUpdate() {
+bool Item::PostUpdate() {
 
-	ListItem<Coins*>* c = coins.start;
+	ListItem<Items*>* c = items.start;
+
 	while (c != NULL) {
-		app->render->DrawTexture(CoinTex, c->data->position.x - 8, c->data->position.y - 8);
-		c = c->next;
+		switch (c->data->type)
+		{
+		case 1:
+			SDL_Rect rect = c->data->currentAnimation->GetCurrentFrame();
+			app->render->DrawTexture(c->data->sprite, c->data->position.x-8, c->data->position.y-8, &rect);
+			c = c->next;
+			break;
+		case 2:
+			app->render->DrawTexture(Willycoin, c->data->position.x - 32, c->data->position.y - 32);
+			c = c->next;
+			break;
+		}
 	}
 	return true;
 }
 
-bool Coin::CleanUp() {
+bool Item::CleanUp() {
 
-	ListItem<Coins*>* c = coins.start;
+	ListItem<Items*>* c = items.start;
 	while (c != NULL) {
 		app->physics->world->DestroyBody(c->data->body->body);
 		c = c->next;
 	}
-	coins.clear();
+	items.clear();
 
-	app->tex->UnLoad(CoinTex);
+	app->tex->UnLoad(ItemSprite);
+	app->tex->UnLoad(Willycoin);
+
+	coinFlash.DeleteAnim();
+	coinIdle.DeleteAnim();
+	coinSpin.DeleteAnim();
 	return true;
 }

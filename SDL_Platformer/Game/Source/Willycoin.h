@@ -4,6 +4,7 @@
 #include "Module.h"
 #include "App.h"
 #include "List.h"
+#include "Animation.h"
 #include "Point.h"
 
 //Todo esto fue
@@ -30,23 +31,27 @@
 
 struct SDL_Texture;
 
-struct Coins {
+struct Items {
 
 	SDL_Texture* sprite;
 	PhysBody* body;
 
+	Animation* currentAnimation = nullptr;
+
+	int type;
+	int cont = 0;
 	bool spawn;
 	iPoint position;
 };
 
-class Coin : public Module
+class Item : public Module
 {
 public:
 	// Constructor
-	Coin(App* application, bool start_enabled);
+	Item(App* application, bool start_enabled);
 
 	// Destructor
-	~Coin();
+	~Item();
 
 	bool Start();
 	bool PreUpdate();
@@ -54,16 +59,19 @@ public:
 	bool PostUpdate();
 	bool CleanUp() override;
 
-	List<Coins*> coins;
+	List<Items*> items;
 
-	void AddCoin(int x, int y);
+	void AddItem(int x, int y, int type);
 	uint coinFx = 0;
+	uint willyFx = 0;
 
 private:
 
 	// The player spritesheet loaded into an SDL_Texture
-	SDL_Texture* CoinTex;
-	// Sound effects indices
+	SDL_Texture* ItemSprite = nullptr;
+	SDL_Texture* Willycoin;
+
+	Animation coinSpin, coinFlash, coinIdle;
 	
 };
 

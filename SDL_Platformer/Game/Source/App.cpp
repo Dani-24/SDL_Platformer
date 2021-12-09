@@ -39,7 +39,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	scene = new Scene(this, false);
 	player = new Player(this, false);
 	enemy = new Enemy(this, false);
-	coin = new Coin(this, false);
+	item = new Item(this, false);
 
 	map = new Map(this, false);
 	physics = new Physics(this, false);
@@ -59,7 +59,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 
 	AddModule(player);
 	AddModule(enemy);
-	AddModule(coin);
+	AddModule(item);
 
 	AddModule(physics);
 

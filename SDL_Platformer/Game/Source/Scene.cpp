@@ -51,7 +51,7 @@ bool Scene::Start()
 	app->map->Enable();
 
 	app->enemy->Enable();
-	app->coin->Enable();
+	app->item->Enable();
 
 	// Load map
 	app->map->Load("mapa.tmx");
@@ -312,7 +312,7 @@ bool Scene::CleanUp()
 	if (app->enemy->isEnabled()) {
 		app->enemy->Disable();
 	}
-	app->coin->Disable();
+	app->item->Disable();
 	app->physics->Disable();
 
 	// Reset Variables

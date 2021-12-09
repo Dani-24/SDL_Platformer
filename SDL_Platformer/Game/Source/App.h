@@ -24,7 +24,7 @@ class RestartLvl1;
 class Scene;
 class Player;
 class Enemy;
-class Coin;
+class Item;
 class Map;
 class Physics;
 class FadeToBlack;
@@ -107,7 +107,7 @@ public:
 	RestartLvl1* restartLvl1;
 	Player* player;
 	Enemy* enemy;
-	Coin* coin;
+	Item* item;
 	Map* map;
 	Physics* physics;
 	FadeToBlack* fade;
