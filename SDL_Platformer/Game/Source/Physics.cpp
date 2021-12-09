@@ -281,6 +281,12 @@ void Physics::BeginContact(b2Contact* contact)
 		app->player->canJump = true;
 	}
 
+	if (physA == app->player->playerBody && physB->type == "brick") {
+		if (physA->body->GetPosition().y <= physB->body->GetPosition().y) {
+			app->player->canJump = true;
+		}
+	}
+
 	// Die Collision
 	if (app->player->godMode == false) {
 		if (physA == app->player->playerBody && physB->type == "enemy" || physA == app->player->playerBody && physB->type == "death") {

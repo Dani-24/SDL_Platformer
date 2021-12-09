@@ -252,6 +252,8 @@ bool Scene::CleanUp()
 		app->enemy->Disable();
 	}
 
+	app->coin->Disable();
+
 	app->physics->Disable();
 
 	cont = w = h = 0;

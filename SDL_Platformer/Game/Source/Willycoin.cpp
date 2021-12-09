@@ -32,7 +32,7 @@ bool Coin::Start() {
 
 void Coin::AddCoin(int x, int y) {
 
-	LOG("Adding new enemy at X: %d and Y: %d", x, y);
+	LOG("Adding new COIN at X: %d and Y: %d", x, y);
 
 	Coins* thisCoin = new Coins();
 
@@ -73,6 +73,7 @@ bool Coin::Update(float dt) {
 	ListItem<Coins*>* c = coins.start;
 	while (c != NULL) {
 		if (c->data->spawn == false) {
+			LOG("Deleting Coin");
 			app->physics->world->DestroyBody(c->data->body->body);
 			coins.del(c);
 			c = NULL;
@@ -98,9 +99,7 @@ bool Coin::CleanUp() {
 
 	ListItem<Coins*>* c = coins.start;
 	while (c != NULL) {
-		if (c->data->body->body != NULL) {
-			app->physics->world->DestroyBody(c->data->body->body);
-		}
+		app->physics->world->DestroyBody(c->data->body->body);
 		c = c->next;
 	}
 	coins.clear();
