@@ -6,6 +6,7 @@
 #include "Animation.h"
 #include "List.h"
 #include "Point.h"
+#define MaxShoots 3
 
 struct SDL_Texture;
 struct Collider;

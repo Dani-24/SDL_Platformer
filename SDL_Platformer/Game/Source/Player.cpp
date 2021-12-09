@@ -327,9 +327,7 @@ bool Player::Update(float dt)
 
 			if (currentVel < velMax && currentVel > -velMax)
 			{
-				// (Right)
-				//--- run ---
-				if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+				if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)	// MOVE TO RIGHT
 				{
 					// --- walk ---
 					if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
@@ -359,7 +357,7 @@ bool Player::Update(float dt)
 						}
 					}
 				}
-				else if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)	//LEFT
+				else if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)	// MOVE TO LEFT
 				{
 					// --- he walk ---
 					if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
@@ -391,6 +389,7 @@ bool Player::Update(float dt)
 					}
 				}
 				else {
+					// ------------------------ FRICTION When stop moving --------------------------------
 					if (currentVel > 3) {
 						playerBody->body->ApplyLinearImpulse(b2Vec2(-0.4f, 0), b2Vec2(0, 0), 1);
 					}
@@ -399,6 +398,7 @@ bool Player::Update(float dt)
 					}
 				}
 			}
+			// ------------------ JUMP -----------------
 			if (canJump == true && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) 
 			{
 				playerBody->body->ApplyForceToCenter(b2Vec2(0, -325), 1);
@@ -419,6 +419,7 @@ bool Player::Update(float dt)
 				}
 			}
 			else {
+				// Allow move when jumping / falling
 				if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && Player_Dir == true) {
 					playerBody->body->ApplyLinearImpulse(b2Vec2(-0.4f, 0), b2Vec2(0, 0), 1);
 				}
@@ -452,6 +453,7 @@ bool Player::Update(float dt)
 		else {
 			GodMode();
 		}
+		// Get body position
 		playerBody->GetPosition(position.x, position.y);
 	}
 	else if(death == true){
@@ -479,14 +481,15 @@ bool Player::Update(float dt)
 		angle += angleV/2;
 		angleV++;
 
-		// Die Fx
+		// Die sfx
 		if (DieFxPlayed != true) {
 			DieFxPlayed = true;
 			app->audio->PlayFx(deathFx);
 		}
 	}
 	else if (win == true) {
-
+		
+		// Win sfx
 		if (WinFxPlayed != true) {
 			WinFxPlayed = true;
 			app->audio->PlayFx(winFx);
