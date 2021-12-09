@@ -41,8 +41,6 @@ bool Scene::Start()
 	app->player->initPos.x = initPosX;
 	app->player->initPos.y = initPosY;
 
-	app->player->mapLimit.x = 3140;
-
 	// Camera at player
 	ResetCamera();
 
@@ -59,13 +57,22 @@ bool Scene::Start()
 	app->map->Load("mapa.tmx");
 	app->map->Blocks();
 
-	// Load Assets
+	// --- Load Assets ---
 
+	// Background
 	app->audio->PlayMusic("Assets/audio/music/music_bg.ogg");
 
-	background = app->tex->Load("Assets/maps/Background.png");
-	sky = app->tex->Load("Assets/maps/BG/Sky.png");
+	forestTex = app->tex->Load("Assets/maps/BG/FG.png");
+	hillsTex = app->tex->Load("Assets/maps/BG/Hills.png");
+	cloudsUpTex = app->tex->Load("Assets/maps/BG/CloudsUp.png");
+	cloudsBGTex = app->tex->Load("Assets/maps/BG/CloudsDown.png");
+	skyTex = app->tex->Load("Assets/maps/BG/SkyBig.png");
 
+	for (int i = 0; i < Scroller; i++) {
+		forestX[i] = hillsX[i] = cloudsDownX[i] = cloudsUpX[i] = i* textureWidth;
+	}
+
+	// Die effect
 	dieWindow = app->tex->Load("Assets/textures/dieTexture.png");
 
 	for (int z = 0; z < 11; z++) {
@@ -73,12 +80,6 @@ bool Scene::Start()
 	}
 	dieWindowAnim.loop = false;
 	dieWindowAnim.speed = 0.2f;
-
-	int N = -886;
-	for (int i = 0; i < 7; i++) {
-		bgScrollX[i] = N;
-		N += 886;
-	}
 
 	// Easter Egg - Press 5 when playing :D
 	easterEgg = false;
@@ -90,6 +91,8 @@ bool Scene::Start()
 	app->enemy->AddEnemy(650, 1000);
 	app->enemy->AddEnemy(2255, 1160);
 	app->enemy->AddEnemy(1800, 100);
+
+	LOG("Spawn player at X = %d Y = %d", initPosX, initPosY);
 
 	return true;
 }
@@ -168,6 +171,44 @@ bool Scene::Update(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN) {
 		app->fade->StartFadeToBlack(this, (Module*)app->scene, 10);
 	}
+
+	// BackGround
+
+	if (playerPosForScroll < METERS_TO_PIXELS(app->player->playerBody->body->GetPosition().x)) {
+		for (int i = 0; i < Scroller; i++) {
+			hillsX[i] -= 0.1f;
+			cloudsDownX[i] -= 0.1f;
+			forestX[i] -= 0.05f;
+		}
+	}
+	else if (playerPosForScroll > METERS_TO_PIXELS(app->player->playerBody->body->GetPosition().x)) {
+		for (int i = 0; i < Scroller; i++) {
+			hillsX[i] += 0.1f;
+			cloudsDownX[i] += 0.1f;
+			forestX[i] += 0.05f;
+		}
+	}
+
+	playerPosForScroll = METERS_TO_PIXELS(app->player->playerBody->body->GetPosition().x);
+
+	for (int i = 0; i < Scroller; i++) {
+		cloudsUpX[i] -= 0.5f;
+		cloudsDownX[i] -= 0.3f;
+
+		if (cloudsUpX[i] <= -textureWidth - 1) {
+			cloudsUpX[i] = (Scroller - 1) * textureWidth;
+		}
+		if (forestX[i] <= -textureWidth - 1) {
+			forestX[i] = (Scroller - 1) * textureWidth;
+		}
+		if (hillsX[i] <= -textureWidth - 1) {
+			hillsX[i] = (Scroller - 1) * textureWidth;
+		}
+		if (cloudsDownX[i] <= -textureWidth - 1) {
+			cloudsDownX[i] = (Scroller - 1) * textureWidth;
+		}
+	}
+
 	return true;
 }
 
@@ -176,20 +217,33 @@ bool Scene::PostUpdate()
 {
 	bool ret = true;
 
-	for (int i = 0; i < 7; i++) {
-		if (bgScrollX[i] <= -(886 * 2)) {
-			bgScrollX[i] = (886 * 3) - 1;
-		}
-		else {
-			bgScrollX[i] -= 0.5f;
-			app->render->DrawTexture(background, bgScrollX[i], 750);// 50
-		}
+	// Draw BackGround (divided each one bc they kbooom when scroller if we put them on the same for)
+	for (int i = 0; i < Scroller; i++) {
+		// Sky 
+		app->render->DrawTexture(skyTex, i * textureWidth, 600);
+		app->render->DrawTexture(skyTex, i * textureWidth, -24);
+		app->render->DrawTexture(skyTex, i * textureWidth, -300);
 	}
 
-	for (int i = 0; i < 12; i++) {
-		for (int j = 0; j < 5; j++) {
-			app->render->DrawTexture(sky, i * 288, 750 - j * 208);
-		}
+	for (int i = 0; i < Scroller; i++) {
+		// Clouds Up
+		app->render->DrawTexture(cloudsUpTex, cloudsUpX[i], 500);
+		app->render->DrawTexture(cloudsUpTex, cloudsUpX[i], 100);
+	}
+
+	for (int i = 0; i < Scroller; i++) {
+		// Clouds Down
+		app->render->DrawTexture(cloudsBGTex, cloudsDownX[i], 625);
+	}
+
+	for (int i = 0; i < Scroller; i++) {
+		// Ground
+		app->render->DrawTexture(hillsTex, hillsX[i], 650);
+	}
+
+	for (int i = 0; i < Scroller; i++) {
+		// Forest
+		app->render->DrawTexture(forestTex, forestX[i], 675);
 	}
 
 	// Draw map
@@ -218,7 +272,6 @@ bool Scene::PostUpdate()
 		}
 	}
 
-
 	// Die / Win textures
 	if (app->player->death == true) {
 		SDL_Rect dieWRect = dieWindowAnim.GetCurrentFrame();
@@ -233,31 +286,37 @@ bool Scene::CleanUp()
 {
 	LOG("Freeing scene");
 
-	dieWindowAnim.Reset();
-
+	// EasterEGG
 	app->tex->UnLoad(egg);
 	app->tex->UnLoad(pandereta);
-	app->tex->UnLoad(background);
-	app->tex->UnLoad(sky);
-	app->tex->UnLoad(dieWindow);
 
 	eggAnim.DeleteAnim();
 	panderetAnim.DeleteAnim();
-	dieWindowAnim.DeleteAnim();
 
+	// BackGround
+	app->tex->UnLoad(forestTex);
+	app->tex->UnLoad(hillsTex);
+	app->tex->UnLoad(cloudsBGTex);
+	app->tex->UnLoad(cloudsUpTex);
+	app->tex->UnLoad(skyTex);
+
+	// Die effect
+	dieWindowAnim.Reset();
+	dieWindowAnim.DeleteAnim();
+	app->tex->UnLoad(dieWindow);
+
+	// Disable modules
 	app->map->Disable();
 	app->player->Disable();
 
 	if (app->enemy->isEnabled()) {
 		app->enemy->Disable();
 	}
-
 	app->coin->Disable();
-
 	app->physics->Disable();
 
-	cont = w = h = 0;
-
+	// Reset Variables
+	cont = w = h = playerPosForScroll = 0;
 	loadEgg = delSaveData = false;
 
 	return true;

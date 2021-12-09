@@ -101,10 +101,12 @@ bool SceneTitle::PostUpdate()
 		else {
 			scroller[i] -= 0.5f;
 		}
-		app->render->DrawTexture(bg, scroller[i], 158);
 
 		// Sky
 		app->render->DrawTexture(bgSky, 288 * i, -50);
+
+		// BG
+		app->render->DrawTexture(bg, scroller[i], 158);
 	}
 
 	// BAck enemy

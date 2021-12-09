@@ -35,7 +35,6 @@ public:
 	iPoint position;
 	int angle = 0, angleV = 1;
 	iPoint initPos;
-	iPoint mapLimit;
 	bool death = false;
 	bool win = false;
 	int HP, max_HP = 3;
