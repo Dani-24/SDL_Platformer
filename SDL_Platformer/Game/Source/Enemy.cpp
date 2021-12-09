@@ -126,7 +126,7 @@ bool Enemy::Update(float dt) {
 			// Detect player
 			int chaseDistance = 200, limitVel = 100;
 
-			if (app->player->position.x - c->data->position.x < chaseDistance && app->player->position.x - c->data->position.x > -chaseDistance && app->player->position.y - c->data->position.y < chaseDistance / 4 && app->player->position.y - c->data->position.y > -chaseDistance / 4) {
+			if (app->player->position.x - c->data->position.x < chaseDistance && app->player->position.x - c->data->position.x > -chaseDistance && app->player->position.y - c->data->position.y < chaseDistance / 4 && app->player->position.y - c->data->position.y > -chaseDistance / 2) {
 				// Play sfx
 				if (c->data->playDetectFx != true) {
 					app->audio->PlayFx(detectPlayerFx);
@@ -195,6 +195,8 @@ bool Enemy::Update(float dt) {
 			app->physics->world->DestroyBody(c->data->body->body);
 			enemies.del(c);
 			c = NULL;
+			
+			app->audio->PlayFx(deathFx);
 		}
 	}
 	return true;
