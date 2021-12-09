@@ -31,6 +31,11 @@ public:
 	// EasterEgg
 	void EasterEgg();
 
+public:
+	// Checkpoint
+	bool checked = false;
+	PhysBody* checkPointSensor;
+
 private:
 
 	// EasterEGG
@@ -54,6 +59,14 @@ private:
 	int textureWidth = 864;
 	int playerPosForScroll = 0;
 
+	// Checkpoint
+
+	SDL_Texture* checkpointTex;
+	Animation checkpointAnim;
+	iPoint checkPos;
+	bool checkfxPlayed = false;
+	uint checkPfx = 0;
+
 	// Variables
 	int cont = 0;
 	int w, h;
@@ -64,7 +77,7 @@ private:
 	// Player Initial Position for Scene 1
 	int initPosX = 32, initPosY = 1090;
 
-	bool delSaveData = false;
+	bool delSaveData = false, checkPointSave = false;
 };
 
 #endif // __SCENE_H__

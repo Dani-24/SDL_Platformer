@@ -8,7 +8,7 @@
 	<sceneLogo />
 	<sceneTitle />
 	<scene>
-		<player x="32" y="1093" hp="3" />
+		<player x="32" y="1090" hp="3" />
 	</scene>
 	<map />
 	<player />

@@ -10,6 +10,7 @@
 #include "Audio.h"
 #include "Willycoin.h"
 #include "Map.h"
+#include "Scene.h"
 
 Physics::Physics(App* application, bool start_enabled) : Module(application, start_enabled)
 {
@@ -318,6 +319,11 @@ void Physics::BeginContact(b2Contact* contact)
 	// WIN 
 	if (physA == app->player->playerBody && physB->type == "win") {
 		app->player->win = true;
+	}
+
+	// Checkpoint collider
+	if (physA == app->player->playerBody && physB == app->scene->checkPointSensor) {
+		app->scene->checked = true;
 	}
 }
 
