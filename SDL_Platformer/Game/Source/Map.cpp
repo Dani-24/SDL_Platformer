@@ -132,6 +132,8 @@ void Map::Blocks()
 							break;
 						case 7:
 							app->item->AddItem(pos.x, pos.y, 2);
+						case 8:
+							app->item->AddItem(pos.x, pos.y, 3);
 						}
 					}
 				}

@@ -325,6 +325,13 @@ void Physics::BeginContact(b2Contact* contact)
 			}
 			d = d->next;
 			break;
+		case 3:
+			if (physA == app->player->playerBody && physB == d->data->body) {
+				//app->audio->PlayFx(app->item->willyFx);
+				d->data->spawn = false;
+			}
+			d = d->next;
+			break;
 		}
 	}
 

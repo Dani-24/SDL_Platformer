@@ -55,6 +55,20 @@ bool Item::Start() {
 	coinFlash.loop = false;
 	coinFlash.speed = 0.05f;
 
+	lollipop.PushBack({ 480,592,16,16 });
+	candy.PushBack({ 496,592,16,16 });
+	chocolate.PushBack({ 512,592,16,16 });
+	can.PushBack({ 544,592,16,16 });
+	iceCream1.PushBack({ 560,592,16,16 });
+	iceCream2.PushBack({ 576,592,16,16 });
+	cherry.PushBack({ 736,592,16,16 });
+	orange.PushBack({ 752,592,16,16 });
+	banana.PushBack({ 768,592,16,16 });
+	strawberry.PushBack({ 784,592,16,16 });
+	apple.PushBack({ 800,592,16,16 });
+
+
+
 	return true;
 }
 
@@ -83,7 +97,17 @@ void Item::AddItem(int x, int y, int type) {
 		thisCoin->position.x = x;
 		thisCoin->position.y = y;
 		break;
+	case 3:
+		thisCoin->spawn = true;
+		thisCoin->type = 3;
+		thisCoin->sprite = ItemSprite;
+		thisCoin->body = app->physics->CreateRectangleSensor(x, y, 16, 16);
+		thisCoin->currentAnimation = &lollipop;
+		thisCoin->position.x = x;
+		thisCoin->position.y = y;
+		break;
 	}
+
 
 	items.add(thisCoin);
 }
@@ -158,7 +182,20 @@ bool Item::Update(float dt) {
 			else {
 				c = c->next;
 			}
-		}	
+			break;
+		case 3:
+			if (c->data->spawn == false) {
+				LOG("Deleting Item");
+				app->physics->world->DestroyBody(c->data->body->body);
+				items.del(c);
+				c = NULL;
+			}
+			else {
+				c = c->next;
+			}
+			break;
+		}
+
 	}	
 	return true;
 }
@@ -178,6 +215,11 @@ bool Item::PostUpdate() {
 				break;
 			case 2:
 				app->render->DrawTexture(Willycoin, c->data->position.x - 32, c->data->position.y - 32);
+				c = c->next;
+				break;
+			case 3:
+				SDL_Rect rect2 = c->data->currentAnimation->GetCurrentFrame();
+				app->render->DrawTexture(c->data->sprite, c->data->position.x - 8, c->data->position.y - 8, &rect2);
 				c = c->next;
 				break;
 			}

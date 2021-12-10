@@ -71,7 +71,7 @@ private:
 	SDL_Texture* ItemSprite = nullptr;
 	SDL_Texture* Willycoin;
 
-	Animation coinSpin, coinFlash, coinIdle;
+	Animation coinSpin, coinFlash, coinIdle, lollipop, candy, chocolate, can, iceCream1, iceCream2, cherry, banana, strawberry, apple, orange;
 	
 };
 
