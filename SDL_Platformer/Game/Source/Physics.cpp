@@ -67,32 +67,22 @@ bool Physics::PreUpdate() {
 	}
 
 	// Reset count
+
+	// Hit enemy
 	if (playerDieCooldown > 0) {
 		playerDieCooldown--;
 	}
 	else {
 		playerDieCooldown = 0;
 	}
+
+	// Recover HP
 	if (healthCont > 0) {
 		healthCont--;
 	}
 	else {
 		healthCont = 0;
 	}
-
-	if (fallCont > 0) {
-		fallCont--;
-
-	}
-	else {
-		fallCont = 0;
-	}
-
-	if (fallCont == 1) {
-		app->player->HP -= 1;
-		app->SaveGameRequest();
-	}
-
 
 	return true;
 }
@@ -329,14 +319,10 @@ void Physics::BeginContact(b2Contact* contact)
 		}
 		if (physA == app->player->playerBody && physB->type == "death") {
 
-			// Revivir en el último punto de guardado con 1 vida menos
+			// Reaparecer en el último punto de guardado
 
-			if (fallCont <= 0) {
-				app->LoadGameRequest();
-				app->audio->PlayFx(app->player->fallFx);
-
-				fallCont = 30;
-			}
+			app->LoadGameRequest();
+			app->audio->PlayFx(app->player->fallFx);
 		}
 	}
 

@@ -119,6 +119,11 @@ bool Scene::Start()
 
 	LOG("Spawn player at X = %d Y = %d", initPosX, initPosY);
 
+	// Delete Save data to disable checkpoint tp if replay the game
+	delSaveData = true;
+	checkPointSave = false;
+	app->SaveGameRequest();
+
 	return true;
 }
 
