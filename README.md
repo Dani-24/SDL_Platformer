@@ -28,6 +28,8 @@ We are MacacoSerapios, a pair of students from CITM, leads of Macacos and Serapi
     - WASD for movement
 
     - SPACE for jump
+    
+    - O for kick
 
 ### Debug
    
@@ -42,6 +44,8 @@ We are MacacoSerapios, a pair of students from CITM, leads of Macacos and Serapi
     - F9 View colliders / logic
 
     - F10 God Mode (fly around, cannot be killed)
+    
+    - F11 Enable/Disable 30 FPS cap
 
 
 ## Additional comments
