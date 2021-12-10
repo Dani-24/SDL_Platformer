@@ -19,7 +19,8 @@ We are MacacoSerapios, a pair of students from CITM, leads of Macacos and Serapi
    * Dani Toledo as [Dani24](https://github.com/Dani-24).
 
 ## Game Description
-    - *Inserte description
+    - An amazing and incredible history, suspicious enemies and crypto coins are awaiting for you in SDL PLATFORMER, 
+      the best indie platformer game made by students that has ever existed. Download it now FOR FREE.
 
 
 ## Controls
