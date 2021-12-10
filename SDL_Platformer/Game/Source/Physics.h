@@ -81,6 +81,9 @@ private:
 	// Mouse joint
 	b2MouseJoint* mouse_joint;
 	b2Body* mouse_body;
+
+public:
+	int playerDieCooldown = 0, fallCont = 0;
 };
 
 #endif // __PHYSICS_H__

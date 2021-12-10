@@ -37,13 +37,14 @@ public:
 	iPoint initPos;
 	bool death = false;
 	bool win = false;
-	int HP, max_HP = 3;
+	int HP, hpCheck, max_HP = 3;
 	PhysBody* playerBody;
 
 	bool canJump;
-
 	int velY;
 
+	uint fallFx = 0;
+	uint killedFx = 0;
 private:
 
 	// Chain for player sprite
@@ -70,6 +71,10 @@ private:
 	// The player spritesheet loaded into an SDL_Texture
 	SDL_Texture* playerSprite = nullptr;
 
+	SDL_Texture* livesSprite, *cooldownTex;
+
+	Animation liveOn, liveOff;
+
 	// The pointer to the current player animation
 	// It will be switched depending on the player's movement direction
 	Animation* currentAnimation = nullptr;
@@ -95,14 +100,14 @@ private:
 
 	// Sound effects indices
 	uint playerAttackFx = 0;
-	uint killedFx = 0;
 	uint deathFx = 0;
-
+	uint loseHPFx = 0;
 	uint winFx = 0;
 
 	bool DieFxPlayed = false;
 	bool WinFxPlayed = false;
 
+	bool livesHUD[3];
 };
 
 #endif //!__PLAYER_H__

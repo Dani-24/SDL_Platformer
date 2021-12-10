@@ -26,6 +26,7 @@ class Player;
 class Enemy;
 class Item;
 class Map;
+class ModuleQFonts;
 class Physics;
 class FadeToBlack;
 
@@ -60,7 +61,7 @@ public:
 	const char* GetTitle() const;
 	const char* GetOrganization() const;
 
-	// L02: DONE 1: Create methods to request Load / Save
+	// Create methods to request Load / Save
 	void LoadGameRequest();
 	void SaveGameRequest() const;
 
@@ -109,6 +110,7 @@ public:
 	Enemy* enemy;
 	Item* item;
 	Map* map;
+	ModuleQFonts* font;
 	Physics* physics;
 	FadeToBlack* fade;
 

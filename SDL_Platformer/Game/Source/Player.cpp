@@ -270,7 +270,6 @@ bool Player::Start()
 	PlayerStartAnims();
 
 	// Physics
-
 	position.x = initPos.x;
 	position.y = initPos.y;
 		
@@ -284,12 +283,26 @@ bool Player::Start()
 	playerSprite = app->tex->Load("Assets/textures/player.png");
 	currentAnimation = &idleR;
 
-	// Audio
+	cooldownTex = app->tex->Load("Assets/textures/playerDieCooldown.png");
 
+	livesSprite = app->tex->Load("Assets/textures/lives.png");
+	liveOn.PushBack({0, 0, 30, 30});
+	liveOff.PushBack({30, 0, 30, 30});
+	liveOn.loop = liveOff.loop = false;
+
+	// Audio
 	deathFx = app->audio->LoadFx("Assets/audio/fx/death.wav");
 	killedFx = app->audio->LoadFx("Assets/audio/fx/killedBySus.wav");
 	playerAttackFx = app->audio->LoadFx("Assets/audio/fx/kick.wav");
 	winFx = app->audio->LoadFx("Assets/audio/fx/winFx.wav");
+	loseHPFx = app->audio->LoadFx("Assets/audio/fx/gnomeFx.wav");
+	fallFx = app->audio->LoadFx("Assets/audio/fx/fallFx.wav");
+
+	// HUD
+	for (int i = 0; i < max_HP; i++) {
+		livesHUD[i] = true;
+	}
+	hpCheck = HP;
 
 	return ret;
 }
@@ -304,6 +317,32 @@ bool Player::PreUpdate() {
 	if (app->input->GetKey(SDL_SCANCODE_U) == KEY_DOWN) {
 		death = true;
 	}
+
+	// --------------------- HUD -------------------------
+
+	// Player HP
+	
+	// Set maximun HP
+	if (HP > max_HP) {
+		HP = max_HP;
+	}
+
+	// Check if HP decreases
+	if (hpCheck > HP) {
+		app->audio->PlayFx(loseHPFx);
+		LOG("Player lose 1 HP, %d HP remaining", HP);
+	}
+	//else if (hpCheck < HP) {
+	//	 //Recover HP fx (meter en el propio item)
+	//}
+	
+	// If HP == 0 player dies
+	if (HP <= 0) {
+		death = true;
+	}
+
+	// Reset variable to check if changes on next frame
+	hpCheck = HP;
 
 	return true;
 }
@@ -584,6 +623,39 @@ bool Player::PostUpdate() {
 	
 	app->render->DrawTexture(playerSprite, position.x-3, position.y-5, &rect, 1.0f, angle, 34, 34); // -3 and -5 are for hitbox adjustments
 
+	// --------------------- DRAW HUD --------------------------------------
+
+	// Lives:
+
+	SDL_Rect liveOnRect = liveOn.GetCurrentFrame(), liveOffRect = liveOff.GetCurrentFrame();
+	switch (HP)
+	{
+	case 0:
+		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2), -app->render->camera.y / 2, &liveOffRect);
+		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 35, -app->render->camera.y / 2, &liveOffRect);
+		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 70, -app->render->camera.y / 2, &liveOffRect);
+		break;
+	case 1:
+		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2), -app->render->camera.y / 2, &liveOnRect);
+		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 35, -app->render->camera.y / 2, &liveOffRect);
+		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 70, -app->render->camera.y / 2, &liveOffRect);
+		break;
+	case 2:
+		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2), -app->render->camera.y / 2, &liveOnRect);
+		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 35, -app->render->camera.y / 2, &liveOnRect);
+		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 70, -app->render->camera.y / 2, &liveOffRect);
+		break;
+	case 3:
+		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2), -app->render->camera.y / 2, &liveOnRect);
+		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 35, -app->render->camera.y / 2, &liveOnRect);
+		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 70, -app->render->camera.y / 2, &liveOnRect);
+		break;
+	}
+
+	if (app->physics->playerDieCooldown != 0 && death == false && win == false) {
+		app->render->DrawTexture(cooldownTex, position.x, position.y);
+	}
+
 	return ret;
 }
 
@@ -618,8 +690,12 @@ bool Player::CleanUp() {
 	walkPunchR.DeleteAnim();
 	walkPunchL.DeleteAnim();
 
+	liveOff.DeleteAnim();
+	liveOn.DeleteAnim();
+
 	// Textures
 	app->tex->UnLoad(playerSprite);
+	app->tex->UnLoad(livesSprite);
 
 	// Physbody
 	app->physics->world->DestroyBody(playerBody->body);
@@ -629,7 +705,7 @@ bool Player::CleanUp() {
 	currentVel = velY = position.x = position.y = initPos.x = initPos.y = NULL;
 	godMode = death = win = destroyed = DieFxPlayed = WinFxPlayed = false;
 
-	angle = angleV = killedFx = deathFx = playerAttackFx = winFx = 0;
+	angle = angleV = killedFx = deathFx = playerAttackFx = winFx = loseHPFx = fallFx = 0;
 
 	return true;
 }

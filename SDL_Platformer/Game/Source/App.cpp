@@ -13,7 +13,7 @@
 #include "FadeToBlack.h"
 #include "Enemy.h"
 #include "Willycoin.h"
-
+#include "ModuleQFonts.h"
 #include "Defs.h"
 #include "Log.h"
 
@@ -42,6 +42,8 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	item = new Item(this, false);
 
 	map = new Map(this, false);
+	font = new ModuleQFonts(this, false);
+
 	physics = new Physics(this, false);
 
 	// Ordered for awake / Start / Update
@@ -60,7 +62,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(player);
 	AddModule(enemy);
 	AddModule(item);
-
+	AddModule(font);
 	AddModule(physics);
 
 	// Render last to swap buffer

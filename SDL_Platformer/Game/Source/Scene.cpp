@@ -13,6 +13,7 @@
 #include "Physics.h"
 #include "Enemy.h"
 #include "Willycoin.h"
+#include "ModuleQFonts.h"
 
 Scene::Scene(App* application, bool start_enabled) : Module(application, start_enabled)
 {
@@ -49,6 +50,7 @@ bool Scene::Start()
 	app->physics->Enable();
 	app->player->Enable();
 	app->map->Enable();
+	app->font->Enable();
 
 	app->enemy->Enable();
 	app->item->Enable();
@@ -358,6 +360,7 @@ bool Scene::CleanUp()
 	// Disable modules
 	app->map->Disable();
 	app->player->Disable();
+	app->font->Disable();
 
 	if (app->enemy->isEnabled()) {
 		app->enemy->Disable();

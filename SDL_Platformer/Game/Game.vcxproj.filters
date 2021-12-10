@@ -61,6 +61,9 @@
     <ClCompile Include="Source\Willycoin.cpp">
       <Filter>Platformer\Scenes\Gameplay</Filter>
     </ClCompile>
+    <ClCompile Include="Source\ModuleQFonts.cpp">
+      <Filter>Platformer\Modules\Extra</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Defs.h">
@@ -146,6 +149,9 @@
     </ClInclude>
     <ClInclude Include="Source\Willycoin.h">
       <Filter>Platformer\Scenes\Gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModuleQFonts.h">
+      <Filter>Platformer\Modules\Extra</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
