@@ -166,20 +166,22 @@ bool Item::Update(float dt) {
 
 bool Item::PostUpdate() {
 
-	ListItem<Items*>* c = items.start;
+	if (app->player->death != true && app->player->win != true) {
+		ListItem<Items*>* c = items.start;
 
-	while (c != NULL) {
-		switch (c->data->type)
-		{
-		case 1:
-			SDL_Rect rect = c->data->currentAnimation->GetCurrentFrame();
-			app->render->DrawTexture(c->data->sprite, c->data->position.x-8, c->data->position.y-8, &rect);
-			c = c->next;
-			break;
-		case 2:
-			app->render->DrawTexture(Willycoin, c->data->position.x - 32, c->data->position.y - 32);
-			c = c->next;
-			break;
+		while (c != NULL) {
+			switch (c->data->type)
+			{
+			case 1:
+				SDL_Rect rect = c->data->currentAnimation->GetCurrentFrame();
+				app->render->DrawTexture(c->data->sprite, c->data->position.x - 8, c->data->position.y - 8, &rect);
+				c = c->next;
+				break;
+			case 2:
+				app->render->DrawTexture(Willycoin, c->data->position.x - 32, c->data->position.y - 32);
+				c = c->next;
+				break;
+			}
 		}
 	}
 	return true;

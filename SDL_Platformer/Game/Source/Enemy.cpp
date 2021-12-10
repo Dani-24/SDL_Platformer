@@ -79,7 +79,8 @@ void Enemy::AddEnemy(int x, int y) {
 	thisEnemy->sprite = enemySprite;
 	thisEnemy->speed = 1.0f;
 	thisEnemy->body = app->physics->CreateChain(x, y, enemyChain, 16);
-	//thisEnemy->body = app->physics->CreateRectangle(x, y, 35, 35, "enemy");
+	thisEnemy->collider = app->physics->CreateRectangleSensor(x, y, 40, 40);
+	thisEnemy->collider->type = "enemy";
 	thisEnemy->body->body->SetType(b2_dynamicBody);
 	thisEnemy->body->body->SetFixedRotation(true);
 	thisEnemy->position.x = x;
@@ -122,6 +123,9 @@ bool Enemy::Update(float dt) {
 		if (c->data->death == false) {
 
 			// ENEMIES ALIVE:
+
+			// Move sensor to enemy body position
+			c->data->collider->body->SetTransform(b2Vec2(c->data->body->body->GetPosition().x + PIXEL_TO_METERS(20), c->data->body->body->GetPosition().y + PIXEL_TO_METERS(20)), c->data->collider->body->GetAngle());
 
 			// Detect player
 			int chaseDistance = 200, limitVel = 100;
@@ -193,6 +197,7 @@ bool Enemy::Update(float dt) {
 
 			LOG("Deleting enemy");
 			app->physics->world->DestroyBody(c->data->body->body);
+			app->physics->world->DestroyBody(c->data->collider->body);
 			enemies.del(c);
 			c = NULL;
 			
@@ -204,19 +209,21 @@ bool Enemy::Update(float dt) {
 
 bool Enemy::PostUpdate() {
 
-	ListItem<Enemies*>* c = enemies.start;
-	while (c != NULL) {
-		SDL_Rect rect = c->data->currentAnimation->GetCurrentFrame();
-		app->render->DrawTexture(c->data->sprite, c->data->position.x - 5, c->data->position.y - 5, &rect);
+	if (app->player->death != true && app->player->win != true) {
+		ListItem<Enemies*>* c = enemies.start;
+		while (c != NULL) {
+			SDL_Rect rect = c->data->currentAnimation->GetCurrentFrame();
+			app->render->DrawTexture(c->data->sprite, c->data->position.x - 5, c->data->position.y - 5, &rect);
 
-		if (c->data->alert == true) {
-			app->render->DrawTexture(alertTexture, c->data->position.x + 5, c->data->position.y - 25);
-		}
-		if (c->data->lost == true) {
-			app->render->DrawTexture(lostTexture, c->data->position.x + 5, c->data->position.y - 25);
-		}
+			if (c->data->alert == true) {
+				app->render->DrawTexture(alertTexture, c->data->position.x + 5, c->data->position.y - 25);
+			}
+			if (c->data->lost == true) {
+				app->render->DrawTexture(lostTexture, c->data->position.x + 5, c->data->position.y - 25);
+			}
 
-		c = c->next;
+			c = c->next;
+		}
 	}
 	return true;
 }
@@ -227,6 +234,7 @@ bool Enemy::CleanUp() {
 	while (c != NULL) {
 		if (c->data->body->body != NULL) {
 			app->physics->world->DestroyBody(c->data->body->body);
+			app->physics->world->DestroyBody(c->data->collider->body);
 		}
 		c = c->next;
 	}

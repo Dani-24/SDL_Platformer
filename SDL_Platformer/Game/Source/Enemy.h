@@ -30,7 +30,7 @@ struct SDL_Texture;
 struct Enemies {
 
 	SDL_Texture* sprite;
-	PhysBody* body;
+	PhysBody* body, *collider;
 
 	iPoint position;
 
