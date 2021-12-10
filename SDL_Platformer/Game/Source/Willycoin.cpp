@@ -30,7 +30,9 @@ bool Item::Start() {
 
 	coinFx = app->audio->LoadFx("Assets/audio/fx/coinSound.wav");
 	willyFx = app->audio->LoadFx("Assets/audio/fx/willy.wav");
+	foodFx = app->audio->LoadFx("Assets/audio/fx/eatFx.wav");
 
+	srand(time(NULL));
 	//Animations
 
 	coinIdle.PushBack({ 16,16,16,16 });
@@ -61,11 +63,11 @@ bool Item::Start() {
 	can.PushBack({ 544,592,16,16 });
 	iceCream1.PushBack({ 560,592,16,16 });
 	iceCream2.PushBack({ 576,592,16,16 });
-	cherry.PushBack({ 736,592,16,16 });
-	orange.PushBack({ 752,592,16,16 });
-	banana.PushBack({ 768,592,16,16 });
-	strawberry.PushBack({ 784,592,16,16 });
-	apple.PushBack({ 800,592,16,16 });
+	cherry.PushBack({ 752,592,16,16 });
+	orange.PushBack({ 768,592,16,16 });
+	banana.PushBack({ 784,592,16,16 });
+	strawberry.PushBack({ 800,592,16,16 });
+	apple.PushBack({ 816,592,16,16 });
 
 
 
@@ -76,40 +78,71 @@ void Item::AddItem(int x, int y, int type) {
 
 	LOG("Adding new COIN at X: %d and Y: %d", x, y);
 
-	Items* thisCoin = new Items();
-
+	Items* thisItem = new Items();
+	
+	int anim = rand() % 11 + 1;
 	switch (type)
 	{
 	case 1:
-		thisCoin->spawn = true;
-		thisCoin->type = 1;
-		thisCoin->sprite = ItemSprite;
-		thisCoin->body = app->physics->CreateRectangleSensor(x, y, 16, 16);
-		thisCoin->currentAnimation = &coinIdle;
-		thisCoin->position.x = x;
-		thisCoin->position.y = y;
+		thisItem->spawn = true;
+		thisItem->type = 1;
+		thisItem->sprite = ItemSprite;
+		thisItem->body = app->physics->CreateRectangleSensor(x, y, 16, 16);
+		thisItem->currentAnimation = &coinIdle;
+		thisItem->position.x = x;
+		thisItem->position.y = y;
 		break;
 
 	case 2:
-		thisCoin->spawn = true;
-		thisCoin->type = 2;
-		thisCoin->body = app->physics->CreateRectangleSensor(x, y, 64, 64);
-		thisCoin->position.x = x;
-		thisCoin->position.y = y;
+		thisItem->spawn = true;
+		thisItem->type = 2;
+		thisItem->body = app->physics->CreateRectangleSensor(x, y, 64, 64);
+		thisItem->position.x = x;
+		thisItem->position.y = y;
 		break;
 	case 3:
-		thisCoin->spawn = true;
-		thisCoin->type = 3;
-		thisCoin->sprite = ItemSprite;
-		thisCoin->body = app->physics->CreateRectangleSensor(x, y, 16, 16);
-		thisCoin->currentAnimation = &lollipop;
-		thisCoin->position.x = x;
-		thisCoin->position.y = y;
+		thisItem->spawn = true;
+		thisItem->type = 3;
+		thisItem->sprite = ItemSprite;
+		thisItem->body = app->physics->CreateRectangleSensor(x, y, 16, 16);
+		thisItem->position.x = x;
+		thisItem->position.y = y;
+		if (anim == 1) {
+			thisItem->currentAnimation = &lollipop;
+		}
+		if (anim == 2) {
+			thisItem->currentAnimation = &candy;
+		}
+		if (anim == 3) {
+			thisItem->currentAnimation = &chocolate;
+		}
+		if (anim == 4) {
+			thisItem->currentAnimation = &can;
+		}
+		if (anim == 5) {
+			thisItem->currentAnimation = &iceCream1;
+		}
+		if (anim == 6) {
+			thisItem->currentAnimation = &iceCream2;
+		}
+		if (anim == 7) {
+			thisItem->currentAnimation = &cherry;
+		}
+		if (anim == 8) {
+			thisItem->currentAnimation = &banana;
+		}
+		if (anim == 9) {
+			thisItem->currentAnimation = &strawberry;
+		}
+		if (anim == 10) {
+			thisItem->currentAnimation = &apple;
+		}
+		if (anim == 11) {
+			thisItem->currentAnimation = &orange;
+		}		
 		break;
 	}
-
-
-	items.add(thisCoin);
+	items.add(thisItem);
 }
 
 bool Item::PreUpdate() {
@@ -140,7 +173,6 @@ bool Item::PreUpdate() {
 bool Item::Update(float dt) {
 	
 	ListItem<Items*>* c = items.start;
-	srand(time(NULL));
 	int anim = rand() % 2 + 1;
 	while (c != NULL) {
 		switch (c->data->type)

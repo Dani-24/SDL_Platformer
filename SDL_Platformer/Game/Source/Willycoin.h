@@ -64,6 +64,7 @@ public:
 	void AddItem(int x, int y, int type);
 	uint coinFx = 0;
 	uint willyFx = 0;
+	uint foodFx = 0;
 
 private:
 

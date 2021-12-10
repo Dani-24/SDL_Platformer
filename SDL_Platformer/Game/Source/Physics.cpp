@@ -73,6 +73,12 @@ bool Physics::PreUpdate() {
 	else {
 		playerDieCooldown = 0;
 	}
+	if (healthCont > 0) {
+		healthCont--;
+	}
+	else {
+		healthCont = 0;
+	}
 
 	if (fallCont > 0) {
 		fallCont--;
@@ -86,6 +92,7 @@ bool Physics::PreUpdate() {
 		app->player->HP -= 1;
 		app->SaveGameRequest();
 	}
+
 
 	return true;
 }
@@ -256,7 +263,7 @@ bool Physics::CleanUp() {
 	delete world;
 
 	pause = false;
-	playerDieCooldown = fallCont = 0;
+	playerDieCooldown = fallCont = healthCont = 0;
 
 	return true;
 }
@@ -365,7 +372,11 @@ void Physics::BeginContact(b2Contact* contact)
 			break;
 		case 3:
 			if (physA == app->player->playerBody && physB == d->data->body) {
-				//app->audio->PlayFx(app->item->willyFx);
+				app->audio->PlayFx(app->item->foodFx);
+				if (healthCont <= 0) {
+					app->player->HP += 1;
+					healthCont = 120;
+				}
 				d->data->spawn = false;
 			}
 			d = d->next;

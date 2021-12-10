@@ -83,7 +83,7 @@ private:
 	b2Body* mouse_body;
 
 public:
-	int playerDieCooldown = 0, fallCont = 0;
+	int playerDieCooldown = 0, fallCont = 0, healthCont = 0;
 };
 
 #endif // __PHYSICS_H__
