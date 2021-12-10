@@ -329,7 +329,7 @@ bool Player::PreUpdate() {
 
 	// Check if HP decreases
 	if (hpCheck > HP) {
-		app->audio->PlayFx(loseHPFx);
+		//app->audio->PlayFx(loseHPFx);
 		LOG("Player lose 1 HP, %d HP remaining", HP);
 	}
 	//else if (hpCheck < HP) {

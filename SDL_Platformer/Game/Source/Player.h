@@ -45,6 +45,8 @@ public:
 
 	uint fallFx = 0;
 	uint killedFx = 0;
+	uint loseHPFx = 0;
+
 private:
 
 	// Chain for player sprite
@@ -101,7 +103,6 @@ private:
 	// Sound effects indices
 	uint playerAttackFx = 0;
 	uint deathFx = 0;
-	uint loseHPFx = 0;
 	uint winFx = 0;
 
 	bool DieFxPlayed = false;

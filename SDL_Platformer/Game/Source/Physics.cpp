@@ -76,10 +76,17 @@ bool Physics::PreUpdate() {
 
 	if (fallCont > 0) {
 		fallCont--;
+
 	}
 	else {
 		fallCont = 0;
 	}
+
+	if (fallCont == 1) {
+		app->player->HP -= 1;
+		app->SaveGameRequest();
+	}
+
 	return true;
 }
 
@@ -308,19 +315,20 @@ void Physics::BeginContact(b2Contact* contact)
 	if (app->player->godMode == false) {
 		if (physA == app->player->playerBody && physB->type == "enemy") {
 			if (playerDieCooldown <= 0) {
-				//app->audio->PlayFx(app->player->killedFx);
+				app->audio->PlayFx(app->player->loseHPFx);
 				app->player->HP -= 1;
 				playerDieCooldown = 200;
 			}
 		}
 		if (physA == app->player->playerBody && physB->type == "death") {
-			if (fallCont <= 0) {
-				app->audio->PlayFx(app->player->fallFx);
-				app->LoadGameRequest();
-				app->player->HP -= 1;
-				app->SaveGameRequest();
 
-				fallCont = 60;
+			// Revivir en el último punto de guardado con 1 vida menos
+
+			if (fallCont <= 0) {
+				app->LoadGameRequest();
+				app->audio->PlayFx(app->player->fallFx);
+
+				fallCont = 30;
 			}
 		}
 	}

@@ -14,7 +14,7 @@
 	<player />
 	<enemy />
 	<coin />
-	<:anonymous />
+	<fonts />
 	<physics />
 	<renderer />
 </save_state>
