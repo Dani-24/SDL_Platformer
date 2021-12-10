@@ -25,6 +25,7 @@ bool Enemy::Start() {
 
 	// Assets
 	enemySprite = app->tex->Load("Assets/textures/enemySprite.png");
+	enemyFlySprite = app->tex->Load("Assets/textures/enemyFlySprite.png");
 
 	detectPlayerFx = app->audio->LoadFx("Assets/audio/fx/enemyDetectPlayer.wav");
 	deathFx = app->audio->LoadFx("Assets/audio/fx/enemyDeath.wav");
@@ -69,27 +70,39 @@ bool Enemy::Start() {
 	return true;
 }
 
-void Enemy::AddEnemy(int x, int y) {
+bool Enemy::AddEnemy(int x, int y, SString type) {
 
 	LOG("Adding new enemy at X: %d and Y: %d", x, y);
 
 	Enemies* thisEnemy = new Enemies();
 
 	thisEnemy->death = false;
-	thisEnemy->sprite = enemySprite;
-	thisEnemy->speed = 1.0f;
+	thisEnemy->position.x = x;
+	thisEnemy->position.y = y;
+	thisEnemy->speed = 0.05f;
+	thisEnemy->dir = false;
+	thisEnemy->playDetectFx = false;
 	thisEnemy->body = app->physics->CreateChain(x, y, enemyChain, 16);
 	thisEnemy->collider = app->physics->CreateRectangleSensor(x, y, 40, 40);
 	thisEnemy->collider->type = "enemy";
 	thisEnemy->body->body->SetType(b2_dynamicBody);
 	thisEnemy->body->body->SetFixedRotation(true);
-	thisEnemy->position.x = x;
-	thisEnemy->position.y = y;
 	thisEnemy->currentAnimation = &animIdleL;
-	thisEnemy->dir = false;
-	thisEnemy->playDetectFx = false;
+	thisEnemy->type = type;
+
+	if (type == "default") {
+		thisEnemy->sprite = enemySprite;
+	}
+	else if (type == "fly") {
+		thisEnemy->sprite = enemyFlySprite;
+	}
+	else {
+		LOG("Error at creating enemy. Type : %s don't exist", type);
+		return false;
+	}
 
 	enemies.add(thisEnemy);
+	return true;
 }
 
 bool Enemy::PreUpdate() {
@@ -111,6 +124,23 @@ bool Enemy::PreUpdate() {
 		}
 
 		AddEnemy(x, y);
+	}
+	if (app->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
+	{
+		int x, y;
+
+		app->input->GetMousePosition(x, y);
+
+		if (app->player->position.x > 352 && app->player->position.x < 2880) { // Just Scene 1 limit
+			x = x + app->player->position.x - 1280 / 4;
+			y = y + app->player->position.y - 720 / 4;
+		}
+		else {
+			x = x + app->player->position.x - 32;
+			y = y + app->player->position.y - 720 / 4;
+		}
+
+		AddEnemy(x, y, "fly");
 	}
 
 	return true;
@@ -139,20 +169,18 @@ bool Enemy::Update(float dt) {
 					c->data->alert = true;
 					c->data->lost = false;
 				}
-
 				// Chase player
 				int vel = METERS_TO_PIXELS(c->data->body->body->GetLinearVelocity().x);	 // limit velocity
 
 				if (-limitVel < vel && vel < limitVel) {
 					if (app->player->position.x < c->data->position.x) {
-						c->data->body->body->ApplyLinearImpulse(b2Vec2(-0.05f, 0), b2Vec2(0, 0), 1);
-
+						c->data->body->body->ApplyLinearImpulse(b2Vec2(-c->data->speed, 0), b2Vec2(0, 0), 1);
 						if (c->data->currentAnimation != &animRunL) {
 							c->data->currentAnimation = &animRunL;
 						}
 					}
 					else {
-						c->data->body->body->ApplyLinearImpulse(b2Vec2(0.05f, 0), b2Vec2(0, 0), 1);
+						c->data->body->body->ApplyLinearImpulse(b2Vec2(c->data->speed, 0), b2Vec2(0, 0), 1);
 
 						if (c->data->currentAnimation != &animRunR) {
 							c->data->currentAnimation = &animRunR;
@@ -243,6 +271,7 @@ bool Enemy::CleanUp() {
 	app->tex->UnLoad(enemySprite);
 	app->tex->UnLoad(lostTexture);
 	app->tex->UnLoad(alertTexture);
+	app->tex->UnLoad(enemyFlySprite);
 
 	animDieL.DeleteAnim();
 	animDieR.DeleteAnim();

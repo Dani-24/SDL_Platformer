@@ -84,7 +84,6 @@ void Item::AddItem(int x, int y, int type) {
 		thisCoin->position.y = y;
 		break;
 	}
-	
 
 	items.add(thisCoin);
 }

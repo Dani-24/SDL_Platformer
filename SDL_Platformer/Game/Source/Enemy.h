@@ -31,11 +31,11 @@ struct Enemies {
 
 	SDL_Texture* sprite;
 	PhysBody* body, *collider;
-
+	SString type;
 	iPoint position;
 
 	bool death, dir, playDetectFx;
-	int speed;
+	float speed;
 
 	Animation* currentAnimation = nullptr;
 
@@ -59,7 +59,8 @@ public:
 	bool PostUpdate();
 	bool CleanUp() override;
 
-	void AddEnemy(int x, int y);
+	// Pos X, Y, and enemy type. ("default" or "fly")
+	bool AddEnemy(int x, int y, SString type = "default");
 
 public:
 	List<Enemies*> enemies;
@@ -67,7 +68,7 @@ public:
 private:
 
 	// The player spritesheet loaded into an SDL_Texture
-	SDL_Texture* enemySprite = nullptr;
+	SDL_Texture* enemySprite = nullptr, *enemyFlySprite = nullptr;
 
 	SDL_Texture* alertTexture;
 	SDL_Texture* lostTexture;
