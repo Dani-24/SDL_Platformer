@@ -55,7 +55,6 @@ bool Item::Start() {
 	coinFlash.loop = false;
 	coinFlash.speed = 0.05f;
 
-
 	return true;
 }
 
