@@ -75,7 +75,7 @@ bool Item::Start() {
 
 void Item::AddItem(int x, int y, int type) {
 
-	LOG("Adding new COIN at X: %d and Y: %d", x, y);
+	LOG("Adding new Item at X: %d and Y: %d", x, y);
 
 	Items* thisItem = new Items();
 	

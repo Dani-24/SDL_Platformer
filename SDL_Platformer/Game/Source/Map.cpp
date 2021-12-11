@@ -5,7 +5,7 @@
 #include "Map.h"
 #include "Physics.h"
 #include "Willycoin.h"
-
+#include "Enemy.h"
 #include "Defs.h"
 #include "Log.h"
 
@@ -135,6 +135,12 @@ void Map::Blocks()
 							break;
 						case 8:
 							app->item->AddItem(pos.x, pos.y, 3);
+							break;
+						case 9:
+							app->enemy->AddEnemy(pos.x, pos.y, "fly");
+							break;
+						case 10:
+							app->enemy->AddEnemy(pos.x, pos.y);
 							break;
 						}
 					}
