@@ -44,7 +44,11 @@ We are MacacoSerapios, a pair of students from CITM, leads of Macacos and Serapi
 
     - F6 Load the previous state (even across levels)
 
-    - F9 View colliders / logic
+    - F9 Debug Mode
+      - View colliders / logic / paths
+      - 1 Create Default Enemy
+      - 2 Create Coin
+      - 3 Create Fly Enemy
 
     - F10 God Mode (fly around, cannot be killed)
     
