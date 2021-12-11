@@ -197,7 +197,7 @@ bool Scene::PreUpdate()
 		}
 	}
 
-	// ======= Win =======
+	// ================== Win ====================
 	if (app->player->win == true) {
 		app->fade->StartFadeToBlack(this, (Module*)app->sceneTitle, 60);
 	}
@@ -242,11 +242,12 @@ bool Scene::Update(float dt)
 		}
 	}
 
-	// Go back to title
+	// --------------- Go back to title --------------------
 	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN) {
 		app->fade->StartFadeToBlack(this, (Module*)app->scene, 10);
 	}
 
+	// ======================================================
 	// BackGround
 
 	if (playerPosForScroll < METERS_TO_PIXELS(app->player->playerBody->body->GetPosition().x)) {
