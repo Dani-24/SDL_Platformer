@@ -88,6 +88,12 @@ bool Enemy::AddEnemy(int x, int y, SString type) {
 	thisEnemy->collider->type = "enemy";
 	thisEnemy->body->body->SetType(b2_dynamicBody);
 	thisEnemy->body->body->SetFixedRotation(true);
+
+	thisEnemy->animDieL = animDieL;
+	thisEnemy->animDieR = animDieR;
+	thisEnemy->animRunL = animRunL;
+	thisEnemy->animRunR = animRunR;
+
 	thisEnemy->currentAnimation = &animIdleL;
 	thisEnemy->type = type;
 
@@ -169,15 +175,15 @@ bool Enemy::Update(float dt) {
 				if (-limitVel < vel && vel < limitVel) {
 					if (app->player->position.x < c->data->position.x) {
 						c->data->body->body->ApplyLinearImpulse(b2Vec2(-c->data->speed, 0), b2Vec2(0, 0), 1);
-						if (c->data->currentAnimation != &animRunL) {
-							c->data->currentAnimation = &animRunL;
+						if (c->data->currentAnimation != &c->data->animRunL) {
+							c->data->currentAnimation = &c->data->animRunL;
 						}
 					}
 					else {
 						c->data->body->body->ApplyLinearImpulse(b2Vec2(c->data->speed, 0), b2Vec2(0, 0), 1);
 
-						if (c->data->currentAnimation != &animRunR) {
-							c->data->currentAnimation = &animRunR;
+						if (c->data->currentAnimation != &c->data->animRunR) {
+							c->data->currentAnimation = &c->data->animRunR;
 						}
 					}
 				}
@@ -185,15 +191,15 @@ bool Enemy::Update(float dt) {
 			else {
 				c->data->playDetectFx = false;
 
-				if (c->data->lost == false && c->data->currentAnimation == &animRunL || c->data->currentAnimation == &animRunR) {
+				if (c->data->lost == false && c->data->currentAnimation == &c->data->animRunL || c->data->currentAnimation == &c->data->animRunR) {
 					c->data->lost = true;
 					c->data->alert = false;
 				}
 
-				if (c->data->currentAnimation == &animRunL) {
+				if (c->data->currentAnimation == &c->data->animRunL) {
 					c->data->currentAnimation = &animIdleL;
 				}
-				if (c->data->currentAnimation == &animRunR) {
+				if (c->data->currentAnimation == &c->data->animRunR) {
 					c->data->currentAnimation = &animIdleR;
 				}
 			}
@@ -226,6 +232,14 @@ bool Enemy::Update(float dt) {
 			app->audio->PlayFx(deathFx);
 		}
 	}
+
+	//// Update animations
+
+	//animRunL.Update();
+	//animRunR.Update();
+	//animDieL.Update();
+	//animDieR.Update();
+
 	return true;
 }
 
@@ -267,6 +281,8 @@ bool Enemy::CleanUp() {
 	app->tex->UnLoad(alertTexture);
 	app->tex->UnLoad(enemyFlySprite);
 
+	animIdleL.DeleteAnim();
+	animIdleR.DeleteAnim();
 	animDieL.DeleteAnim();
 	animDieR.DeleteAnim();
 	animRunL.DeleteAnim();

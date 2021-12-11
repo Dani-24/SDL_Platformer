@@ -37,6 +37,7 @@ struct Enemies {
 	bool death, dir, playDetectFx;
 	float speed;
 
+	Animation animRunL, animRunR, animDieL, animDieR;
 	Animation* currentAnimation = nullptr;
 
 	bool alert = false;
