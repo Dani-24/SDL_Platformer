@@ -395,11 +395,12 @@ bool Scene::LoadState(pugi::xml_node& data){
 
 	app->player->initPos.x = pNode.attribute("x").as_int();
 	app->player->initPos.y = pNode.attribute("y").as_int();
+
+	app->player->Enable();
+
 	app->player->HP = pNode.attribute("hp").as_int();
 
 	LOG("Loaded : X: %d, Y: %d, HP: %d", app->player->initPos.x, app->player->initPos.y, app->player->HP);
-
-	app->player->Enable();
 
 	// Reset Camera
 	app->render->camera.x = 0 - (app->player->position.x * 2);
