@@ -16,6 +16,8 @@
 #include "ModuleQFonts.h"
 #include "Pathfinder.h"
 
+
+
 Scene::Scene(App* application, bool start_enabled) : Module(application, start_enabled)
 {
 	name.Create("scene");
@@ -480,12 +482,24 @@ bool Scene::LoadState(pugi::xml_node& data){
 	}
 	app->render->camera.y = 0 - ((app->player->position.y * 2) - (720 / 2) - 180);
 
+	app->item->Disable();
+	app->item->Enable();
+	//items
+	ListItem<Items*>* d = app->item->items.start;
+	while (d != NULL) {
+		pugi::xml_node iNode = data.append_child("item");
+		d->data->spawn = iNode.append_attribute("spawn");
+		d = d->next;
+	}
+	
+
 	return true;
 }
 
 bool Scene::SaveState(pugi::xml_node& data) const 
 {
 	pugi::xml_node pNode = data.append_child("player");
+	ListItem<Items*>* d = app->item->items.start;
 
 	if (delSaveData == false && checkPointSave == false) {
 		// ---------------- SAVE DATA -----------------------------
@@ -510,6 +524,16 @@ bool Scene::SaveState(pugi::xml_node& data) const
 		pNode.append_attribute("x") = checkPos.x - 16;
 		pNode.append_attribute("y") = checkPos.y;
 		pNode.append_attribute("hp") = app->player->HP;
+	}
+	while (d != NULL) {
+		pugi::xml_node iNode = data.append_child("item");
+		if (d->data->spawn == true) {
+			iNode.append_attribute("spawn") = true;
+		}
+		if (d->data->spawn == false) {
+			iNode.append_attribute("spawn") = false;
+		}
+		d = d->next;
 	}
 	return true;
 }
