@@ -5,6 +5,7 @@
 	<textures />
 	<audio />
 	<FadeToBlack />
+	<pathfinder />
 	<sceneLogo />
 	<sceneTitle />
 	<scene>

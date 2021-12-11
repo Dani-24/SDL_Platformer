@@ -9,6 +9,7 @@
 #include "Animation.h"
 #include "Physics.h"
 #include "Player.h"
+#include "Map.h"
 
 Enemy::Enemy(App* application, bool start_enabled) : Module(application, start_enabled)
 {
@@ -110,37 +111,29 @@ bool Enemy::PreUpdate() {
 
 	if (app->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
+		// Get mouse position
 		int x, y;
-		
 		app->input->GetMousePosition(x, y);
-	
-		if (app->player->position.x > 352 && app->player->position.x < 2880) { // Just Scene 1 limit
-			x = x + app->player->position.x - 1280 / 4;
-			y = y + app->player->position.y - 720 / 4;
-		}
-		else {
-			x = x + app->player->position.x - 32;
-			y = y + app->player->position.y - 720 / 4;
-		}
 
-		AddEnemy(x, y);
+		// Transform mouse position into map position
+		iPoint p = app->render->ScreenToWorld(x, y);
+		p = app->map->WorldToMap(p.x, p.y);
+
+		// Multiply per 16 as tiles widht and height are 16 pixels
+		AddEnemy(p.x*16, p.y*16);
 	}
 	if (app->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
 	{
+		// Get mouse position
 		int x, y;
-
 		app->input->GetMousePosition(x, y);
 
-		if (app->player->position.x > 352 && app->player->position.x < 2880) { // Just Scene 1 limit
-			x = x + app->player->position.x - 1280 / 4;
-			y = y + app->player->position.y - 720 / 4;
-		}
-		else {
-			x = x + app->player->position.x - 32;
-			y = y + app->player->position.y - 720 / 4;
-		}
+		// Transform mouse position into map position
+		iPoint p = app->render->ScreenToWorld(x, y);
+		p = app->map->WorldToMap(p.x, p.y);
 
-		AddEnemy(x, y, "fly");
+		// Multiply per 16 as tiles widht and height are 16 pixels
+		AddEnemy(p.x * 16, p.y * 16, "fly");
 	}
 
 	return true;

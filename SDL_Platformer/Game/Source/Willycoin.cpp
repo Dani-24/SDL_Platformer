@@ -9,6 +9,7 @@
 #include "Animation.h"
 #include "Physics.h"
 #include "Player.h"
+#include "Map.h"
 
 #include <time.h>    
 
@@ -150,21 +151,19 @@ bool Item::PreUpdate() {
 
 	if (app->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
 	{
-		int x, y;
-		int	type = 1;
-		
-		app->input->GetMousePosition(x, y);
-	
-		if (app->player->position.x > 352 && app->player->position.x < 2880) { // Just Scene 1 limit
-			x = x + app->player->position.x - 1280 / 4;
-			y = y + app->player->position.y - 720 / 4;
-		}
-		else {
-			x = x + app->player->position.x - 32;
-			y = y + app->player->position.y - 720 / 4;
-		}
+		// Item type
+		int type = 1;
 
-		AddItem(x, y, type);
+		// Get mouse position
+		int x, y;
+		app->input->GetMousePosition(x, y);
+
+		// Transform mouse position into map position
+		iPoint p = app->render->ScreenToWorld(x, y);
+		p = app->map->WorldToMap(p.x, p.y);
+
+		// Multiply per 16 as tiles widht and height are 16 pixels
+		AddItem(p.x * 16, p.y * 16, type);
 	}
 
 	return true;

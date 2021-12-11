@@ -16,6 +16,7 @@
 #include "ModuleQFonts.h"
 #include "Defs.h"
 #include "Log.h"
+#include "Pathfinder.h"
 
 #include <iostream>
 #include <sstream>
@@ -45,6 +46,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	font = new ModuleQFonts(this, false);
 
 	physics = new Physics(this, false);
+	pathfinder = new Pathfinder(this, false);
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -54,6 +56,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(audio);
 
 	AddModule(fade);
+	AddModule(pathfinder);
 	AddModule(sceneLogo);
 	AddModule(sceneTitle);
 	AddModule(scene);

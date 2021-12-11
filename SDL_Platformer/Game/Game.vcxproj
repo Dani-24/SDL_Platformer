@@ -102,6 +102,7 @@
     <ClCompile Include="Source\Input.cpp" />
     <ClCompile Include="Source\Map.cpp" />
     <ClCompile Include="Source\ModuleQFonts.cpp" />
+    <ClCompile Include="Source\Pathfinder.cpp" />
     <ClCompile Include="Source\PerfTimer.cpp" />
     <ClCompile Include="Source\Physics.cpp" />
     <ClCompile Include="Source\Player.cpp" />
@@ -119,6 +120,7 @@
     <ClInclude Include="Source\FadeToBlack.h" />
     <ClInclude Include="Source\Map.h" />
     <ClInclude Include="Source\ModuleQFonts.h" />
+    <ClInclude Include="Source\Pathfinder.h" />
     <ClInclude Include="Source\PerfTimer.h" />
     <ClInclude Include="Source\Physics.h" />
     <ClInclude Include="Source\Player.h" />

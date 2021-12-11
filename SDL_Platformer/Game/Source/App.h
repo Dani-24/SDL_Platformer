@@ -29,6 +29,7 @@ class Map;
 class ModuleQFonts;
 class Physics;
 class FadeToBlack;
+class Pathfinder;
 
 class App
 {
@@ -113,6 +114,7 @@ public:
 	ModuleQFonts* font;
 	Physics* physics;
 	FadeToBlack* fade;
+	Pathfinder* pathfinder;
 
 private:
 

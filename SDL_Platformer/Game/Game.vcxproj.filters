@@ -64,6 +64,9 @@
     <ClCompile Include="Source\ModuleQFonts.cpp">
       <Filter>Platformer\Modules\Extra</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Pathfinder.cpp">
+      <Filter>Platformer\Modules\Extra</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Defs.h">
@@ -151,6 +154,9 @@
       <Filter>Platformer\Scenes\Gameplay</Filter>
     </ClInclude>
     <ClInclude Include="Source\ModuleQFonts.h">
+      <Filter>Platformer\Modules\Extra</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Pathfinder.h">
       <Filter>Platformer\Modules\Extra</Filter>
     </ClInclude>
   </ItemGroup>

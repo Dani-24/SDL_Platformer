@@ -78,6 +78,9 @@ private:
 	int initPosX = 32, initPosY = 1090;
 
 	bool delSaveData = false, checkPointSave = false;
+
+	// Pathfinding
+	SDL_Texture* pathTexture, * pathOriginTexture;
 };
 
 #endif // __SCENE_H__

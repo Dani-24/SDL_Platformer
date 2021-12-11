@@ -14,6 +14,7 @@
 #include "Enemy.h"
 #include "Willycoin.h"
 #include "ModuleQFonts.h"
+#include "Pathfinder.h"
 
 Scene::Scene(App* application, bool start_enabled) : Module(application, start_enabled)
 {
@@ -47,6 +48,7 @@ bool Scene::Start()
 
 	// Enable modules q se usan
 
+	app->pathfinder->Enable();
 	app->physics->Enable();
 	app->player->Enable();
 	app->map->Enable();
@@ -109,20 +111,38 @@ bool Scene::Start()
 	loadEgg = false;
 	EasterEgg();
 
-	// Enemies
-
+	// =============================================
+	//         Add Enemies (Move to tiled)
+	// =============================================
 	app->enemy->AddEnemy(650, 1000);
 	app->enemy->AddEnemy(2255, 1160);
 	app->enemy->AddEnemy(1800, 100);
 
 	app->enemy->AddEnemy(800, 1000, "fly");
 
-	LOG("Spawn player at X = %d Y = %d", initPosX, initPosY);
+	// =============================================
+	//				   PathFinding
+	// =============================================
+
+	// Check if map loaded, then create the walkability map
+	if (app->map->Load("mapa.tmx") == true) {
+		int w, h; uchar* data = NULL;
+		if (app->map->CreateWalkabilityMap(w, h, &data)) {
+			app->pathfinder->SetMap(w, h, data);
+		}
+		RELEASE_ARRAY(data);
+	}
+
+	// Pathfinding textures:
+	//pathTexture = app->tex->Load("Assets/textures/path.png");
+	//pathOriginTexture = app->tex->Load("Assets/textures/pathOrigin.png");
 
 	// Delete Save data to disable checkpoint tp if replay the game
 	delSaveData = true;
 	checkPointSave = false;
 	app->SaveGameRequest();
+
+	LOG("Spawn player at X = %d Y = %d", initPosX, initPosY);
 
 	return true;
 }
@@ -372,6 +392,7 @@ bool Scene::CleanUp()
 	}
 	app->item->Disable();
 	app->physics->Disable();
+	app->pathfinder->Disable();
 
 	// Reset Variables
 	cont = w = h = playerPosForScroll = checkPfx = 0;
