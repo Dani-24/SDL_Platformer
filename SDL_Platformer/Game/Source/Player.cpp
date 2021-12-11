@@ -332,9 +332,6 @@ bool Player::PreUpdate() {
 		//app->audio->PlayFx(loseHPFx);
 		LOG("Player lose 1 HP, %d HP remaining", HP);
 	}
-	//else if (hpCheck < HP) {
-	//	 //Recover HP fx (meter en el propio item)
-	//}
 	
 	// If HP == 0 player dies
 	if (HP <= 0) {
@@ -539,6 +536,7 @@ bool Player::Update(float dt)
 
 void Player::GodMode() {
 	// --- GOD MODE Movement ---
+
 	if ((app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT))
 	{
 		playerBody->body->SetTransform(b2Vec2(playerBody->body->GetPosition().x + 0.4f, playerBody->body->GetPosition().y),playerBody->body->GetAngle());
