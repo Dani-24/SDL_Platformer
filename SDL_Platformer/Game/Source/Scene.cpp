@@ -134,8 +134,8 @@ bool Scene::Start()
 	}
 
 	// Pathfinding textures:
-	//pathTexture = app->tex->Load("Assets/textures/path.png");
-	//pathOriginTexture = app->tex->Load("Assets/textures/pathOrigin.png");
+	pathTexture = app->tex->Load("Assets/textures/path.png");
+	pathOriginTexture = app->tex->Load("Assets/textures/pathOrigin.png");
 
 	// Delete Save data to disable checkpoint tp if replay the game
 	delSaveData = true;
@@ -150,6 +150,26 @@ bool Scene::Start()
 // Called each loop iteration
 bool Scene::PreUpdate()
 {
+	// Pathfinding testing
+	int x, y;
+	app->input->GetMousePosition(x,y);
+	iPoint p = app->render->ScreenToWorld(x, y);
+	p = app->map->WorldToMap(p.x, p.y);
+
+	if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
+	{
+		if (originSelected == true)
+		{
+			app->pathfinder->CreatePath(originPos, p);
+			originSelected = false;
+		}
+		else
+		{
+			originPos = p;
+			originSelected = true;
+		}
+	}
+
 	// Request Load / Save when pressing F6/F5
 	if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN){
 		app->LoadGameRequest();
@@ -345,7 +365,35 @@ bool Scene::PostUpdate()
 	SDL_Rect rectCheck = checkpointAnim.GetCurrentFrame();
 	app->render->DrawTexture(checkpointTex, checkPos.x - 25, checkPos.y - 32, &rectCheck);
 
-	// Die / Win textures
+	// ========================================
+	//             Pathfinding draw
+	// ========================================
+
+	int mouseX, mouseY;
+	app->input->GetMousePosition(mouseX, mouseY);
+	iPoint mouseTile = app->map->WorldToMap(mouseX - app->render->camera.x, mouseY - app->render->camera.y);
+
+	app->input->GetMousePosition(mouseX, mouseY);
+	iPoint p = app->render->ScreenToWorld(mouseX, mouseY);
+	p = app->map->WorldToMap(p.x, p.y);
+	p = app->map->MapToWorld(p.x, p.y);
+
+	app->render->DrawTexture(pathTexture, p.x, p.y);
+
+	const DynArray<iPoint>* path = app->pathfinder->GetLastPath();
+
+	for (uint i = 0; i < path->Count(); ++i)
+	{
+		iPoint pos = app->map->MapToWorld(path->At(i)->x, path->At(i)->y);
+		app->render->DrawTexture(pathTexture, pos.x, pos.y);
+	}
+
+	iPoint originScreen = app->map->MapToWorld(originPos.x, originPos.y);
+	app->render->DrawTexture(pathOriginTexture, originScreen.x, originScreen.y);
+
+	// =========================================
+	//           Die / Win textures
+	// =========================================
 	if (app->player->death == true) {
 		SDL_Rect dieWRect = dieWindowAnim.GetCurrentFrame();
 		app->render->DrawTexture(dieWindow, w, h, &dieWRect);
