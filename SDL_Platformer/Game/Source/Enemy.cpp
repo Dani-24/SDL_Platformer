@@ -107,35 +107,36 @@ bool Enemy::AddEnemy(int x, int y, SString type) {
 }
 
 bool Enemy::PreUpdate() {
-	// ENEMY DEBUG GENERATOR
 
-	if (app->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
-	{
-		// Get mouse position
-		int x, y;
-		app->input->GetMousePosition(x, y);
+	if (app->physics->debug == true) {
+		// ENEMY DEBUG GENERATOR
+		if (app->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
+		{
+			// Get mouse position
+			int x, y;
+			app->input->GetMousePosition(x, y);
 
-		// Transform mouse position into map position
-		iPoint p = app->render->ScreenToWorld(x, y);
-		p = app->map->WorldToMap(p.x, p.y);
+			// Transform mouse position into map position
+			iPoint p = app->render->ScreenToWorld(x, y);
+			p = app->map->WorldToMap(p.x, p.y);
 
-		// Multiply per 16 as tiles widht and height are 16 pixels
-		AddEnemy(p.x*16, p.y*16);
+			// Multiply per 16 as tiles widht and height are 16 pixels
+			AddEnemy(p.x * 16, p.y * 16);
+		}
+		if (app->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
+		{
+			// Get mouse position
+			int x, y;
+			app->input->GetMousePosition(x, y);
+
+			// Transform mouse position into map position
+			iPoint p = app->render->ScreenToWorld(x, y);
+			p = app->map->WorldToMap(p.x, p.y);
+
+			// Multiply per 16 as tiles widht and height are 16 pixels
+			AddEnemy(p.x * 16, p.y * 16, "fly");
+		}
 	}
-	if (app->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
-	{
-		// Get mouse position
-		int x, y;
-		app->input->GetMousePosition(x, y);
-
-		// Transform mouse position into map position
-		iPoint p = app->render->ScreenToWorld(x, y);
-		p = app->map->WorldToMap(p.x, p.y);
-
-		// Multiply per 16 as tiles widht and height are 16 pixels
-		AddEnemy(p.x * 16, p.y * 16, "fly");
-	}
-
 	return true;
 }
 

@@ -70,8 +70,6 @@ bool Item::Start() {
 	strawberry.PushBack({ 800,592,16,16 });
 	apple.PushBack({ 816,592,16,16 });
 
-
-
 	return true;
 }
 
@@ -147,25 +145,25 @@ void Item::AddItem(int x, int y, int type) {
 }
 
 bool Item::PreUpdate() {
-	// COIN DEBUG GENERATOR
+	if (app->physics->debug == true) {
+		// COIN DEBUG GENERATOR
+		if (app->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
+		{
+			// Item type
+			int type = 1;
 
-	if (app->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
-	{
-		// Item type
-		int type = 1;
+			// Get mouse position
+			int x, y;
+			app->input->GetMousePosition(x, y);
 
-		// Get mouse position
-		int x, y;
-		app->input->GetMousePosition(x, y);
+			// Transform mouse position into map position
+			iPoint p = app->render->ScreenToWorld(x, y);
+			p = app->map->WorldToMap(p.x, p.y);
 
-		// Transform mouse position into map position
-		iPoint p = app->render->ScreenToWorld(x, y);
-		p = app->map->WorldToMap(p.x, p.y);
-
-		// Multiply per 16 as tiles widht and height are 16 pixels
-		AddItem(p.x * 16, p.y * 16, type);
+			// Multiply per 16 as tiles widht and height are 16 pixels
+			AddItem(p.x * 16, p.y * 16, type);
+		}
 	}
-
 	return true;
 }
 
