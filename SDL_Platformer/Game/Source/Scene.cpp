@@ -136,6 +136,7 @@ bool Scene::Start()
 	// Pathfinding textures:
 	pathTexture = app->tex->Load("Assets/textures/path.png");
 	pathOriginTexture = app->tex->Load("Assets/textures/pathOrigin.png");
+	pathFx = app->audio->LoadFx("Assets/audio/fx/pathfx.wav");
 
 	// Delete Save data to disable checkpoint tp if replay the game
 	delSaveData = true;
@@ -150,27 +151,35 @@ bool Scene::Start()
 // Called each loop iteration
 bool Scene::PreUpdate()
 {
-	// Pathfinding testing
-	int x, y;
-	app->input->GetMousePosition(x,y);
-	iPoint p = app->render->ScreenToWorld(x, y);
-	p = app->map->WorldToMap(p.x, p.y);
+	// ====================================
+	//        Pathfinding testing
+	// ====================================
+	if (app->physics->debug == true) {
+		int x, y;
+		app->input->GetMousePosition(x, y);
+		iPoint p = app->render->ScreenToWorld(x, y);
+		p = app->map->WorldToMap(p.x, p.y);
 
-	if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
-	{
-		if (originSelected == true)
+		if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
 		{
-			app->pathfinder->CreatePath(originPos, p);
-			originSelected = false;
-		}
-		else
-		{
-			originPos = p;
-			originSelected = true;
+			if (originSelected == true)
+			{
+				app->pathfinder->CreatePath(originPos, p);
+				originSelected = false;
+
+				app->audio->PlayFx(pathFx);
+			}
+			else
+			{
+				originPos = p;
+				originSelected = true;
+			}
 		}
 	}
 
+	// ========================================
 	// Request Load / Save when pressing F6/F5
+	// ========================================
 	if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN){
 		app->LoadGameRequest();
 	}
@@ -185,7 +194,7 @@ bool Scene::PreUpdate()
 		app->SaveGameRequest();
 	}
 
-	// --- Camera (Follows player) ---
+	// ---------------- Camera (Follows player) ----------------------
 	if (app->player->death != true) {
 		if (app->player->position.x > 352 && app->player->position.x < 2880) {
 			app->render->camera.x = 0 - ((app->player->position.x * 2) - 1280 / 2);
@@ -195,7 +204,7 @@ bool Scene::PreUpdate()
 		}
 	}
 
-	// win
+	// ======= Win =======
 	if (app->player->win == true) {
 		app->fade->StartFadeToBlack(this, (Module*)app->sceneTitle, 60);
 	}
@@ -369,27 +378,29 @@ bool Scene::PostUpdate()
 	//             Pathfinding draw
 	// ========================================
 
-	int mouseX, mouseY;
-	app->input->GetMousePosition(mouseX, mouseY);
-	iPoint mouseTile = app->map->WorldToMap(mouseX - app->render->camera.x, mouseY - app->render->camera.y);
+	if (app->physics->debug == true) {
+		int mouseX, mouseY;
+		app->input->GetMousePosition(mouseX, mouseY);
+		iPoint mouseTile = app->map->WorldToMap(mouseX - app->render->camera.x, mouseY - app->render->camera.y);
 
-	app->input->GetMousePosition(mouseX, mouseY);
-	iPoint p = app->render->ScreenToWorld(mouseX, mouseY);
-	p = app->map->WorldToMap(p.x, p.y);
-	p = app->map->MapToWorld(p.x, p.y);
+		app->input->GetMousePosition(mouseX, mouseY);
+		iPoint p = app->render->ScreenToWorld(mouseX, mouseY);
+		p = app->map->WorldToMap(p.x, p.y);
+		p = app->map->MapToWorld(p.x, p.y);
 
-	app->render->DrawTexture(pathTexture, p.x, p.y);
+		app->render->DrawTexture(pathTexture, p.x, p.y);
 
-	const DynArray<iPoint>* path = app->pathfinder->GetLastPath();
+		const DynArray<iPoint>* path = app->pathfinder->GetLastPath();
 
-	for (uint i = 0; i < path->Count(); ++i)
-	{
-		iPoint pos = app->map->MapToWorld(path->At(i)->x, path->At(i)->y);
-		app->render->DrawTexture(pathTexture, pos.x, pos.y);
+		for (uint i = 0; i < path->Count(); ++i)
+		{
+			iPoint pos = app->map->MapToWorld(path->At(i)->x, path->At(i)->y);
+			app->render->DrawTexture(pathTexture, pos.x, pos.y);
+		}
+
+		iPoint originScreen = app->map->MapToWorld(originPos.x, originPos.y);
+		app->render->DrawTexture(pathOriginTexture, originScreen.x, originScreen.y);
 	}
-
-	iPoint originScreen = app->map->MapToWorld(originPos.x, originPos.y);
-	app->render->DrawTexture(pathOriginTexture, originScreen.x, originScreen.y);
 
 	// =========================================
 	//           Die / Win textures
@@ -443,7 +454,7 @@ bool Scene::CleanUp()
 	app->pathfinder->Disable();
 
 	// Reset Variables
-	cont = w = h = playerPosForScroll = checkPfx = 0;
+	cont = w = h = playerPosForScroll = checkPfx = pathFx = 0;
 	loadEgg = delSaveData = checkPointSave = checked = checkfxPlayed = false;
 
 	return true;

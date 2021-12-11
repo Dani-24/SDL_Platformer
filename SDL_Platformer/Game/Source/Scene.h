@@ -83,6 +83,7 @@ private:
 	SDL_Texture* pathTexture, * pathOriginTexture;
 	iPoint originPos;
 	bool originSelected = false;
+	uint pathFx;
 };
 
 #endif // __SCENE_H__
