@@ -46,7 +46,7 @@ bool Item::Start() {
 	coinSpin.PushBack({ 96,16,16,16 });
 	coinSpin.PushBack({ 16,16,16,16 });
 	coinSpin.loop = false;
-	coinSpin.speed = 0.05f;
+	coinSpin.speed = 0.08f;
 
 	coinFlash.PushBack({ 16,112,16,16 });
 	coinFlash.PushBack({ 32,112,16,16 });
@@ -56,7 +56,7 @@ bool Item::Start() {
 	coinFlash.PushBack({ 96,112,16,16 });
 	coinFlash.PushBack({ 16,112,16,16 });
 	coinFlash.loop = false;
-	coinFlash.speed = 0.05f;
+	coinFlash.speed = 0.1f;
 
 	lollipop.PushBack({ 480,592,16,16 });
 	candy.PushBack({ 496,592,16,16 });
@@ -90,8 +90,10 @@ void Item::AddItem(int x, int y, int type) {
 		thisItem->currentAnimation = &coinIdle;
 		thisItem->position.x = x;
 		thisItem->position.y = y;
-		break;
 
+		thisItem->coinFlashAnim = coinFlash;
+		thisItem->coinSpinAnim = coinSpin;
+		break;
 	case 2:
 		thisItem->spawn = true;
 		thisItem->type = 2;
@@ -219,13 +221,13 @@ bool Item::Update(float dt) {
 				if (c->data->cont >= 100) {
 					if (anim == 1)
 					{
-						coinFlash.Reset();
-						c->data->currentAnimation = &coinFlash;
+						c->data->coinFlashAnim.Reset();
+						c->data->currentAnimation = &c->data->coinFlashAnim;
 					}
 					if (anim == 2)
 					{
-						coinSpin.Reset();
-						c->data->currentAnimation = &coinSpin;
+						c->data->coinSpinAnim.Reset();
+						c->data->currentAnimation = &c->data->coinSpinAnim;
 					}
 					c->data->cont = 0;
 				}

@@ -50,6 +50,8 @@ bool Physics::PreUpdate() {
 	if (pause != true) {
 		
 		// Physics framerate:
+		
+
 		world->Step(1.0f / 60.0f, 6, 2);
 
 		for (b2Contact* c = world->GetContactList(); c; c = c->GetNext())

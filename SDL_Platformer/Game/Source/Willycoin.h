@@ -38,6 +38,8 @@ struct Items {
 
 	Animation* currentAnimation = nullptr;
 
+	Animation coinSpinAnim, coinFlashAnim;
+
 	int type;
 	int cont = 0;
 	
