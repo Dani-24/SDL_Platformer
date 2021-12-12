@@ -290,6 +290,7 @@ bool Player::Start()
 	attackSensorRight->body->SetType(b2_dynamicBody);
 	attackSensorRight->body->SetFixedRotation(true);
 
+	//Joint the attack collider to the player body
 	b2WeldJointDef LeftWeldJointDef;
 	LeftWeldJointDef.bodyA = playerBody->body;
 	LeftWeldJointDef.bodyB = attackSensorLeft->body;

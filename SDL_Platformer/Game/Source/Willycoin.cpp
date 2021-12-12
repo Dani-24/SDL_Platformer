@@ -18,6 +18,7 @@ Item::Item(App* application, bool start_enabled) : Module(application, start_ena
 }
 
 Item::~Item() {
+	
 
 }
 
@@ -82,7 +83,7 @@ void Item::AddItem(int x, int y, int type) {
 	int anim = rand() % 11 + 1;
 	switch (type)
 	{
-	case 1:
+	case 1: //COIN
 		thisItem->spawn = true;
 		thisItem->type = 1;
 		thisItem->sprite = ItemSprite;
@@ -94,14 +95,14 @@ void Item::AddItem(int x, int y, int type) {
 		thisItem->coinFlashAnim = coinFlash;
 		thisItem->coinSpinAnim = coinSpin;
 		break;
-	case 2:
+	case 2: //WILLYCOIN
 		thisItem->spawn = true;
 		thisItem->type = 2;
 		thisItem->body = app->physics->CreateRectangleSensor(x, y, 64, 64);
 		thisItem->position.x = x;
 		thisItem->position.y = y;
 		break;
-	case 3:
+	case 3: //FOOD
 		thisItem->spawn = true;
 		thisItem->type = 3;
 		thisItem->sprite = ItemSprite;
@@ -206,6 +207,9 @@ bool Item::Update(float dt) {
 	ListItem<Items*>* c = items.start;
 	int anim = rand() % 2 + 1;
 	while (c != NULL) {
+		// ======================================================
+		//        Destroy Items when player collects them
+		// ======================================================
 		switch (c->data->type)
 		{
 		case 1:
@@ -277,7 +281,9 @@ bool Item::PostUpdate() {
 
 	if (app->player->death != true && app->player->win != true) {
 		ListItem<Items*>* c = items.start;
-
+		// ======================================================
+		//						Draw items
+		// ======================================================
 		while (c != NULL) {
 			switch (c->data->type)
 			{
