@@ -11,6 +11,7 @@
 #include "Willycoin.h"
 #include "Map.h"
 #include "Scene.h"
+#include "FadeToBlack.h"
 
 Physics::Physics(App* application, bool start_enabled) : Module(application, start_enabled)
 {
@@ -107,8 +108,6 @@ bool Physics::PostUpdate() {
 		return true;
 	}
 
-	// Bonus code: this will iterate all objects in the world and draw the circles
-	// You need to provide your own macro to translate meters to pixels
 	for (b2Body* b = world->GetBodyList(); b; b = b->GetNext())
 	{
 		// Solo dibujar colliders si estan cerca del player
@@ -182,72 +181,7 @@ bool Physics::PostUpdate() {
 				break;
 				}
 
-				if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT))
-				{
-					// test if the current body contains mouse position
-					int mouseX, mouseY;
-					app->input->GetMousePosition(mouseX, mouseY);
-					b2Vec2 p = { PIXEL_TO_METERS(mouseX), PIXEL_TO_METERS(mouseY) };
-					if (f->GetShape()->TestPoint(b->GetTransform(), p) == true)
-					{
-
-						// If a body was selected we will attach a mouse joint to it
-						// so we can pull it around
-
-						// The variable "b2Body* mouse_body;" is defined in the header ModulePhysics.h 
-						// We need to keep this body throughout several game frames; you cannot define it as a local variable here. 
-						mouse_body = b;
-
-						// Get current mouse position
-						b2Vec2 mousePosition;
-						mousePosition.x = p.x;
-						mousePosition.y = p.y;
-
-						// Define new mouse joint
-						b2MouseJointDef def;
-						def.bodyA = ground; // First body must be a static ground
-						def.bodyB = mouse_body; // Second body will be the body to attach to the mouse
-						def.target = mousePosition; // The second body will be pulled towards this location
-						def.dampingRatio = 0.5f; // Play with this value
-						def.frequencyHz = 2.0f; // Play with this value
-						def.maxForce = 200.0f * mouse_body->GetMass(); // Play with this value
-
-						// Add the new mouse joint into the World
-						mouse_joint = (b2MouseJoint*)world->CreateJoint(&def);
-					}
-				}
 			}
-		}
-	}
-
-	if (mouse_body != nullptr && mouse_joint != nullptr)
-	{
-		if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT)
-		{
-			// Get new mouse position and re-target mouse_joint there
-			int mouseX, mouseY;
-			app->input->GetMousePosition(mouseX, mouseY);
-
-			b2Vec2 mousePosition;
-			mousePosition.x = PIXEL_TO_METERS(mouseX);
-			mousePosition.y = PIXEL_TO_METERS(mouseY);
-			mouse_joint->SetTarget(mousePosition);
-
-			// Draw a red line between both anchor points
-			app->render->DrawLine(METERS_TO_PIXELS(mouse_body->GetPosition().x), METERS_TO_PIXELS(mouse_body->GetPosition().y), mouseX, mouseY, 255, 0, 0);
-		}
-	}
-
-	if (mouse_body != nullptr && mouse_joint != nullptr)
-	{
-		if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP)
-		{
-			// Tell Box2D to destroy the mouse_joint
-			world->DestroyJoint(mouse_joint);
-
-			// DO NOT FORGET THIS! We need it for the "if (mouse_body != nullptr && mouse_joint != nullptr)"
-			mouse_joint = nullptr;
-			mouse_body = nullptr;
 		}
 	}
 	return true;
@@ -333,6 +267,7 @@ void Physics::BeginContact(b2Contact* contact)
 			}
 			else {
 				app->player->death = true;
+				app->fade->StartFadeToBlack(app->scene, app->scene, 120);
 			}
 		}
 	}
