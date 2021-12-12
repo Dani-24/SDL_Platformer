@@ -483,14 +483,21 @@ bool Scene::LoadState(pugi::xml_node& data){
 	}
 	app->render->camera.y = 0 - ((app->player->position.y * 2) - (720 / 2) - 180);
 
+	//items
 	app->item->Disable();
 	app->item->Enable();
-	//items
-	ListItem<Items*>* d = app->item->items.start;
-	while (d != NULL) {
-		pugi::xml_node iNode = data.append_child("item");
-		d->data->spawn = iNode.append_attribute("spawn");
-		d = d->next;
+	pugi::xml_node nNode = data.child("itemNum");
+	int Num = 0;
+	Num = nNode.attribute("num").as_int();
+	pugi::xml_node iNode = data.child("item");
+	app->item->itemNum = 0;
+	for (int i = 0; i < Num; i++) {
+		int x, y, type;
+		x = iNode.attribute("x").as_int();
+		y = iNode.attribute("y").as_int();
+		type = iNode.attribute("type").as_int();
+		app->item->AddItem(x, y, type);
+		iNode = iNode.next_sibling("item");
 	}
 	
 
@@ -526,15 +533,15 @@ bool Scene::SaveState(pugi::xml_node& data) const
 		pNode.append_attribute("y") = checkPos.y;
 		pNode.append_attribute("hp") = app->player->HP;
 	}
+	pugi::xml_node nNode = data.append_child("itemNum");
+	nNode.append_attribute("num").set_value(app->item->itemNum);
 	while (d != NULL) {
 		pugi::xml_node iNode = data.append_child("item");
-		if (d->data->spawn == true) {
-			iNode.append_attribute("spawn") = true;
-		}
-		if (d->data->spawn == false) {
-			iNode.append_attribute("spawn") = false;
-		}
+		iNode.append_attribute("type") = d->data->type;
+		iNode.append_attribute("x") = d->data->position.x;
+		iNode.append_attribute("y") = d->data->position.y;
 		d = d->next;
+		
 	}
 	return true;
 }

@@ -40,6 +40,7 @@ struct Items {
 
 	int type;
 	int cont = 0;
+	
 	bool spawn;
 	iPoint position;
 };
@@ -61,6 +62,7 @@ public:
 
 	List<Items*> items;
 
+	int itemNum;
 	void AddItem(int x, int y, int type);
 	uint coinFx = 0;
 	uint willyFx = 0;

@@ -9,11 +9,9 @@
 	<sceneLogo />
 	<sceneTitle />
 	<scene>
-		<player x="288" y="1093" hp="3" />
-		<item spawn="true" />
-		<item spawn="true" />
-		<item spawn="true" />
-		<item spawn="true" />
+		<player x="591" y="981" hp="3" />
+		<itemNum num="1" />
+		<item type="2" x="832" y="1056" />
 	</scene>
 	<map />
 	<player />
