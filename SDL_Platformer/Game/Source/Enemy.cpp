@@ -71,10 +71,10 @@ bool Enemy::Start() {
 	return true;
 }
 
-bool Enemy::AddEnemy(int x, int y, SString type) {
+bool Enemy::AddEnemy(int x, int y, int type) {
 
 	LOG("Adding new enemy at X: %d and Y: %d", x, y);
-
+	enemyNum += 1;
 	Enemies* thisEnemy = new Enemies();
 
 	thisEnemy->death = false;
@@ -97,10 +97,10 @@ bool Enemy::AddEnemy(int x, int y, SString type) {
 	thisEnemy->currentAnimation = &animIdleL;
 	thisEnemy->type = type;
 
-	if (type == "default") {
+	if (type == 0) {
 		thisEnemy->sprite = enemySprite;
 	}
-	else if (type == "fly") {
+	else if (type == 1) {
 		thisEnemy->sprite = enemyFlySprite;
 	}
 	else {
@@ -127,7 +127,7 @@ bool Enemy::PreUpdate() {
 			p = app->map->WorldToMap(p.x, p.y);
 
 			// Multiply per 16 as tiles widht and height are 16 pixels
-			AddEnemy(p.x * 16, p.y * 16);
+			AddEnemy(p.x * 16, p.y * 16, 0);
 		}
 		if (app->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
 		{
@@ -140,7 +140,7 @@ bool Enemy::PreUpdate() {
 			p = app->map->WorldToMap(p.x, p.y);
 
 			// Multiply per 16 as tiles widht and height are 16 pixels
-			AddEnemy(p.x * 16, p.y * 16, "fly");
+			AddEnemy(p.x * 16, p.y * 16, 1);
 		}
 	}
 	return true;
@@ -224,6 +224,7 @@ bool Enemy::Update(float dt) {
 			// ENEMIES DEAD
 
 			LOG("Deleting enemy");
+			enemyNum -= 1;
 			app->physics->world->DestroyBody(c->data->body->body);
 			app->physics->world->DestroyBody(c->data->collider->body);
 			enemies.del(c);

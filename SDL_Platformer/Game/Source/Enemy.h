@@ -31,7 +31,7 @@ struct Enemies {
 
 	SDL_Texture* sprite;
 	PhysBody* body, *collider;
-	SString type;
+	int type;
 	iPoint position;
 
 	bool death, dir, playDetectFx;
@@ -60,8 +60,10 @@ public:
 	bool PostUpdate();
 	bool CleanUp() override;
 
-	// Pos X, Y, and enemy type. ("default" or "fly")
-	bool AddEnemy(int x, int y, SString type = "default");
+	int enemyNum;
+
+	// Pos X, Y, and enemy type. ("default" = 0 or "fly" = 1)
+	bool AddEnemy(int x, int y, int type);
 
 public:
 	List<Enemies*> enemies;

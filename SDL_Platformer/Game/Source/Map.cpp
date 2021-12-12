@@ -137,10 +137,10 @@ void Map::Blocks()
 							app->item->AddItem(pos.x, pos.y, 3);
 							break;
 						case 9:
-							app->enemy->AddEnemy(pos.x, pos.y, "fly");
+							app->enemy->AddEnemy(pos.x, pos.y, 1);
 							break;
 						case 10:
-							app->enemy->AddEnemy(pos.x, pos.y);
+							app->enemy->AddEnemy(pos.x, pos.y, 0);
 							break;
 						}
 					}
