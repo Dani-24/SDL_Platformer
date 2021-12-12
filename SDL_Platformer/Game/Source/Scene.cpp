@@ -551,7 +551,7 @@ bool Scene::SaveState(pugi::xml_node& data) const
 		//				RESET ITEMS AND ENEMY
 		// =================================================
 		pugi::xml_node nNode = data.append_child("itemNum");
-		nNode.append_attribute("num").set_value(9);	// Put the exactly total items in scene
+		nNode.append_attribute("num").set_value(110);	// Put the exactly total items in scene
 
 		pugi::xml_node aNode = data.append_child("enemyNum");
 		aNode.append_attribute("num").set_value(10); // Put the exactly total enemies in scene 

@@ -10,12 +10,113 @@
 	<sceneTitle />
 	<scene>
 		<player x="32" y="1090" hp="3" />
-		<itemNum num="9" />
+		<itemNum num="110" />
 		<enemyNum num="10" />
+		<item type="1" x="224" y="1024" />
+		<item type="1" x="240" y="1024" />
+		<item type="1" x="256" y="1024" />
+		<item type="1" x="272" y="1024" />
 		<item type="1" x="560" y="1056" />
 		<item type="1" x="576" y="1056" />
 		<item type="1" x="592" y="1056" />
 		<item type="1" x="608" y="1056" />
+		<item type="1" x="832" y="1104" />
+		<item type="1" x="832" y="1168" />
+		<item type="1" x="848" y="1168" />
+		<item type="1" x="864" y="1168" />
+		<item type="1" x="880" y="1168" />
+		<item type="1" x="896" y="1104" />
+		<item type="1" x="896" y="1168" />
+		<item type="1" x="928" y="800" />
+		<item type="1" x="928" y="880" />
+		<item type="1" x="944" y="880" />
+		<item type="1" x="960" y="896" />
+		<item type="1" x="976" y="912" />
+		<item type="1" x="992" y="832" />
+		<item type="1" x="992" y="848" />
+		<item type="1" x="992" y="864" />
+		<item type="1" x="992" y="880" />
+		<item type="1" x="992" y="928" />
+		<item type="1" x="1008" y="832" />
+		<item type="1" x="1008" y="880" />
+		<item type="1" x="1024" y="832" />
+		<item type="1" x="1024" y="880" />
+		<item type="1" x="1040" y="832" />
+		<item type="1" x="1040" y="848" />
+		<item type="1" x="1040" y="864" />
+		<item type="1" x="1040" y="880" />
+		<item type="1" x="1040" y="928" />
+		<item type="1" x="1056" y="912" />
+		<item type="1" x="1072" y="896" />
+		<item type="1" x="1088" y="880" />
+		<item type="1" x="1104" y="800" />
+		<item type="1" x="1104" y="880" />
+		<item type="1" x="1312" y="1088" />
+		<item type="1" x="1328" y="1088" />
+		<item type="1" x="1344" y="1088" />
+		<item type="1" x="1360" y="288" />
+		<item type="1" x="1456" y="384" />
+		<item type="1" x="1456" y="1040" />
+		<item type="1" x="1520" y="448" />
+		<item type="1" x="1536" y="992" />
+		<item type="1" x="1552" y="992" />
+		<item type="1" x="1568" y="992" />
+		<item type="1" x="1584" y="992" />
+		<item type="1" x="1632" y="464" />
+		<item type="1" x="1712" y="288" />
+		<item type="1" x="1840" y="112" />
+		<item type="1" x="1856" y="112" />
+		<item type="1" x="1872" y="112" />
+		<item type="1" x="1888" y="112" />
+		<item type="1" x="1888" y="960" />
+		<item type="1" x="1904" y="112" />
+		<item type="1" x="1904" y="944" />
+		<item type="1" x="1920" y="112" />
+		<item type="1" x="1920" y="960" />
+		<item type="1" x="1936" y="112" />
+		<item type="1" x="1952" y="112" />
+		<item type="1" x="1984" y="1168" />
+		<item type="1" x="2000" y="1168" />
+		<item type="1" x="2016" y="1168" />
+		<item type="1" x="2032" y="1168" />
+		<item type="1" x="2048" y="1168" />
+		<item type="1" x="2272" y="464" />
+		<item type="1" x="2288" y="464" />
+		<item type="1" x="2304" y="464" />
+		<item type="1" x="2320" y="464" />
+		<item type="1" x="2384" y="960" />
+		<item type="1" x="2400" y="944" />
+		<item type="1" x="2416" y="960" />
+		<item type="1" x="2544" y="512" />
+		<item type="1" x="2560" y="512" />
+		<item type="1" x="2576" y="512" />
+		<item type="1" x="2576" y="960" />
+		<item type="1" x="2592" y="960" />
+		<item type="1" x="2608" y="880" />
+		<item type="1" x="2608" y="960" />
+		<item type="1" x="2624" y="960" />
+		<item type="1" x="2656" y="1024" />
+		<item type="1" x="2672" y="1024" />
+		<item type="1" x="2688" y="1024" />
+		<item type="1" x="2752" y="960" />
+		<item type="1" x="2768" y="960" />
+		<item type="1" x="2800" y="656" />
+		<item type="1" x="2816" y="656" />
+		<item type="1" x="2832" y="464" />
+		<item type="1" x="2832" y="656" />
+		<item type="1" x="2848" y="464" />
+		<item type="1" x="2848" y="656" />
+		<item type="1" x="2960" y="240" />
+		<item type="1" x="2976" y="224" />
+		<item type="1" x="2976" y="1152" />
+		<item type="1" x="2992" y="208" />
+		<item type="1" x="2992" y="1152" />
+		<item type="1" x="3008" y="192" />
+		<item type="1" x="3024" y="208" />
+		<item type="1" x="3040" y="224" />
+		<item type="1" x="3056" y="240" />
+		<item type="1" x="3056" y="1024" />
+		<item type="1" x="3152" y="880" />
 		<item type="2" x="1008" y="752" />
 		<item type="2" x="1744" y="896" />
 		<item type="2" x="2688" y="336" />
