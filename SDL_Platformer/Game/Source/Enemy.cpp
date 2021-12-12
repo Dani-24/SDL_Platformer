@@ -80,7 +80,7 @@ bool Enemy::AddEnemy(int x, int y, int type) {
 	thisEnemy->death = false;
 	thisEnemy->position.x = x;
 	thisEnemy->position.y = y;
-	thisEnemy->speed = 0.05f;
+	thisEnemy->speed = 0.02f;
 	thisEnemy->dir = false;
 	thisEnemy->playDetectFx = false;
 	thisEnemy->body = app->physics->CreateChain(x, y, enemyChain, 16);
@@ -181,13 +181,13 @@ bool Enemy::Update(float dt) {
 
 					if (-limitVel < vel && vel < limitVel) {
 						if (app->player->position.x < c->data->position.x) {
-							c->data->body->body->ApplyLinearImpulse(b2Vec2(-c->data->speed, 0), b2Vec2(0, 0), 1);
+							c->data->body->body->ApplyLinearImpulse(b2Vec2(-c->data->speed * dt, 0), b2Vec2(0, 0), 1);
 							if (c->data->currentAnimation != &c->data->animRunL) {
 								c->data->currentAnimation = &c->data->animRunL;
 							}
 						}
 						else {
-							c->data->body->body->ApplyLinearImpulse(b2Vec2(c->data->speed, 0), b2Vec2(0, 0), 1);
+							c->data->body->body->ApplyLinearImpulse(b2Vec2(c->data->speed * dt, 0), b2Vec2(0, 0), 1);
 
 							if (c->data->currentAnimation != &c->data->animRunR) {
 								c->data->currentAnimation = &c->data->animRunR;
@@ -235,13 +235,13 @@ bool Enemy::Update(float dt) {
 
 						// X axis
 						if (app->player->position.x < c->data->position.x) {
-							c->data->body->body->ApplyLinearImpulse(b2Vec2(-c->data->speed, 0), b2Vec2(0, 0), 1);
+							c->data->body->body->ApplyLinearImpulse(b2Vec2(-c->data->speed * dt, 0), b2Vec2(0, 0), 1);
 							if (c->data->currentAnimation != &c->data->animRunL) {
 								c->data->currentAnimation = &c->data->animRunL;
 							}
 						}
 						else if (app->player->position.x > c->data->position.x) {
-							c->data->body->body->ApplyLinearImpulse(b2Vec2(c->data->speed, 0), b2Vec2(0, 0), 1);
+							c->data->body->body->ApplyLinearImpulse(b2Vec2(c->data->speed * dt, 0), b2Vec2(0, 0), 1);
 
 							if (c->data->currentAnimation != &c->data->animRunR) {
 								c->data->currentAnimation = &c->data->animRunR;
@@ -251,10 +251,10 @@ bool Enemy::Update(float dt) {
 					if(-limitVel < vel.y && vel.y < limitVel){
 						// Y axis
 						if (app->player->position.y < c->data->position.y) {
-							c->data->body->body->ApplyLinearImpulse(b2Vec2(0, -c->data->speed), b2Vec2(0, 0), 1);
+							c->data->body->body->ApplyLinearImpulse(b2Vec2(0, -c->data->speed * dt), b2Vec2(0, 0), 1);
 						}
 						else if (app->player->position.y > c->data->position.y) {
-							c->data->body->body->ApplyLinearImpulse(b2Vec2(0, c->data->speed), b2Vec2(0, 0), 1);
+							c->data->body->body->ApplyLinearImpulse(b2Vec2(0, c->data->speed * dt), b2Vec2(0, 0), 1);
 						}
 					}
 				}

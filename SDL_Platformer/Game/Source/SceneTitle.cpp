@@ -51,28 +51,17 @@ bool SceneTitle::Start()
 	fxEnter = app->audio->LoadFx("Assets/audio/fx/enter.wav");
 	app->render->camera.x = 0; app->render->camera.y = 0;
 
+	// ----------- Velocity ------------
+
+	scrollVelocity = 1.0f;
+
 	return true;
 }
 
 // Called each loop iteration
 bool SceneTitle::PreUpdate()
 {
-	return true;
-}
-
-// Called each loop iteration
-bool SceneTitle::Update(float dt)
-{
-	// Movimiento del titulo
-	if (titleY < 50) {
-		titleY += 1;
-		titleMove = true;
-	}
-	else {
-		titleMove = false;
-	}
-
-	// pasar de escena cuando se pare el titulo si pulsas enter
+	// Go to Scene 
 	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
 		app->audio->PlayFx(fxEnter);
 		app->fade->StartFadeToBlack(this, (Module*)app->scene, 0);
@@ -81,6 +70,48 @@ bool SceneTitle::Update(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {
 		return false; // QUIT
 	}
+
+	return true;
+}
+
+// Called each loop iteration
+bool SceneTitle::Update(float dt)
+{
+	// Applying dt directly bugged the scene so we change the velocity depending if the game runs at 60 or 30 fps (no more framerates are possible)
+	if (dt < 30) {
+		scrollVelocity = 1.0f;
+	}
+	else {
+		scrollVelocity = 2.0f;
+	}
+
+	// Title movement
+	if (titleY < 50) {
+		titleY += scrollVelocity;
+		titleMove = true;
+	}
+	else {
+		titleMove = false;
+	}
+
+	// Background
+	for (int i = 0; i < 4; i++) {
+		if (scroller[i] < -286) {
+			scroller[i] = 288 * 3;
+		}
+		else {
+			scroller[i] -= scrollVelocity / 2;
+		}
+	}
+
+	// Scrolling enemy
+	if (enemyFlyX < -250) {
+		enemyFlyX = 700;
+	}
+	else {
+		enemyFlyX -= scrollVelocity;
+	}
+	enemyAngle += scrollVelocity;
 
 	return true;
 }
@@ -95,13 +126,6 @@ bool SceneTitle::PostUpdate()
 	// Background
 
 	for (int i = 0; i < 4; i++) {
-		if (scroller[i] <= -287) {
-			scroller[i] = 288 * 3;
-		}
-		else {
-			scroller[i] -= 0.5f;
-		}
-
 		// Sky
 		app->render->DrawTexture(bgSky, 288 * i, -50);
 
@@ -109,14 +133,8 @@ bool SceneTitle::PostUpdate()
 		app->render->DrawTexture(bg, scroller[i], 158);
 	}
 
-	// BAck enemy
-	if (enemyFlyX < -250) {
-		enemyFlyX = 700;
-	}
-	else {
-		enemyFlyX--;
-	}
-	enemyAngle++;
+	// Scrolling enemy
+	
 	app->render->DrawTexture(enemyFlying, enemyFlyX, 100, 0, 1, enemyAngle);
 
 	// Title
@@ -129,7 +147,6 @@ bool SceneTitle::PostUpdate()
 	return ret;
 }
 
-// Called before quitting
 bool SceneTitle::CleanUp()
 {
 	LOG("Cleaning Title Scene");
@@ -139,7 +156,7 @@ bool SceneTitle::CleanUp()
 	app->tex->UnLoad(titleText);
 	app->tex->UnLoad(pressEnter);
 
-	fxEnter = 0;
+	fxEnter = scrollVelocity = 0;
 	enemyFlyX = 700;
 
 	return true;
