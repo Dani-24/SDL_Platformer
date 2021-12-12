@@ -32,19 +32,19 @@
 struct SDL_Texture;
 
 struct Items {
+	SDL_Texture* sprite; //Item texture
+	PhysBody* body; //The item Collider
 
-	SDL_Texture* sprite;
-	PhysBody* body;
-
+	//Animation
 	Animation* currentAnimation = nullptr;
-
 	Animation coinSpinAnim, coinFlashAnim;
 
+	//TYPE: 1 = COIN, 2 = WILLYCOIN, 3 = FOOD
 	int type;
 	int cont = 0;
 	
-	bool spawn;
-	iPoint position;
+	bool spawn; //if the item is on the map
+	iPoint position; //The item position
 };
 
 class Item : public Module
@@ -62,20 +62,27 @@ public:
 	bool PostUpdate();
 	bool CleanUp() override;
 
+	//All the items saved in a list
 	List<Items*> items;
 
 	int itemNum;
+
+	//Add an item to the Items List: POS X, POS Y, TYPE (1 = COIN, 2 = WILLYCOIN, 3 = FOOD)
 	void AddItem(int x, int y, int type);
+	
+	//Items FX
+
 	uint coinFx = 0;
 	uint willyFx = 0;
 	uint foodFx = 0;
 
 private:
 
-	// The player spritesheet loaded into an SDL_Texture
+	// The ITEMS spritesheet loaded into an SDL_Texture
 	SDL_Texture* ItemSprite = nullptr;
-	SDL_Texture* Willycoin;
+	SDL_Texture* Willycoin; // The WILLYCOIN texture loaded into an SDL_Texture
 
+	//Items Animations
 	Animation coinSpin, coinFlash, coinIdle, lollipop, candy, chocolate, can, iceCream1, iceCream2, cherry, banana, strawberry, apple, orange;
 	
 };
