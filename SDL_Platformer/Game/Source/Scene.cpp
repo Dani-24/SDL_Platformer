@@ -486,12 +486,9 @@ bool Scene::LoadState(pugi::xml_node& data){
 	//items
 	app->item->Disable();
 	app->item->Enable();
-	pugi::xml_node nNode = data.child("itemNum");
-	int Num = 0;
-	Num = nNode.attribute("num").as_int();
 	pugi::xml_node iNode = data.child("item");
 	app->item->itemNum = 0;
-	for (int i = 0; i < Num; i++) {
+	for (int i = 0; i < 110; i++) { //Edit the nunber (110) in case of adding more items
 		int x, y, type;
 		x = iNode.attribute("x").as_int();
 		y = iNode.attribute("y").as_int();
@@ -502,12 +499,9 @@ bool Scene::LoadState(pugi::xml_node& data){
 	//enemy
 	app->enemy->Disable();
 	app->enemy->Enable();
-	pugi::xml_node aNode = data.child("enemyNum");
-	int Num2 = 0;
-	Num2 = aNode.attribute("num").as_int();
 	pugi::xml_node eNode = data.child("enemy");
 	app->enemy->enemyNum = 0;
-	for (int i = 0; i < Num2; i++) {
+	for (int i = 0; i < 10; i++) { //Edit the nunber (10) in case of adding more enemies
 		int x, y, type;
 		x = eNode.attribute("x").as_int();
 		y = eNode.attribute("y").as_int();
@@ -533,11 +527,6 @@ bool Scene::SaveState(pugi::xml_node& data) const
 		pNode.append_attribute("x") = app->player->position.x;
 		pNode.append_attribute("y") = app->player->position.y;
 		pNode.append_attribute("hp") = app->player->HP;
-
-		pugi::xml_node nNode = data.append_child("itemNum");
-		nNode.append_attribute("num").set_value(app->item->itemNum);
-		pugi::xml_node aNode = data.append_child("enemyNum");
-		aNode.append_attribute("num").set_value(app->enemy->enemyNum);
 	}
 	else if(delSaveData == true && checkPointSave == false) {
 		// ---------------- DELETE SAVE DATA ----------------------
@@ -546,15 +535,6 @@ bool Scene::SaveState(pugi::xml_node& data) const
 		pNode.append_attribute("x") = initPosX;
 		pNode.append_attribute("y") = initPosY;
 		pNode.append_attribute("hp") = app->player->max_HP;
-
-		// =================================================
-		//				RESET ITEMS AND ENEMY
-		// =================================================
-		pugi::xml_node nNode = data.append_child("itemNum");
-		nNode.append_attribute("num").set_value(110);	// Put the exactly total items in scene
-
-		pugi::xml_node aNode = data.append_child("enemyNum");
-		aNode.append_attribute("num").set_value(10); // Put the exactly total enemies in scene 
 	}
 	else if (checkPointSave == true && delSaveData == false) {
 		// ---------------- CHECKPOINT SAVE DATA -----------------------------
@@ -563,11 +543,6 @@ bool Scene::SaveState(pugi::xml_node& data) const
 		pNode.append_attribute("x") = checkPos.x - 16;
 		pNode.append_attribute("y") = checkPos.y;
 		pNode.append_attribute("hp") = app->player->HP;
-
-		pugi::xml_node nNode = data.append_child("itemNum");
-		nNode.append_attribute("num").set_value(app->item->itemNum);
-		pugi::xml_node aNode = data.append_child("enemyNum");
-		aNode.append_attribute("num").set_value(app->enemy->enemyNum);
 	}
 	// ---------------- ITEM SAVE DATA -----------------------------
 	while (d != NULL) {
