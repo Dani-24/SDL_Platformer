@@ -320,9 +320,13 @@ void Physics::BeginContact(b2Contact* contact)
 		if (physA == app->player->playerBody && physB->type == "death") {
 
 			// Reaparecer en el último punto de guardado
-
-			app->LoadGameRequest();
-			app->audio->PlayFx(app->player->fallFx);
+			if (app->player->saved == true) {
+				app->LoadGameRequest();
+				app->audio->PlayFx(app->player->fallFx);
+			}
+			else {
+				app->player->death = true;
+			}
 		}
 	}
 

@@ -176,6 +176,7 @@ bool Scene::PreUpdate()
 	if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN) {
 		delSaveData = false;
 		checkPointSave = false;
+		app->player->saved = true;
 		app->SaveGameRequest();
 	}
 	if (app->input->GetKey(SDL_SCANCODE_6) == KEY_DOWN) {
@@ -359,6 +360,7 @@ bool Scene::PostUpdate()
 			// Save
 			delSaveData = false;
 			checkPointSave = true;
+			app->player->saved = true;
 			app->SaveGameRequest();
 		}
 	}

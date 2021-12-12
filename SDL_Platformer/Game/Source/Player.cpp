@@ -265,6 +265,7 @@ bool Player::Start()
 	speed = 2;
 	lowSpeed = 1;
 	HP = max_HP;
+	saved = false;
 
 	// Load assets
 	PlayerStartAnims();
@@ -501,7 +502,7 @@ bool Player::Update(float dt)
 						currentAnimation = &punchR;
 						Player_Dir = true;
 
-						hitTimeR = 30;
+						hitTimeR = 20;
 					}
 				}
 				else {
@@ -511,7 +512,7 @@ bool Player::Update(float dt)
 						currentAnimation = &punchL;
 						Player_Dir = false;
 
-						hitTimeL = 30;
+						hitTimeL = 20;
 					}
 				}
 			}

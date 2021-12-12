@@ -9,8 +9,8 @@
 	<sceneLogo />
 	<sceneTitle />
 	<scene>
-		<player x="32" y="1090" hp="3" />
-		<itemNum num="9" />
+		<player x="76" y="1093" hp="3" />
+		<itemNum num="27" />
 		<item type="1" x="560" y="1056" />
 		<item type="1" x="576" y="1056" />
 		<item type="1" x="592" y="1056" />
@@ -20,17 +20,17 @@
 		<item type="2" x="2688" y="336" />
 		<item type="3" x="1008" y="1152" />
 		<item type="3" x="2368" y="192" />
-		<enemyNum num="10" />
+		<enemyNum num="30" />
 		<enemy type="1" x="1200" y="959" />
 		<enemy type="1" x="1648" y="319" />
 		<enemy type="1" x="2143" y="96" />
 		<enemy type="1" x="2480" y="400" />
 		<enemy type="1" x="2880" y="912" />
-		<enemy type="0" x="639" y="1040" />
-		<enemy type="0" x="1711" y="79" />
-		<enemy type="0" x="1871" y="336" />
-		<enemy type="0" x="2176" y="1152" />
-		<enemy type="0" x="2864" y="496" />
+		<enemy type="0" x="639" y="1047" />
+		<enemy type="0" x="1711" y="103" />
+		<enemy type="0" x="1871" y="391" />
+		<enemy type="0" x="2176" y="1159" />
+		<enemy type="0" x="2864" y="519" />
 	</scene>
 	<map />
 	<player />
