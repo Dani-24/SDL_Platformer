@@ -43,6 +43,7 @@ struct Enemies {
 	bool alert = false;
 	bool lost = false;
 	int cont = 0;
+	bool dieAnim = false;
 };
 
 class Enemy : public Module

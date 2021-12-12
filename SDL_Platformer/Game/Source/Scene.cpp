@@ -41,6 +41,12 @@ bool Scene::Start()
 {
 	LOG("Start Scene and load assets");
 
+
+	// Delete Save data to disable checkpoint tp if replay the game
+	delSaveData = true;
+	checkPointSave = false;
+	app->SaveGameRequest();
+
 	// Player position for Scene 1
 	app->player->initPos.x = initPosX;
 	app->player->initPos.y = initPosY;
@@ -130,11 +136,6 @@ bool Scene::Start()
 	pathTexture = app->tex->Load("Assets/textures/path.png");
 	pathOriginTexture = app->tex->Load("Assets/textures/pathOrigin.png");
 	pathFx = app->audio->LoadFx("Assets/audio/fx/pathfx.wav");
-
-	// Delete Save data to disable checkpoint tp if replay the game
-	delSaveData = true;
-	checkPointSave = false;
-	app->SaveGameRequest();
 
 	LOG("Spawn player at X = %d Y = %d", initPosX, initPosY);
 

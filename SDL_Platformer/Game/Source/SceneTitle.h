@@ -14,22 +14,13 @@ public:
 	// Destructor
 	virtual ~SceneTitle();
 
-	// Called before render is available
 	bool Awake();
-
-	// Called before the first frame
 	bool Start();
 
-	// Called before all Updates
 	bool PreUpdate();
-
-	// Called each loop iteration
 	bool Update(float dt);
-
-	// Called before all Updates
 	bool PostUpdate();
 
-	// Called before quitting
 	bool CleanUp();
 
 private:
@@ -50,6 +41,8 @@ private:
 	int enemyFlyX = 700, enemyAngle = 0; 
 
 	uint fxEnter;
+
+	float scrollVelocity;
 
 };
 
