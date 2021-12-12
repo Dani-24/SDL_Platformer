@@ -39,8 +39,10 @@ public:
 	bool win = false;
 	int HP, hpCheck, max_HP = 3;
 	PhysBody* playerBody;
+	PhysBody* attackSensorLeft;
+	PhysBody* attackSensorRight;
 
-	bool canJump;
+	bool canJump, attackL, attackR;
 	int velY;
 
 	uint fallFx = 0;

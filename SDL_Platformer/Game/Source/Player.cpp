@@ -276,8 +276,34 @@ bool Player::Start()
 	//playerBody = app->physics->CreateRectangle(position.x, position.y, 26, 26);
 	playerBody = app->physics->CreateChain(position.x, position.y, playerChain, 16);
 
+	//attack collider
+	attackSensorLeft = app->physics->CreateRectangleSensor(position.x, position.y, 32, 32);
+	attackSensorRight = app->physics->CreateRectangleSensor(position.x, position.y, 32, 32);
+
 	playerBody->body->SetType(b2_dynamicBody);
 	playerBody->body->SetFixedRotation(true);
+
+	attackSensorLeft->body->SetType(b2_dynamicBody);
+	attackSensorLeft->body->SetFixedRotation(true);
+
+	attackSensorRight->body->SetType(b2_dynamicBody);
+	attackSensorRight->body->SetFixedRotation(true);
+
+	b2WeldJointDef LeftWeldJointDef;
+	LeftWeldJointDef.bodyA = playerBody->body;
+	LeftWeldJointDef.bodyB = attackSensorLeft->body;
+	LeftWeldJointDef.localAnchorA.Set(0, 0.3);
+	LeftWeldJointDef.localAnchorB.Set(0, 0);
+
+	b2WeldJoint* LeftWeldJoint = (b2WeldJoint*)app->physics->world->CreateJoint(&LeftWeldJointDef);
+
+	b2WeldJointDef RightWeldJointDef;
+	RightWeldJointDef.bodyA = playerBody->body;
+	RightWeldJointDef.bodyB = attackSensorRight->body;
+	RightWeldJointDef.localAnchorA.Set(0.6, 0.3);
+	RightWeldJointDef.localAnchorB.Set(0, 0);
+
+	b2WeldJoint* RightWeldJoint = (b2WeldJoint*)app->physics->world->CreateJoint(&RightWeldJointDef);
 
 	// Texture & Animation
 	playerSprite = app->tex->Load("Assets/textures/player.png");
@@ -484,6 +510,18 @@ bool Player::Update(float dt)
 						Player_Dir = false;
 					}
 				}
+			}
+
+			if (currentAnimation == &punchR )
+			{
+				attackR = true;
+			}
+			if (currentAnimation == &punchL){
+				attackL = true;
+			}
+			else {
+				attackR = false;
+				attackL = false;
 			}
 		}
 		else {

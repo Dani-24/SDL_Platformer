@@ -334,6 +334,14 @@ void Physics::BeginContact(b2Contact* contact)
 			LOG("Enemy fall from map");
 			c->data->death = true;
 		}
+		if (physA == c->data->collider && physB == app->player->attackSensorLeft && app->player->attackL == true) {
+			LOG("Enemy killed");
+			c->data->death = true;
+		}
+		if (physA == c->data->collider && physB == app->player->attackSensorRight && app->player->attackR == true) {
+			LOG("Enemy killed");
+			c->data->death = true;
+		}
 		c = c->next;
 	}
 
