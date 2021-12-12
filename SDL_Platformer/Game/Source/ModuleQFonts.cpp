@@ -4,6 +4,8 @@
 #include "Render.h"
 #include "Textures.h"
 
+// This module will be used for HUD and menus
+
 ModuleQFonts::ModuleQFonts(App* application, bool start_enabled) : Module(application, start_enabled)
 {
 	name.Create("fonts");
@@ -52,7 +54,7 @@ void ModuleQFonts::RenderText(const char* textToRender, int x, int y, Uint8 r , 
 	color = { r,g,b };
 
 	// Create the text on surface
-	if (!(fontSurface = TTF_RenderText_Blended(font, textToRender, color))) {	// Blended sale menos pixelado q Solid
+	if (!(fontSurface = TTF_RenderText_Blended(font, textToRender, color))) {	// Blended means more quality than Solid
 		LOG("Error Rendering Text || TTF_OpenFont: %s", TTF_GetError());
 	}
 	else {
