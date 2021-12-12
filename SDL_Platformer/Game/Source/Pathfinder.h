@@ -10,12 +10,15 @@
 #define DEFAULT_PATH_LENGTH 50
 #define INVALID_WALK_CODE 255
 
+struct SDL_Texture;
+
 class Pathfinder : public Module
 {
 public:
 
 	Pathfinder(App* application, bool start_enabled);
 	~Pathfinder();
+	bool Start();
 	bool CleanUp();
 
 	// Sets up the walkability map
@@ -35,6 +38,9 @@ public:
 
 	// Utility: return the walkability value of a tile
 	uchar GetTileAt(const iPoint& pos) const;
+
+	// Path textures
+	SDL_Texture* pathTexture,* pathOriginTexture;
 
 private:
 

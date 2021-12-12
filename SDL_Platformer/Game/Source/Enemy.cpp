@@ -10,6 +10,7 @@
 #include "Physics.h"
 #include "Player.h"
 #include "Map.h"
+#include "Pathfinder.h"
 
 Enemy::Enemy(App* application, bool start_enabled) : Module(application, start_enabled)
 {
@@ -80,7 +81,7 @@ bool Enemy::AddEnemy(int x, int y, int type) {
 	thisEnemy->death = false;
 	thisEnemy->position.x = x;
 	thisEnemy->position.y = y;
-	thisEnemy->speed = 0.02f;
+	thisEnemy->speed = 0.01f;
 	thisEnemy->dir = false;
 	thisEnemy->playDetectFx = false;
 	thisEnemy->body = app->physics->CreateChain(x, y, enemyChain, 16);
@@ -176,7 +177,17 @@ bool Enemy::Update(float dt) {
 						c->data->alert = true;
 						c->data->lost = false;
 					}
-					// Chase player
+
+					// ----------- Chase player --------------
+
+					// Pathfinding
+					iPoint origin = app->map->WorldToMap(c->data->position.x, c->data->position.y);
+					iPoint destination = app->map->WorldToMap(app->player->position.x, app->player->position.y);
+
+					int a = app->pathfinder->CreatePath(origin, destination);
+
+					//LOG("%d", a);
+
 					int vel = METERS_TO_PIXELS(c->data->body->body->GetLinearVelocity().x);	 // limit velocity
 
 					if (-limitVel < vel && vel < limitVel) {
@@ -224,7 +235,14 @@ bool Enemy::Update(float dt) {
 						c->data->alert = true;
 						c->data->lost = false;
 					}
+
 					// ----------- Chase player --------------
+
+					// Pathfinding
+					iPoint origin = app->map->WorldToMap(c->data->position.x, c->data->position.y);
+					iPoint destination = app->map->WorldToMap(app->player->position.x, app->player->position.y);
+
+					int a = app->pathfinder->CreatePath(origin, destination);
 
 					// limit velocity
 					iPoint vel;
@@ -342,7 +360,11 @@ bool Enemy::PostUpdate() {
 
 	if (app->player->death != true && app->player->win != true) {
 		ListItem<Enemies*>* c = enemies.start;
+
 		while (c != NULL) {
+			// ======================================================
+			//                    Draw enemies
+			// ======================================================
 			SDL_Rect rect;
 			if (c->data->death != true) {
 				rect = c->data->currentAnimation->GetCurrentFrame();
@@ -359,9 +381,29 @@ bool Enemy::PostUpdate() {
 				rect = c->data->animDieL.GetCurrentFrame();
 			}
 			app->render->DrawTexture(c->data->sprite, c->data->position.x - 5, c->data->position.y - 5, &rect);
+			
+			// ======================================================
+			//                  Pathfinding Debug
+			// ======================================================
+			if (app->physics->debug == true) {
+
+				const DynArray<iPoint>* path = app->pathfinder->GetLastPath();
+
+				for (uint i = 0; i < path->Count(); ++i)
+				{
+					iPoint pos = app->map->MapToWorld(path->At(i)->x, path->At(i)->y);
+					app->render->DrawTexture(app->pathfinder->pathTexture, pos.x, pos.y);
+				}
+
+				iPoint originScreen = app->map->MapToWorld(c->data->position.x, c->data->position.y);
+				app->render->DrawTexture(app->pathfinder->pathOriginTexture, originScreen.x, originScreen.y);
+			}
+			
+			
 			c = c->next;
 		}
 	}
+
 	return true;
 }
 

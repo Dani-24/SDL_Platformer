@@ -476,8 +476,9 @@ bool Map::CreateWalkabilityMap(int& width, int& height, uchar** buffer) const
 	{
 		MapLayer* layer = item->data;
 
-		if (layer->properties.GetProperty("Navigation", 0) == 0)
+		if (layer->properties.GetProperty("Navigation", 0) == 0) {
 			continue;
+		}
 
 		uchar* map = new uchar[layer->width * layer->height];
 		memset(map, 1, layer->width * layer->height);

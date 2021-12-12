@@ -28,18 +28,19 @@
 struct SDL_Texture;
 
 struct Enemies {
-
+	// Textures and body
 	SDL_Texture* sprite;
 	PhysBody* body, *collider;
-	int type;
+	int type;	// default or fly
 	iPoint position;
-
-	bool death, dir, playDetectFx;
 	float speed;
 
+	// Animations
 	Animation animRunL, animRunR, animDieL, animDieR;
 	Animation* currentAnimation = nullptr;
 
+	// Variables
+	bool death, dir, playDetectFx;
 	bool alert = false;
 	bool lost = false;
 	int cont = 0;

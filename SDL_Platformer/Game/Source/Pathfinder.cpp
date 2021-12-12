@@ -1,6 +1,6 @@
 #include "App.h"
 #include "Pathfinder.h"
-
+#include "Textures.h"
 #include "Defs.h"
 #include "Log.h"
 
@@ -15,6 +15,12 @@ Pathfinder::~Pathfinder()
 	RELEASE_ARRAY(map);
 }
 
+bool Pathfinder::Start() {
+
+	pathTexture = app->tex->Load("Assets/textures/path.png");
+	pathOriginTexture = app->tex->Load("Assets/textures/pathOrigin.png");
+	return true;
+}
 // Called before quitting
 bool Pathfinder::CleanUp()
 {
@@ -22,6 +28,9 @@ bool Pathfinder::CleanUp()
 
 	lastPath.Clear();
 	RELEASE_ARRAY(map);
+
+	app->tex->UnLoad(pathTexture);
+	app->tex->UnLoad(pathOriginTexture);
 
 	return true;
 }
@@ -172,10 +181,10 @@ int Pathfinder::CreatePath(const iPoint& origin, const iPoint& destination)
 	int ret = -1;
 	int iterations = 0;
 
-	// L12b: TODO 1: if origin or destination are not walkable, return -1
+	// if origin or destination are not walkable, return -1
 	if (IsWalkable(origin) && IsWalkable(destination))
 	{
-		// L12b: TODO 2: Create two lists: open, close
+		//Create two lists: open, close
 		PathList open;
 		PathList closed;
 
@@ -185,12 +194,12 @@ int Pathfinder::CreatePath(const iPoint& origin, const iPoint& destination)
 		// Iterate while we have tile in the open list
 		while (open.list.count() > 0)
 		{
-			// L12b: TODO 3: Move the lowest score cell from open list to the closed list
+			// Move the lowest score cell from open list to the closed list
 			ListItem<PathNode>* lowest = open.GetNodeLowestScore();
 			ListItem<PathNode>* node = closed.list.add(lowest->data);
 			open.list.del(lowest);
 
-			// L12b: TODO 4: If we just added the destination, we are done!
+			// If we just added the destination, we are done!
 			if (node->data.pos == destination)
 			{
 				lastPath.Clear();
@@ -211,11 +220,11 @@ int Pathfinder::CreatePath(const iPoint& origin, const iPoint& destination)
 				break;
 			}
 
-			// L12b: TODO 5: Fill a list of all adjancent nodes
+			// Fill a list of all adjancent nodes
 			PathList adjacent;
 			node->data.FindWalkableAdjacents(adjacent);
 
-			// L12b: TODO 6: Iterate adjancent nodes:
+			// Iterate adjancent nodes:
 			// If it is a better path, Update the parent
 			ListItem<PathNode>* item = adjacent.list.start;
 			for (; item; item = item->next)

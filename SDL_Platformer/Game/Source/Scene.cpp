@@ -131,10 +131,6 @@ bool Scene::Start()
 		}
 		RELEASE_ARRAY(data);
 	}
-
-	// Pathfinding textures:
-	pathTexture = app->tex->Load("Assets/textures/path.png");
-	pathOriginTexture = app->tex->Load("Assets/textures/pathOrigin.png");
 	pathFx = app->audio->LoadFx("Assets/audio/fx/pathfx.wav");
 
 	LOG("Spawn player at X = %d Y = %d", initPosX, initPosY);
@@ -384,18 +380,18 @@ bool Scene::PostUpdate()
 		p = app->map->WorldToMap(p.x, p.y);
 		p = app->map->MapToWorld(p.x, p.y);
 
-		app->render->DrawTexture(pathTexture, p.x, p.y);
+		app->render->DrawTexture(app->pathfinder->pathTexture, p.x, p.y);
 
 		const DynArray<iPoint>* path = app->pathfinder->GetLastPath();
 
 		for (uint i = 0; i < path->Count(); ++i)
 		{
 			iPoint pos = app->map->MapToWorld(path->At(i)->x, path->At(i)->y);
-			app->render->DrawTexture(pathTexture, pos.x, pos.y);
+			app->render->DrawTexture(app->pathfinder->pathTexture, pos.x, pos.y);
 		}
 
 		iPoint originScreen = app->map->MapToWorld(originPos.x, originPos.y);
-		app->render->DrawTexture(pathOriginTexture, originScreen.x, originScreen.y);
+		app->render->DrawTexture(app->pathfinder->pathOriginTexture, originScreen.x, originScreen.y);
 	}
 
 	// =========================================

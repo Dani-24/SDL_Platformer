@@ -80,7 +80,6 @@ private:
 	bool delSaveData = false, checkPointSave = false;
 
 	// Pathfinding
-	SDL_Texture* pathTexture, * pathOriginTexture;
 	iPoint originPos;
 	bool originSelected = false;
 	uint pathFx;
