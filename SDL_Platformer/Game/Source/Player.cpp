@@ -292,7 +292,7 @@ bool Player::Start()
 	b2WeldJointDef LeftWeldJointDef;
 	LeftWeldJointDef.bodyA = playerBody->body;
 	LeftWeldJointDef.bodyB = attackSensorLeft->body;
-	LeftWeldJointDef.localAnchorA.Set(-0.4, 0.3);
+	LeftWeldJointDef.localAnchorA.Set(-0.2, 0.3);
 	LeftWeldJointDef.localAnchorB.Set(0, 0);
 
 	b2WeldJoint* LeftWeldJoint = (b2WeldJoint*)app->physics->world->CreateJoint(&LeftWeldJointDef);
@@ -300,7 +300,7 @@ bool Player::Start()
 	b2WeldJointDef RightWeldJointDef;
 	RightWeldJointDef.bodyA = playerBody->body;
 	RightWeldJointDef.bodyB = attackSensorRight->body;
-	RightWeldJointDef.localAnchorA.Set(0.9, 0.3);
+	RightWeldJointDef.localAnchorA.Set(0.7, 0.3);
 	RightWeldJointDef.localAnchorB.Set(0, 0);
 
 	b2WeldJoint* RightWeldJoint = (b2WeldJoint*)app->physics->world->CreateJoint(&RightWeldJointDef);
