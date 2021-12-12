@@ -463,7 +463,7 @@ bool Player::Update(float dt)
 			// ------------------ JUMP -----------------
 			if (canJump == true && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) 
 			{
-				playerBody->body->ApplyForceToCenter(b2Vec2(0, -325), 1);
+				playerBody->body->ApplyForceToCenter(b2Vec2(0, -355), 1);
 
 				if (Player_Dir == true) {
 					if (currentAnimation != &jumpR)
