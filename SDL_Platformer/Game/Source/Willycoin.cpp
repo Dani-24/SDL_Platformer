@@ -322,5 +322,17 @@ bool Item::CleanUp() {
 	coinFlash.DeleteAnim();
 	coinIdle.DeleteAnim();
 	coinSpin.DeleteAnim();
+	lollipop.DeleteAnim(); 
+	candy.DeleteAnim();
+	chocolate.DeleteAnim();
+	can.DeleteAnim();
+	iceCream1.DeleteAnim();
+	iceCream2.DeleteAnim();
+	cherry.DeleteAnim();
+	banana.DeleteAnim();
+	strawberry.DeleteAnim();
+	apple.DeleteAnim();
+	orange.DeleteAnim();
+
 	return true;
 }

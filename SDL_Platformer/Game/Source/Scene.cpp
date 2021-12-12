@@ -41,7 +41,6 @@ bool Scene::Start()
 {
 	LOG("Start Scene and load assets");
 
-
 	// Delete Save data to disable checkpoint tp if replay the game
 	delSaveData = true;
 	checkPointSave = false;
@@ -460,6 +459,9 @@ bool Scene::CleanUp()
 	// Reset Variables
 	cont = w = h = playerPosForScroll = checkPfx = pathFx = 0;
 	loadEgg = delSaveData = checkPointSave = checked = checkfxPlayed = false;
+	for (int a = 0; a < Scroller; a++) {
+		forestX[a] = hillsX[a] = cloudsDownX[a] = cloudsUpX[a] = NULL;
+	}
 
 	return true;
 }

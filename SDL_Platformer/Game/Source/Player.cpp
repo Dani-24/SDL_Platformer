@@ -753,6 +753,7 @@ bool Player::CleanUp() {
 	// Textures
 	app->tex->UnLoad(playerSprite);
 	app->tex->UnLoad(livesSprite);
+	app->tex->UnLoad(cooldownTex);
 
 	// Physbody
 	app->physics->world->DestroyBody(playerBody->body);
