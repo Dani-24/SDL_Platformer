@@ -102,6 +102,9 @@ bool Enemy::AddEnemy(int x, int y, int type) {
 	}
 	else if (type == 1) {
 		thisEnemy->sprite = enemyFlySprite;
+
+		// Allow fly
+		thisEnemy->body->body->SetGravityScale(0);
 	}
 	else {
 		LOG("Error at creating enemy. Type : %s don't exist", type);

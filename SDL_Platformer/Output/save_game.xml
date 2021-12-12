@@ -10,7 +10,7 @@
 	<sceneTitle />
 	<scene>
 		<player x="32" y="1090" hp="3" />
-		<itemNum num="14" />
+		<itemNum num="9" />
 		<item type="1" x="560" y="1056" />
 		<item type="1" x="576" y="1056" />
 		<item type="1" x="592" y="1056" />
@@ -20,7 +20,7 @@
 		<item type="2" x="2688" y="336" />
 		<item type="3" x="1008" y="1152" />
 		<item type="3" x="2368" y="192" />
-		<enemyNum num="19" />
+		<enemyNum num="10" />
 		<enemy type="1" x="1200" y="959" />
 		<enemy type="1" x="1648" y="319" />
 		<enemy type="1" x="2143" y="96" />

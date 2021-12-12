@@ -199,6 +199,7 @@ bool Scene::PreUpdate()
 
 	// ================== Win ====================
 	if (app->player->win == true) {
+		app->physics->pause;
 		app->fade->StartFadeToBlack(this, (Module*)app->sceneTitle, 60);
 	}
 
