@@ -29,6 +29,8 @@ We are MacacoSerapios, a pair of students from CITM, leads of Macacos and Serapi
 ## Controls
 
     - WASD for movement
+    
+    - SHIFT for walk
 
     - SPACE for jump
     
@@ -47,8 +49,10 @@ We are MacacoSerapios, a pair of students from CITM, leads of Macacos and Serapi
     - F9 Debug Mode
       - View colliders / logic / paths
       - 1 Create Default Enemy
-      - 2 Create Coin
-      - 3 Create Fly Enemy
+      - 2 Create Fly Enemy
+      - 3 Create Coin
+      - 4 Create WillyCoin (special coin)
+      - 5 Create Food
 
     - F10 God Mode (fly around, cannot be killed)
     
