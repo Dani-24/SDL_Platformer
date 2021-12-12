@@ -231,7 +231,13 @@ bool Item::Update(float dt) {
 					}
 					c->data->cont = 0;
 				}
-				c->data->currentAnimation->Update();
+				if (app->getDeltaTime() < 20) {
+					c->data->currentAnimation->Update();
+				}
+				else {
+					c->data->currentAnimation->Update();
+					c->data->currentAnimation->Update();
+				}
 				c->data->cont += 1;
 				c = c->next;
 

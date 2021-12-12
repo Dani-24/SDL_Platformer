@@ -259,8 +259,8 @@ void App::setFrameRateCap() {
 	}
 }
 
-float App::getFrameRate() {
-	return framesPerSecond;
+float App::getDeltaTime() {
+	return dt;
 }
 
 // Call modules before each loop iteration

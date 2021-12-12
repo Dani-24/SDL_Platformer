@@ -262,8 +262,8 @@ bool Player::Start()
 	bool ret = true;
 
 	// Inicializar variables
-	speed = 2;
-	lowSpeed = 1;
+	speed = 0.05f;
+	lowSpeed = 0.01f;
 	HP = max_HP;
 	saved = false;
 
@@ -395,7 +395,7 @@ bool Player::Update(float dt)
 					// --- walk ---
 					if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
 						if (currentVel < velSlowMax && currentVel > -velSlowMax) {
-							playerBody->body->ApplyLinearImpulse(b2Vec2(0.05f, 0), b2Vec2(0, 0), 1);
+							playerBody->body->ApplyLinearImpulse(b2Vec2(speed * dt, 0), b2Vec2(0, 0), 1);
 
 							if (currentAnimation != &walkR)
 							{
@@ -405,12 +405,12 @@ bool Player::Update(float dt)
 							}
 						}
 						else {
-							playerBody->body->ApplyLinearImpulse(b2Vec2(-0.2f, 0), b2Vec2(0, 0), 1);
+							playerBody->body->ApplyLinearImpulse(b2Vec2(-lowSpeed * dt, 0), b2Vec2(0, 0), 1);
 						}
 					}
 					else {
 						// --- Run ---	
-						playerBody->body->ApplyLinearImpulse(b2Vec2(0.2f, 0), b2Vec2(0, 0), 1);
+						playerBody->body->ApplyLinearImpulse(b2Vec2(lowSpeed * dt, 0), b2Vec2(0, 0), 1);
 
 						if (currentAnimation != &runR)
 						{
@@ -426,7 +426,7 @@ bool Player::Update(float dt)
 					if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
 
 						if (currentVel < velSlowMax && currentVel > -velSlowMax) {
-							playerBody->body->ApplyLinearImpulse(b2Vec2(-0.05f, 0), b2Vec2(0, 0), 1);
+							playerBody->body->ApplyLinearImpulse(b2Vec2(-speed * dt, 0), b2Vec2(0, 0), 1);
 
 							if (currentAnimation != &walkL)
 							{
@@ -436,12 +436,12 @@ bool Player::Update(float dt)
 							}
 						}
 						else {
-							playerBody->body->ApplyLinearImpulse(b2Vec2(0.2f, 0), b2Vec2(0, 0), 1);
+							playerBody->body->ApplyLinearImpulse(b2Vec2(lowSpeed * dt, 0), b2Vec2(0, 0), 1);
 						}
 					} // --- He run ---
 					else {
 
-						playerBody->body->ApplyLinearImpulse(b2Vec2(-0.2f, 0), b2Vec2(0, 0), 1);
+						playerBody->body->ApplyLinearImpulse(b2Vec2(-lowSpeed * dt, 0), b2Vec2(0, 0), 1);
 
 						if (currentAnimation != &runL)
 						{
@@ -454,17 +454,22 @@ bool Player::Update(float dt)
 				else {
 					// ------------------------ FRICTION When stop moving --------------------------------
 					if (currentVel > 3) {
-						playerBody->body->ApplyLinearImpulse(b2Vec2(-0.4f, 0), b2Vec2(0, 0), 1);
+						playerBody->body->ApplyLinearImpulse(b2Vec2(-speed * 0.5f * dt, 0), b2Vec2(0, 0), 1);
 					}
 					else if (currentVel < -16) {
-						playerBody->body->ApplyLinearImpulse(b2Vec2(0.4f, 0), b2Vec2(0, 0), 1);
+						playerBody->body->ApplyLinearImpulse(b2Vec2(speed * 0.5f* dt, 0), b2Vec2(0, 0), 1);
 					}
 				}
 			}
 			// ------------------ JUMP -----------------
 			if (canJump == true && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) 
 			{
-				playerBody->body->ApplyForceToCenter(b2Vec2(0, -355), 1);
+				if (dt < 20) {
+					playerBody->body->ApplyForceToCenter(b2Vec2(0, -355), 1);
+				}
+				else {
+					playerBody->body->ApplyForceToCenter(b2Vec2(0, -180), 1);
+				}
 
 				if (Player_Dir == true) {
 					if (currentAnimation != &jumpR)
@@ -484,10 +489,10 @@ bool Player::Update(float dt)
 			else {
 				// Allow move when jumping / falling
 				if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && Player_Dir == true) {
-					playerBody->body->ApplyLinearImpulse(b2Vec2(-0.4f, 0), b2Vec2(0, 0), 1);
+					playerBody->body->ApplyLinearImpulse(b2Vec2(-speed * 0.07f * dt, 0), b2Vec2(0, 0), 1);
 				}
 				if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT && Player_Dir == false) {
-					playerBody->body->ApplyLinearImpulse(b2Vec2(0.4f, 0), b2Vec2(0, 0), 1);
+					playerBody->body->ApplyLinearImpulse(b2Vec2(speed * 0.07f * dt, 0), b2Vec2(0, 0), 1);
 				}
 			}
 
@@ -661,7 +666,13 @@ bool Player::PostUpdate() {
 	}
 
 	// Update Animation each frame
-	currentAnimation->Update();
+	if (app->getDeltaTime() > 20) {
+		currentAnimation->Update();
+		currentAnimation->Update();
+	}
+	else {
+		currentAnimation->Update();
+	}
 
 	// --- Draw Player ---
 	SDL_Rect rect = currentAnimation->GetCurrentFrame();
