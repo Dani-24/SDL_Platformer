@@ -533,6 +533,11 @@ bool Scene::SaveState(pugi::xml_node& data) const
 		pNode.append_attribute("x") = app->player->position.x;
 		pNode.append_attribute("y") = app->player->position.y;
 		pNode.append_attribute("hp") = app->player->HP;
+
+		pugi::xml_node nNode = data.append_child("itemNum");
+		nNode.append_attribute("num").set_value(app->item->itemNum);
+		pugi::xml_node aNode = data.append_child("enemyNum");
+		aNode.append_attribute("num").set_value(app->enemy->enemyNum);
 	}
 	else if(delSaveData == true && checkPointSave == false) {
 		// ---------------- DELETE SAVE DATA ----------------------
@@ -541,6 +546,15 @@ bool Scene::SaveState(pugi::xml_node& data) const
 		pNode.append_attribute("x") = initPosX;
 		pNode.append_attribute("y") = initPosY;
 		pNode.append_attribute("hp") = app->player->max_HP;
+
+		// =================================================
+		//				RESET ITEMS AND ENEMY
+		// =================================================
+		pugi::xml_node nNode = data.append_child("itemNum");
+		nNode.append_attribute("num").set_value(9);	// Put the exactly total items in scene
+
+		pugi::xml_node aNode = data.append_child("enemyNum");
+		aNode.append_attribute("num").set_value(10); // Put the exactly total enemies in scene 
 	}
 	else if (checkPointSave == true && delSaveData == false) {
 		// ---------------- CHECKPOINT SAVE DATA -----------------------------
@@ -549,10 +563,13 @@ bool Scene::SaveState(pugi::xml_node& data) const
 		pNode.append_attribute("x") = checkPos.x - 16;
 		pNode.append_attribute("y") = checkPos.y;
 		pNode.append_attribute("hp") = app->player->HP;
+
+		pugi::xml_node nNode = data.append_child("itemNum");
+		nNode.append_attribute("num").set_value(app->item->itemNum);
+		pugi::xml_node aNode = data.append_child("enemyNum");
+		aNode.append_attribute("num").set_value(app->enemy->enemyNum);
 	}
 	// ---------------- ITEM SAVE DATA -----------------------------
-	pugi::xml_node nNode = data.append_child("itemNum");
-	nNode.append_attribute("num").set_value(app->item->itemNum);
 	while (d != NULL) {
 		pugi::xml_node iNode = data.append_child("item");
 		iNode.append_attribute("type") = d->data->type;
@@ -562,8 +579,6 @@ bool Scene::SaveState(pugi::xml_node& data) const
 		
 	}
 	// ---------------- ENEMY SAVE DATA -----------------------------
-	pugi::xml_node aNode = data.append_child("enemyNum");
-	aNode.append_attribute("num").set_value(app->enemy->enemyNum);
 	while (c != NULL) {
 		pugi::xml_node aNode = data.append_child("enemy");
 		aNode.append_attribute("type") = c->data->type;

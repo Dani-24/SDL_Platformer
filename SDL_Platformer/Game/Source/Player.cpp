@@ -745,6 +745,9 @@ bool Player::CleanUp() {
 	// Physbody
 	app->physics->world->DestroyBody(playerBody->body);
 
+	app->physics->world->DestroyBody(attackSensorLeft->body);
+	app->physics->world->DestroyBody(attackSensorRight->body);
+
 	// Reset variables
 
 	currentVel = velY = position.x = position.y = initPos.x = initPos.y = NULL;
