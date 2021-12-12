@@ -45,6 +45,8 @@ We are MacacoSerapios, a pair of students from CITM, leads of Macacos and Serapi
     - F5 Save the current game state
 
     - F6 Load the previous state (even across levels)
+    
+    - 6  Reset Save data
 
     - F9 Debug Mode
       - View colliders / logic / paths

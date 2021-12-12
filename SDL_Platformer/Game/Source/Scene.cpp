@@ -241,8 +241,18 @@ bool Scene::Update(float dt)
 		}
 	}
 
-	// --------------- Go back to title --------------------
+	// --------------- Go to 1st level --------------------
 	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN) {
+		app->fade->StartFadeToBlack(this, (Module*)app->scene, 10);
+	}
+
+	// --------------- Go to 2nd level -------------------- (there isn't 2nd lvl yet)
+	/*if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN) {
+		app->fade->StartFadeToBlack(this, (Module*)app->sceneLevel2, 10);
+	}*/
+
+	// --------------- Start from the beginning of the current level -------------------- 
+	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN) {
 		app->fade->StartFadeToBlack(this, (Module*)app->scene, 10);
 	}
 
