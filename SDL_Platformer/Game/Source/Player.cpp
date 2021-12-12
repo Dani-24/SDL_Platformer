@@ -273,12 +273,12 @@ bool Player::Start()
 	position.x = initPos.x;
 	position.y = initPos.y;
 		
-	//playerBody = app->physics->CreateRectangle(position.x, position.y, 26, 26);
+	// Player physbody
 	playerBody = app->physics->CreateChain(position.x, position.y, playerChain, 16);
 
 	//attack collider
-	attackSensorLeft = app->physics->CreateRectangleSensor(position.x, position.y, 32, 32);
-	attackSensorRight = app->physics->CreateRectangleSensor(position.x, position.y, 32, 32);
+	attackSensorLeft = app->physics->CreateRectangleSensor(position.x, position.y, 16, 16);
+	attackSensorRight = app->physics->CreateRectangleSensor(position.x, position.y, 16, 16);
 
 	playerBody->body->SetType(b2_dynamicBody);
 	playerBody->body->SetFixedRotation(true);
@@ -292,7 +292,7 @@ bool Player::Start()
 	b2WeldJointDef LeftWeldJointDef;
 	LeftWeldJointDef.bodyA = playerBody->body;
 	LeftWeldJointDef.bodyB = attackSensorLeft->body;
-	LeftWeldJointDef.localAnchorA.Set(0, 0.3);
+	LeftWeldJointDef.localAnchorA.Set(-0.4, 0.3);
 	LeftWeldJointDef.localAnchorB.Set(0, 0);
 
 	b2WeldJoint* LeftWeldJoint = (b2WeldJoint*)app->physics->world->CreateJoint(&LeftWeldJointDef);
@@ -300,7 +300,7 @@ bool Player::Start()
 	b2WeldJointDef RightWeldJointDef;
 	RightWeldJointDef.bodyA = playerBody->body;
 	RightWeldJointDef.bodyB = attackSensorRight->body;
-	RightWeldJointDef.localAnchorA.Set(0.6, 0.3);
+	RightWeldJointDef.localAnchorA.Set(0.9, 0.3);
 	RightWeldJointDef.localAnchorB.Set(0, 0);
 
 	b2WeldJoint* RightWeldJoint = (b2WeldJoint*)app->physics->world->CreateJoint(&RightWeldJointDef);
@@ -500,6 +500,8 @@ bool Player::Update(float dt)
 						punchR.Reset();
 						currentAnimation = &punchR;
 						Player_Dir = true;
+
+						hitTimeR = 30;
 					}
 				}
 				else {
@@ -508,16 +510,22 @@ bool Player::Update(float dt)
 						punchL.Reset();
 						currentAnimation = &punchL;
 						Player_Dir = false;
+
+						hitTimeL = 30;
 					}
 				}
 			}
 
-			if (currentAnimation == &punchR )
+			//LOG("R %d L %d", hitTimeR, hitTimeL);
+
+			if (hitTimeR > 0 )
 			{
 				attackR = true;
+				hitTimeR--;
 			}
-			if (currentAnimation == &punchL){
+			else if (hitTimeL > 0){
 				attackL = true;
+				hitTimeL--;
 			}
 			else {
 				attackR = false;

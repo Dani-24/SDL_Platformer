@@ -72,6 +72,8 @@ private:
 
 	bool Player_Dir;
 
+	int hitTimeR = 0, hitTimeL = 0;
+
 	// The player spritesheet loaded into an SDL_Texture
 	SDL_Texture* playerSprite = nullptr;
 
