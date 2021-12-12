@@ -211,7 +211,7 @@ bool Scene::PreUpdate()
 bool Scene::Update(float dt)
 {
 	// EasterEGG()
-	if (app->input->GetKey(SDL_SCANCODE_5) == KEY_UP) {
+	if (app->input->GetKey(SDL_SCANCODE_7) == KEY_UP) {
 		easterEgg = !easterEgg;
 		EasterEgg();
 	}

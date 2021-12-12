@@ -132,7 +132,7 @@ bool Enemy::PreUpdate() {
 			// Multiply per 16 as tiles widht and height are 16 pixels
 			AddEnemy(p.x * 16, p.y * 16, 0);
 		}
-		if (app->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
+		if (app->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
 		{
 			// Get mouse position
 			int x, y;
