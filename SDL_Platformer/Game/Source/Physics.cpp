@@ -50,9 +50,14 @@ bool Physics::PreUpdate() {
 	if (pause != true) {
 		
 		// Physics framerate:
-		
+		dt = app->getDeltaTime();
 
-		world->Step(1.0f / 60.0f, 6, 2);
+		if (dt > 20) {
+			world->Step(1.0f / 30.0f, 6, 2);
+		}
+		else {
+			world->Step(1.0f / 60.0f, 6, 2);
+		}
 
 		for (b2Contact* c = world->GetContactList(); c; c = c->GetNext())
 		{

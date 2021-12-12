@@ -68,7 +68,7 @@ public:
 
 	void setFrameRateCap();
 
-	float getFrameRate();
+	float getDeltaTime();
 
 private:
 

@@ -78,6 +78,8 @@ private:
 	b2MouseJoint* mouse_joint;
 	b2Body* mouse_body;
 
+	float dt;
+
 public:
 	int playerDieCooldown = 0, fallCont = 0, healthCont = 0;
 };
