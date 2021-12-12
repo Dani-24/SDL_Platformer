@@ -45,12 +45,12 @@ bool Enemy::Start() {
 	animDieL.PushBack({ 50, 150, 50, 50});
 	animDieL.PushBack({ 0, 150, 50, 50 });
 	animDieL.loop = false;
-	animDieL.speed = 0.1f;
+	animDieL.speed = 0.05f;
 
 	animDieR.PushBack({ 100, 50, 50, 50 });
 	animDieR.PushBack({ 150, 50, 50, 50 });
 	animDieR.loop = false;
-	animDieR.speed = 0.1f;
+	animDieR.speed = 0.05f;
 
 	animRunR.PushBack({ 0, 0, 50, 50 });
 	animRunR.PushBack({ 50, 0, 50, 50 });
@@ -163,50 +163,122 @@ bool Enemy::Update(float dt) {
 			// Detect player
 			int chaseDistance = 200, limitVel = 100;
 
-			if (app->player->position.x - c->data->position.x < chaseDistance && app->player->position.x - c->data->position.x > -chaseDistance && app->player->position.y - c->data->position.y < chaseDistance / 4 && app->player->position.y - c->data->position.y > -chaseDistance / 2) {
-				// Play sfx
-				if (c->data->playDetectFx != true) {
-					app->audio->PlayFx(detectPlayerFx);
-					c->data->playDetectFx = true;
+			if (c->data->type == 0) {
+				// ==================================================
+				//					  Walking Enemy
+				// ==================================================
+				if (app->player->position.x - c->data->position.x < chaseDistance && app->player->position.x - c->data->position.x > -chaseDistance && app->player->position.y - c->data->position.y < chaseDistance / 4 && app->player->position.y - c->data->position.y > -chaseDistance / 2) {
+					// Play sfx
+					if (c->data->playDetectFx != true) {
+						app->audio->PlayFx(detectPlayerFx);
+						c->data->playDetectFx = true;
 
-					c->data->alert = true;
-					c->data->lost = false;
-				}
-				// Chase player
-				int vel = METERS_TO_PIXELS(c->data->body->body->GetLinearVelocity().x);	 // limit velocity
+						c->data->alert = true;
+						c->data->lost = false;
+					}
+					// Chase player
+					int vel = METERS_TO_PIXELS(c->data->body->body->GetLinearVelocity().x);	 // limit velocity
 
-				if (-limitVel < vel && vel < limitVel) {
-					if (app->player->position.x < c->data->position.x) {
-						c->data->body->body->ApplyLinearImpulse(b2Vec2(-c->data->speed, 0), b2Vec2(0, 0), 1);
-						if (c->data->currentAnimation != &c->data->animRunL) {
-							c->data->currentAnimation = &c->data->animRunL;
+					if (-limitVel < vel && vel < limitVel) {
+						if (app->player->position.x < c->data->position.x) {
+							c->data->body->body->ApplyLinearImpulse(b2Vec2(-c->data->speed, 0), b2Vec2(0, 0), 1);
+							if (c->data->currentAnimation != &c->data->animRunL) {
+								c->data->currentAnimation = &c->data->animRunL;
+							}
+						}
+						else {
+							c->data->body->body->ApplyLinearImpulse(b2Vec2(c->data->speed, 0), b2Vec2(0, 0), 1);
+
+							if (c->data->currentAnimation != &c->data->animRunR) {
+								c->data->currentAnimation = &c->data->animRunR;
+							}
 						}
 					}
-					else {
-						c->data->body->body->ApplyLinearImpulse(b2Vec2(c->data->speed, 0), b2Vec2(0, 0), 1);
+				}
+				else {
+					c->data->playDetectFx = false;
 
-						if (c->data->currentAnimation != &c->data->animRunR) {
-							c->data->currentAnimation = &c->data->animRunR;
-						}
+					if (c->data->lost == false && c->data->currentAnimation == &c->data->animRunL || c->data->currentAnimation == &c->data->animRunR) {
+						c->data->lost = true;
+						c->data->alert = false;
+					}
+
+					if (c->data->currentAnimation == &c->data->animRunL) {
+						c->data->currentAnimation = &animIdleL;
+					}
+					if (c->data->currentAnimation == &c->data->animRunR) {
+						c->data->currentAnimation = &animIdleR;
 					}
 				}
 			}
-			else {
-				c->data->playDetectFx = false;
+			// ==================================================
+			//					  Flying Enemy
+			// ==================================================
+			else if (c->data->type == 1) {
+				if (app->player->position.x - c->data->position.x < chaseDistance && app->player->position.x - c->data->position.x > -chaseDistance && app->player->position.y - c->data->position.y < chaseDistance && app->player->position.y - c->data->position.y > -chaseDistance) {
+					// Play sfx
+					if (c->data->playDetectFx != true) {
+						app->audio->PlayFx(detectPlayerFx);
+						c->data->playDetectFx = true;
 
-				if (c->data->lost == false && c->data->currentAnimation == &c->data->animRunL || c->data->currentAnimation == &c->data->animRunR) {
-					c->data->lost = true;
-					c->data->alert = false;
-				}
+						c->data->alert = true;
+						c->data->lost = false;
+					}
+					// ----------- Chase player --------------
 
-				if (c->data->currentAnimation == &c->data->animRunL) {
-					c->data->currentAnimation = &animIdleL;
+					// limit velocity
+					iPoint vel;
+					vel.x = METERS_TO_PIXELS(c->data->body->body->GetLinearVelocity().x);	
+					vel.y = METERS_TO_PIXELS(c->data->body->body->GetLinearVelocity().y);
+
+					if (-limitVel < vel.x && vel.x < limitVel) {
+
+						// X axis
+						if (app->player->position.x < c->data->position.x) {
+							c->data->body->body->ApplyLinearImpulse(b2Vec2(-c->data->speed, 0), b2Vec2(0, 0), 1);
+							if (c->data->currentAnimation != &c->data->animRunL) {
+								c->data->currentAnimation = &c->data->animRunL;
+							}
+						}
+						else if (app->player->position.x > c->data->position.x) {
+							c->data->body->body->ApplyLinearImpulse(b2Vec2(c->data->speed, 0), b2Vec2(0, 0), 1);
+
+							if (c->data->currentAnimation != &c->data->animRunR) {
+								c->data->currentAnimation = &c->data->animRunR;
+							}
+						}
+					}
+					if(-limitVel < vel.y && vel.y < limitVel){
+						// Y axis
+						if (app->player->position.y < c->data->position.y) {
+							c->data->body->body->ApplyLinearImpulse(b2Vec2(0, -c->data->speed), b2Vec2(0, 0), 1);
+						}
+						else if (app->player->position.y > c->data->position.y) {
+							c->data->body->body->ApplyLinearImpulse(b2Vec2(0, c->data->speed), b2Vec2(0, 0), 1);
+						}
+					}
 				}
-				if (c->data->currentAnimation == &c->data->animRunR) {
-					c->data->currentAnimation = &animIdleR;
+				else {
+
+					// Stop movement
+					c->data->body->body->SetLinearVelocity(b2Vec2(0, 0));
+
+					// Animations and interactions:
+					c->data->playDetectFx = false;
+
+					if (c->data->lost == false && c->data->currentAnimation == &c->data->animRunL || c->data->currentAnimation == &c->data->animRunR) {
+						c->data->lost = true;
+						c->data->alert = false;
+					}
+
+					if (c->data->currentAnimation == &c->data->animRunL) {
+						c->data->currentAnimation = &animIdleL;
+					}
+					if (c->data->currentAnimation == &c->data->animRunR) {
+						c->data->currentAnimation = &animIdleR;
+					}
 				}
 			}
-
 			// Reset alert/lost effect
 			if (c->data->alert == true || c->data->lost == true) {
 				c->data->cont++;
@@ -224,25 +296,44 @@ bool Enemy::Update(float dt) {
 			c = c->next;
 		}
 		else {
-			// ENEMIES DEAD
+			// =======================
+			//      ENEMIES DEAD
+			// =======================
 
-			LOG("Deleting enemy");
-			enemyNum -= 1;
-			app->physics->world->DestroyBody(c->data->body->body);
-			app->physics->world->DestroyBody(c->data->collider->body);
-			enemies.del(c);
-			c = NULL;
-			
-			app->audio->PlayFx(deathFx);
+			if (c->data->dieAnim == false) {
+
+				app->audio->PlayFx(deathFx);
+
+				c->data->dieAnim = true;
+				c->data->cont = 0;
+				c->data->animDieL.Reset();
+
+				LOG("Preparing enemy dead");
+
+				app->physics->world->DestroyBody(c->data->body->body);
+				app->physics->world->DestroyBody(c->data->collider->body);
+				
+				c->data->currentAnimation == &c->data->animDieL;
+			}
+
+			if (c->data->cont > 60) {
+				c->data->cont = 0;
+
+				LOG("Deleting enemy");
+				enemyNum -= 1;
+				enemies.del(c);
+				c = NULL;
+			}
+			else {
+				c->data->cont++;
+				c->data->animDieL.Update();
+			}
+
+			if (c != NULL) {
+				c = c->next;
+			}
 		}
 	}
-
-	//// Update animations
-
-	//animRunL.Update();
-	//animRunR.Update();
-	//animDieL.Update();
-	//animDieR.Update();
 
 	return true;
 }
@@ -252,16 +343,22 @@ bool Enemy::PostUpdate() {
 	if (app->player->death != true && app->player->win != true) {
 		ListItem<Enemies*>* c = enemies.start;
 		while (c != NULL) {
-			SDL_Rect rect = c->data->currentAnimation->GetCurrentFrame();
+			SDL_Rect rect;
+			if (c->data->death != true) {
+				rect = c->data->currentAnimation->GetCurrentFrame();
+
+				// Draw interactions
+				if (c->data->alert == true) {
+					app->render->DrawTexture(alertTexture, c->data->position.x + 5, c->data->position.y - 25);
+				}
+				if (c->data->lost == true) {
+					app->render->DrawTexture(lostTexture, c->data->position.x + 5, c->data->position.y - 25);
+				}
+			}
+			else {
+				rect = c->data->animDieL.GetCurrentFrame();
+			}
 			app->render->DrawTexture(c->data->sprite, c->data->position.x - 5, c->data->position.y - 5, &rect);
-
-			if (c->data->alert == true) {
-				app->render->DrawTexture(alertTexture, c->data->position.x + 5, c->data->position.y - 25);
-			}
-			if (c->data->lost == true) {
-				app->render->DrawTexture(lostTexture, c->data->position.x + 5, c->data->position.y - 25);
-			}
-
 			c = c->next;
 		}
 	}
