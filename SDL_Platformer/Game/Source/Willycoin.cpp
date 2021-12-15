@@ -318,7 +318,6 @@ bool Item::CleanUp() {
 		c = c->next;
 	}
 	items.clear();
-	items.~List();
 
 	app->tex->UnLoad(ItemSprite);
 	app->tex->UnLoad(Willycoin);
