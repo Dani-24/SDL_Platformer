@@ -113,6 +113,10 @@ bool Enemy::AddEnemy(int x, int y, int type) {
 	}
 
 	enemies.add(thisEnemy);
+
+	thisEnemy = nullptr;
+	delete thisEnemy;
+
 	return true;
 }
 
@@ -398,8 +402,7 @@ bool Enemy::PostUpdate() {
 				iPoint originScreen = app->map->MapToWorld(c->data->position.x, c->data->position.y);
 				app->render->DrawTexture(app->pathfinder->pathOriginTexture, originScreen.x, originScreen.y);
 			}
-			
-			
+						
 			c = c->next;
 		}
 	}
