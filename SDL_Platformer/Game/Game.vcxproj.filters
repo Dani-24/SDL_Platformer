@@ -67,9 +67,6 @@
     <ClCompile Include="Source\Pathfinder.cpp">
       <Filter>Platformer\Modules\Extra</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Entity.cpp">
-      <Filter>Platformer\Scenes\Gameplay</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Defs.h">
@@ -161,9 +158,6 @@
     </ClInclude>
     <ClInclude Include="Source\Pathfinder.h">
       <Filter>Platformer\Modules\Extra</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Entity.h">
-      <Filter>Platformer\Scenes\Gameplay</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
