@@ -270,7 +270,7 @@ bool Map::CleanUp()
 
 	ListItem<PhysBody*>* c = colliders.start;
 	while (c != NULL) {
-		app->physics->world->DestroyBody(c->data->body);
+		RELEASE(c->data);
 		c = c->next;
 	}
 	colliders.clear();

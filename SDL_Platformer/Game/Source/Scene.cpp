@@ -421,6 +421,8 @@ bool Scene::CleanUp()
 {
 	LOG("Freeing scene");
 
+	app->audio->PlayMusic(NULL);
+
 	// EasterEGG
 	app->tex->UnLoad(egg);
 	app->tex->UnLoad(pandereta);
@@ -436,11 +438,10 @@ bool Scene::CleanUp()
 	app->tex->UnLoad(skyTex);
 
 	app->tex->UnLoad(checkpointTex);
-	checkpointAnim.Reset();
 	checkpointAnim.DeleteAnim();
+	app->physics->world->DestroyBody(checkPointSensor->body);
 
 	// Die effect
-	dieWindowAnim.Reset();
 	dieWindowAnim.DeleteAnim();
 	app->tex->UnLoad(dieWindow);
 
@@ -457,7 +458,7 @@ bool Scene::CleanUp()
 	app->pathfinder->Disable();
 
 	// Reset Variables
-	cont = w = h = playerPosForScroll = checkPfx = pathFx = 0;
+	cont = w = h = playerPosForScroll = checkPfx = pathFx = NULL;
 	loadEgg = delSaveData = checkPointSave = checked = checkfxPlayed = false;
 	for (int a = 0; a < Scroller; a++) {
 		forestX[a] = hillsX[a] = cloudsDownX[a] = cloudsUpX[a] = NULL;

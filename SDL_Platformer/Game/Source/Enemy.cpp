@@ -421,6 +421,7 @@ bool Enemy::CleanUp() {
 		c = c->next;
 	}
 	enemies.clear();
+	enemies.~List();
 
 	app->tex->UnLoad(enemySprite);
 	app->tex->UnLoad(lostTexture);

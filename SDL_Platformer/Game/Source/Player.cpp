@@ -675,37 +675,34 @@ bool Player::PostUpdate() {
 		currentAnimation->Update();
 	}
 
-	// --- Draw Player ---
-	SDL_Rect rect = currentAnimation->GetCurrentFrame();
-	
-	app->render->DrawTexture(playerSprite, position.x-3, position.y-5, &rect, 1.0f, angle, 34, 34); // -3 and -5 are for hitbox adjustments
+	// --- Draw Player ---	
+	app->render->DrawTexture(playerSprite, position.x-3, position.y-5, &currentAnimation->GetCurrentFrame(), 1.0f, angle, 34, 34); // -3 and -5 are for hitbox adjustments
 
 	// --------------------- DRAW HUD --------------------------------------
 
 	// Lives:
 
-	SDL_Rect liveOnRect = liveOn.GetCurrentFrame(), liveOffRect = liveOff.GetCurrentFrame();
 	switch (HP)
 	{
 	case 0:
-		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2), -app->render->camera.y / 2, &liveOffRect);
-		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 35, -app->render->camera.y / 2, &liveOffRect);
-		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 70, -app->render->camera.y / 2, &liveOffRect);
+		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2), -app->render->camera.y / 2, &liveOff.GetCurrentFrame());
+		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 35, -app->render->camera.y / 2, &liveOff.GetCurrentFrame());
+		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 70, -app->render->camera.y / 2, &liveOff.GetCurrentFrame());
 		break;
 	case 1:
-		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2), -app->render->camera.y / 2, &liveOnRect);
-		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 35, -app->render->camera.y / 2, &liveOffRect);
-		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 70, -app->render->camera.y / 2, &liveOffRect);
+		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2), -app->render->camera.y / 2, &liveOn.GetCurrentFrame());
+		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 35, -app->render->camera.y / 2, &liveOff.GetCurrentFrame());
+		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 70, -app->render->camera.y / 2, &liveOff.GetCurrentFrame());
 		break;
 	case 2:
-		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2), -app->render->camera.y / 2, &liveOnRect);
-		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 35, -app->render->camera.y / 2, &liveOnRect);
-		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 70, -app->render->camera.y / 2, &liveOffRect);
+		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2), -app->render->camera.y / 2, &liveOn.GetCurrentFrame());
+		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 35, -app->render->camera.y / 2, &liveOn.GetCurrentFrame());
+		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 70, -app->render->camera.y / 2, &liveOff.GetCurrentFrame());
 		break;
 	case 3:
-		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2), -app->render->camera.y / 2, &liveOnRect);
-		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 35, -app->render->camera.y / 2, &liveOnRect);
-		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 70, -app->render->camera.y / 2, &liveOnRect);
+		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2), -app->render->camera.y / 2, &liveOn.GetCurrentFrame());
+		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 35, -app->render->camera.y / 2, &liveOn.GetCurrentFrame());
+		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 70, -app->render->camera.y / 2, &liveOn.GetCurrentFrame());
 		break;
 	}
 
@@ -746,7 +743,6 @@ bool Player::CleanUp() {
 	walkL.DeleteAnim();
 	walkPunchR.DeleteAnim();
 	walkPunchL.DeleteAnim();
-
 	liveOff.DeleteAnim();
 	liveOn.DeleteAnim();
 
@@ -757,16 +753,12 @@ bool Player::CleanUp() {
 
 	// Physbody
 	app->physics->world->DestroyBody(playerBody->body);
-
 	app->physics->world->DestroyBody(attackSensorLeft->body);
 	app->physics->world->DestroyBody(attackSensorRight->body);
 
 	// Reset variables
-
-	currentVel = velY = position.x = position.y = initPos.x = initPos.y = NULL;
+	currentVel = velY = position.x = position.y = initPos.x = initPos.y = angle = angleV = killedFx = deathFx = playerAttackFx = winFx = loseHPFx = fallFx = NULL;
 	godMode = death = win = destroyed = DieFxPlayed = WinFxPlayed = false;
-
-	angle = angleV = killedFx = deathFx = playerAttackFx = winFx = loseHPFx = fallFx = 0;
 
 	return true;
 }
