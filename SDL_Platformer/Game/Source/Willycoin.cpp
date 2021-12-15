@@ -147,7 +147,7 @@ void Item::AddItem(int x, int y, int type) {
 	items.add(thisItem);
 
 	thisItem = nullptr;
-	//delete thisItem;
+	delete thisItem;
 }
 
 bool Item::PreUpdate() {
