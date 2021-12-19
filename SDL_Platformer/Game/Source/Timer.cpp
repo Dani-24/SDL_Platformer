@@ -4,9 +4,6 @@
 
 #include "Timer.h"
 #include "SDL\include\SDL_timer.h"
-
-// L07: DONE 1: Fill Start(), Read(), ReadSec() methods
-// they are simple, one line each!
 	
 Timer::Timer()
 {
