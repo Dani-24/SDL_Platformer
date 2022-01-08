@@ -11,12 +11,14 @@
 #include "Log.h"
 #include "Player.h"
 #include "Physics.h"
+#include "Entity.h"
+
+// sus
 #include "Enemy.h"
 #include "Willycoin.h"
+
 #include "ModuleQFonts.h"
 #include "Pathfinder.h"
-
-
 
 Scene::Scene(App* application, bool start_enabled) : Module(application, start_enabled)
 {
@@ -59,8 +61,13 @@ bool Scene::Start()
 	app->physics->Enable();
 	app->player->Enable();
 	app->map->Enable();
+	// Enable is use fonts
 	//app->font->Enable();
 
+	// Enable when entities ok
+	//app->entity->Enable();
+
+	// delete when entities is ok
 	app->enemy->Enable();
 	app->item->Enable();
 
@@ -448,12 +455,20 @@ bool Scene::CleanUp()
 	// Disable modules
 	app->map->Disable();
 	app->player->Disable();
+
+	// Enable when used
 	//app->font->Disable();
 
+	// Enable when used
+	//app->entity->Disable();
+
+	// Delete when entities ok
 	if (app->enemy->isEnabled()) {
 		app->enemy->Disable();
 	}
 	app->item->Disable();
+
+
 	app->physics->Disable();
 	app->pathfinder->Disable();
 

@@ -1,4 +1,4 @@
-#include "App.h"
+﻿#include "App.h"
 #include "Window.h"
 #include "Input.h"
 #include "Render.h"
@@ -11,12 +11,17 @@
 #include "Map.h"
 #include "Physics.h"
 #include "FadeToBlack.h"
+
+// ඞ
 #include "Enemy.h"
 #include "Willycoin.h"
+
 #include "ModuleQFonts.h"
 #include "Defs.h"
 #include "Log.h"
 #include "Pathfinder.h"
+#include "Entity.h"
+#include "GuiManager.h"
 
 #include <iostream>
 #include <sstream>
@@ -39,6 +44,9 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	sceneTitle = new SceneTitle(this, false);
 	scene = new Scene(this, false);
 	player = new Player(this, false);
+	entity = new Entity(this, false);
+
+	// Delete this
 	enemy = new Enemy(this, false);
 	item = new Item(this, false);
 
@@ -47,6 +55,8 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 
 	physics = new Physics(this, false);
 	pathfinder = new Pathfinder(this, false);
+
+	guiManager = new GuiManager(this, false);
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -63,10 +73,16 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(map);
 
 	AddModule(player);
+	AddModule(entity);
+
+	// Delete i guess (anyways, whatever)
 	AddModule(enemy);
 	AddModule(item);
+
 	AddModule(font);
 	AddModule(physics);
+
+	AddModule(guiManager);
 
 	// Render last to swap buffer
 	AddModule(render);

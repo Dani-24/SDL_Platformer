@@ -23,13 +23,15 @@ class SceneTitle;
 class RestartLvl1;
 class Scene;
 class Player;
-class Enemy;
-class Item;
+class Entity;
+class Enemy;	// delete this
+class Item;		// delete this
 class Map;
 class ModuleQFonts;
 class Physics;
 class FadeToBlack;
 class Pathfinder;
+class GuiManager;
 
 class App
 {
@@ -108,13 +110,19 @@ public:
 	Scene* scene;
 	RestartLvl1* restartLvl1;
 	Player* player;
+	Entity* entity;
+
+	// Delete:
 	Enemy* enemy;
 	Item* item;
+
 	Map* map;
 	ModuleQFonts* font;
 	Physics* physics;
 	FadeToBlack* fade;
 	Pathfinder* pathfinder;
+
+	GuiManager* guiManager;
 
 private:
 
