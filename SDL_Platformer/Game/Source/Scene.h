@@ -3,6 +3,7 @@
 
 #include "Module.h"
 #include "Animation.h"
+#include "GuiButton.h"
 
 #define Scroller 5
 
@@ -83,6 +84,8 @@ private:
 	iPoint originPos;
 	bool originSelected = false;
 	uint pathFx;
+
+	
 };
 
 #endif // __SCENE_H__

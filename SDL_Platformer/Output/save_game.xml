@@ -136,9 +136,11 @@
 	</scene>
 	<map />
 	<player />
+	<entity />
 	<enemy />
 	<coin />
 	<fonts />
 	<physics />
+	<guiManager />
 	<renderer />
 </save_state>

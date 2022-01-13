@@ -8,6 +8,8 @@
 #include "FadeToBlack.h"
 #include "Defs.h"
 #include "Log.h"
+#include "GuiButton.h"
+#include "GuiManager.h"
 
 SceneTitle::SceneTitle(App* application, bool start_enabled) : Module(application, start_enabled)
 {
@@ -50,6 +52,11 @@ bool SceneTitle::Start()
 
 	fxEnter = app->audio->LoadFx("Assets/audio/fx/enter.wav");
 	app->render->camera.x = 0; app->render->camera.y = 0;
+
+	// GUI Buttons
+	btn1 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 1, "Test1", { (app->win->GetWidth() / 2) - 300, app->win->GetWidth() / 10, 160, 40 }, this);
+	btn2 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 2, "Test2", { (app->win->GetWidth() / 2) + 300, app->win->GetWidth() / 10, 160, 40 }, this);
+
 
 	// ----------- Velocity ------------
 
@@ -112,6 +119,9 @@ bool SceneTitle::Update(float dt)
 		enemyFlyX -= scrollVelocity;
 	}
 	enemyAngle += scrollVelocity;
+
+	//Draw GUI
+	app->guiManager->Draw();
 
 	return true;
 }

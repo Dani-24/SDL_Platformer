@@ -2,6 +2,7 @@
 #define __SCENETITLE_H__
 
 #include "Module.h"
+#include "GuiButton.h"
 
 struct SDL_Texture;
 
@@ -29,6 +30,10 @@ private:
 
 	SDL_Texture* bg;
 	SDL_Texture* bgSky;
+
+	// GUI Button
+	GuiButton* btn1;
+	GuiButton* btn2;
 
 	float scroller[4];
 

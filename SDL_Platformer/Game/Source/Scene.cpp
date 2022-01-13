@@ -12,6 +12,8 @@
 #include "Player.h"
 #include "Physics.h"
 #include "Entity.h"
+#include "GuiButton.h"
+#include "GuiManager.h"
 
 // sus
 #include "Enemy.h"
@@ -90,6 +92,7 @@ bool Scene::Start()
 		forestX[i] = hillsX[i] = cloudsDownX[i] = cloudsUpX[i] = i* textureWidth;
 	}
 
+	
 	// Die effect
 	dieWindow = app->tex->Load("Assets/textures/dieTexture.png");
 
@@ -264,6 +267,8 @@ bool Scene::Update(float dt)
 
 	// ======================================================
 	// BackGround
+
+	
 
 	if (playerPosForScroll < METERS_TO_PIXELS(app->player->playerBody->body->GetPosition().x)) {
 		for (int i = 0; i < Scroller; i++) {
