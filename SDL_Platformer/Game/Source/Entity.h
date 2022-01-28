@@ -17,6 +17,16 @@
 //But I'm ready 
 //...
 
+enum class EntityType
+{
+	PLAYER,
+	ENEMY_WALK,
+	ENEMY_FLY,
+	ITEM_COIN,
+	ITEM_HEAL,
+	ITEM_WILLYCOIN
+};
+
 class Entity : public Module {
 public:
 	Entity(App* application, bool start_enabled);

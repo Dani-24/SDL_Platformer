@@ -176,3 +176,12 @@ bool Audio::PlayFx(unsigned int id, int repeat)
 
 	return ret;
 }
+
+// Change Music volume
+void Audio::ChangeVolume(int volume) {
+	Mix_VolumeMusic(volume);
+}
+
+void Audio::ChangeFXVolume(int volume) {
+	Mix_Volume(-1, volume);
+}
