@@ -205,7 +205,6 @@ bool SceneTitle::PostUpdate()
 
 bool SceneTitle::OnGuiMouseClickEvent(GuiControl* control)
 {
-
 	switch (control->type)
 	{
 	case GuiControlType::BUTTON:

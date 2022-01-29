@@ -151,151 +151,153 @@ bool Enemy::Update(float dt) {
 
 	for (ListItem<Enemies*>* c = enemies.start; c != NULL; c = c->next) {
 		if (c->data->dead == false) {
-			// ENEMIES ALIVE:
+			if (app->scene->pause != true) {
+				// ENEMIES ALIVE:
 
-			// Move sensor to enemy body position
-			c->data->collider->body->SetTransform(b2Vec2(c->data->body->body->GetPosition().x + PIXEL_TO_METERS(20), c->data->body->body->GetPosition().y + PIXEL_TO_METERS(20)), c->data->collider->body->GetAngle());
+				// Move sensor to enemy body position
+				c->data->collider->body->SetTransform(b2Vec2(c->data->body->body->GetPosition().x + PIXEL_TO_METERS(20), c->data->body->body->GetPosition().y + PIXEL_TO_METERS(20)), c->data->collider->body->GetAngle());
 
-			// Detect player
-			int chaseDistance = 200, limitVel = 100;
-			if (c->data->type == 0) {
+				// Detect player
+				int chaseDistance = 200, limitVel = 100;
+				if (c->data->type == 0) {
+					// ==================================================
+					//					  Walking Enemy
+					// ==================================================
+					if (app->player->position.x - c->data->position.x < chaseDistance && app->player->position.x - c->data->position.x > -chaseDistance && app->player->position.y - c->data->position.y < chaseDistance / 4 && app->player->position.y - c->data->position.y > -chaseDistance / 2) {
+						// Play sfx
+						if (c->data->playDetectFx != true) {
+							app->audio->PlayFx(detectPlayerFx);
+							c->data->playDetectFx = true;
+							c->data->alert = true;
+							c->data->lost = false;
+						}
+						// ----------- Chase player --------------
+						// Pathfinding
+						iPoint origin = app->map->WorldToMap(c->data->position.x, c->data->position.y);
+						iPoint destination = app->map->WorldToMap(app->player->position.x, app->player->position.y);
+
+						int a = app->pathfinder->CreatePath(origin, destination);
+
+						int vel = METERS_TO_PIXELS(c->data->body->body->GetLinearVelocity().x);	 // limit velocity
+
+						if (-limitVel < vel && vel < limitVel) {
+							if (app->player->position.x < c->data->position.x) {
+								c->data->body->body->ApplyLinearImpulse(b2Vec2(-c->data->speed * dt, 0), b2Vec2(0, 0), 1);
+								if (c->data->currentAnimation != &c->data->animRunL) {
+									c->data->currentAnimation = &c->data->animRunL;
+								}
+							}
+							else {
+								c->data->body->body->ApplyLinearImpulse(b2Vec2(c->data->speed * dt, 0), b2Vec2(0, 0), 1);
+
+								if (c->data->currentAnimation != &c->data->animRunR) {
+									c->data->currentAnimation = &c->data->animRunR;
+								}
+							}
+						}
+					}
+					else {
+						c->data->playDetectFx = false;
+						if (c->data->lost == false && c->data->currentAnimation == &c->data->animRunL || c->data->currentAnimation == &c->data->animRunR) {
+							c->data->lost = true;
+							c->data->alert = false;
+						}
+						if (c->data->currentAnimation == &c->data->animRunL) {
+							c->data->currentAnimation = &animIdleL;
+						}
+						if (c->data->currentAnimation == &c->data->animRunR) {
+							c->data->currentAnimation = &animIdleR;
+						}
+					}
+				}
 				// ==================================================
-				//					  Walking Enemy
+				//					  Flying Enemy
 				// ==================================================
-				if (app->player->position.x - c->data->position.x < chaseDistance && app->player->position.x - c->data->position.x > -chaseDistance && app->player->position.y - c->data->position.y < chaseDistance / 4 && app->player->position.y - c->data->position.y > -chaseDistance / 2) {
-					// Play sfx
-					if (c->data->playDetectFx != true) {
-						app->audio->PlayFx(detectPlayerFx);
-						c->data->playDetectFx = true;
-						c->data->alert = true;
-						c->data->lost = false;
-					}
-					// ----------- Chase player --------------
-					// Pathfinding
-					iPoint origin = app->map->WorldToMap(c->data->position.x, c->data->position.y);
-					iPoint destination = app->map->WorldToMap(app->player->position.x, app->player->position.y);
+				else if (c->data->type == 1) {
+					if (app->player->position.x - c->data->position.x < chaseDistance && app->player->position.x - c->data->position.x > -chaseDistance && app->player->position.y - c->data->position.y < chaseDistance && app->player->position.y - c->data->position.y > -chaseDistance) {
+						// Play sfx
+						if (c->data->playDetectFx != true) {
+							app->audio->PlayFx(detectPlayerFx);
+							c->data->playDetectFx = true;
+							c->data->alert = true;
+							c->data->lost = false;
+						}
 
-					int a = app->pathfinder->CreatePath(origin, destination);
+						// ----------- Chase player --------------
 
-					int vel = METERS_TO_PIXELS(c->data->body->body->GetLinearVelocity().x);	 // limit velocity
+						// Pathfinding
+						iPoint origin = app->map->WorldToMap(c->data->position.x, c->data->position.y);
+						iPoint destination = app->map->WorldToMap(app->player->position.x, app->player->position.y);
 
-					if (-limitVel < vel && vel < limitVel) {
-						if (app->player->position.x < c->data->position.x) {
-							c->data->body->body->ApplyLinearImpulse(b2Vec2(-c->data->speed * dt, 0), b2Vec2(0, 0), 1);
-							if (c->data->currentAnimation != &c->data->animRunL) {
-								c->data->currentAnimation = &c->data->animRunL;
+						int a = app->pathfinder->CreatePath(origin, destination);
+
+						// limit velocity
+						iPoint vel;
+						vel.x = METERS_TO_PIXELS(c->data->body->body->GetLinearVelocity().x);
+						vel.y = METERS_TO_PIXELS(c->data->body->body->GetLinearVelocity().y);
+
+						if (-limitVel < vel.x && vel.x < limitVel) {
+
+							// X axis
+							if (app->player->position.x < c->data->position.x) {
+								c->data->body->body->ApplyLinearImpulse(b2Vec2(-c->data->speed * dt, 0), b2Vec2(0, 0), 1);
+								if (c->data->currentAnimation != &c->data->animRunL) {
+									c->data->currentAnimation = &c->data->animRunL;
+								}
+							}
+							else if (app->player->position.x > c->data->position.x) {
+								c->data->body->body->ApplyLinearImpulse(b2Vec2(c->data->speed * dt, 0), b2Vec2(0, 0), 1);
+								if (c->data->currentAnimation != &c->data->animRunR) {
+									c->data->currentAnimation = &c->data->animRunR;
+								}
 							}
 						}
-						else {
-							c->data->body->body->ApplyLinearImpulse(b2Vec2(c->data->speed * dt, 0), b2Vec2(0, 0), 1);
-
-							if (c->data->currentAnimation != &c->data->animRunR) {
-								c->data->currentAnimation = &c->data->animRunR;
+						if (-limitVel < vel.y && vel.y < limitVel) {
+							// Y axis
+							if (app->player->position.y < c->data->position.y) {
+								c->data->body->body->ApplyLinearImpulse(b2Vec2(0, -c->data->speed * dt), b2Vec2(0, 0), 1);
 							}
-						}
-					}
-				}
-				else {
-					c->data->playDetectFx = false;
-					if (c->data->lost == false && c->data->currentAnimation == &c->data->animRunL || c->data->currentAnimation == &c->data->animRunR) {
-						c->data->lost = true;
-						c->data->alert = false;
-					}
-					if (c->data->currentAnimation == &c->data->animRunL) {
-						c->data->currentAnimation = &animIdleL;
-					}
-					if (c->data->currentAnimation == &c->data->animRunR) {
-						c->data->currentAnimation = &animIdleR;
-					}
-				}
-			}
-			// ==================================================
-			//					  Flying Enemy
-			// ==================================================
-			else if (c->data->type == 1) {
-				if (app->player->position.x - c->data->position.x < chaseDistance && app->player->position.x - c->data->position.x > -chaseDistance && app->player->position.y - c->data->position.y < chaseDistance && app->player->position.y - c->data->position.y > -chaseDistance) {
-					// Play sfx
-					if (c->data->playDetectFx != true) {
-						app->audio->PlayFx(detectPlayerFx);
-						c->data->playDetectFx = true;
-						c->data->alert = true;
-						c->data->lost = false;
-					}
-
-					// ----------- Chase player --------------
-
-					// Pathfinding
-					iPoint origin = app->map->WorldToMap(c->data->position.x, c->data->position.y);
-					iPoint destination = app->map->WorldToMap(app->player->position.x, app->player->position.y);
-
-					int a = app->pathfinder->CreatePath(origin, destination);
-
-					// limit velocity
-					iPoint vel;
-					vel.x = METERS_TO_PIXELS(c->data->body->body->GetLinearVelocity().x);
-					vel.y = METERS_TO_PIXELS(c->data->body->body->GetLinearVelocity().y);
-
-					if (-limitVel < vel.x && vel.x < limitVel) {
-
-						// X axis
-						if (app->player->position.x < c->data->position.x) {
-							c->data->body->body->ApplyLinearImpulse(b2Vec2(-c->data->speed * dt, 0), b2Vec2(0, 0), 1);
-							if (c->data->currentAnimation != &c->data->animRunL) {
-								c->data->currentAnimation = &c->data->animRunL;
-							}
-						}
-						else if (app->player->position.x > c->data->position.x) {
-							c->data->body->body->ApplyLinearImpulse(b2Vec2(c->data->speed * dt, 0), b2Vec2(0, 0), 1);
-							if (c->data->currentAnimation != &c->data->animRunR) {
-								c->data->currentAnimation = &c->data->animRunR;
+							else if (app->player->position.y > c->data->position.y) {
+								c->data->body->body->ApplyLinearImpulse(b2Vec2(0, c->data->speed * dt), b2Vec2(0, 0), 1);
 							}
 						}
 					}
-					if (-limitVel < vel.y && vel.y < limitVel) {
-						// Y axis
-						if (app->player->position.y < c->data->position.y) {
-							c->data->body->body->ApplyLinearImpulse(b2Vec2(0, -c->data->speed * dt), b2Vec2(0, 0), 1);
+					else {
+
+						// Stop movement
+						c->data->body->body->SetLinearVelocity(b2Vec2(0, 0));
+
+						// Animations and interactions:
+						c->data->playDetectFx = false;
+
+						if (c->data->lost == false && c->data->currentAnimation == &c->data->animRunL || c->data->currentAnimation == &c->data->animRunR) {
+							c->data->lost = true;
+							c->data->alert = false;
 						}
-						else if (app->player->position.y > c->data->position.y) {
-							c->data->body->body->ApplyLinearImpulse(b2Vec2(0, c->data->speed * dt), b2Vec2(0, 0), 1);
+
+						if (c->data->currentAnimation == &c->data->animRunL) {
+							c->data->currentAnimation = &animIdleL;
+						}
+						if (c->data->currentAnimation == &c->data->animRunR) {
+							c->data->currentAnimation = &animIdleR;
 						}
 					}
 				}
-				else {
-
-					// Stop movement
-					c->data->body->body->SetLinearVelocity(b2Vec2(0, 0));
-
-					// Animations and interactions:
-					c->data->playDetectFx = false;
-
-					if (c->data->lost == false && c->data->currentAnimation == &c->data->animRunL || c->data->currentAnimation == &c->data->animRunR) {
-						c->data->lost = true;
-						c->data->alert = false;
-					}
-
-					if (c->data->currentAnimation == &c->data->animRunL) {
-						c->data->currentAnimation = &animIdleL;
-					}
-					if (c->data->currentAnimation == &c->data->animRunR) {
-						c->data->currentAnimation = &animIdleR;
-					}
+				// Reset alert/lost effect
+				if (c->data->alert == true || c->data->lost == true) {
+					c->data->cont++;
 				}
-			}
-			// Reset alert/lost effect
-			if (c->data->alert == true || c->data->lost == true) {
-				c->data->cont++;
-			}
 
-			if (c->data->cont > 100) {
-				c->data->alert = false;
-				c->data->lost = false;
-				c->data->cont = false;
-			}
+				if (c->data->cont > 100) {
+					c->data->alert = false;
+					c->data->lost = false;
+					c->data->cont = false;
+				}
 
-			// Update animation and position
-			c->data->currentAnimation->Update();
-			c->data->body->GetPosition(c->data->position.x, c->data->position.y);
+				// Update animation and position
+				c->data->currentAnimation->Update();
+				c->data->body->GetPosition(c->data->position.x, c->data->position.y);
+			}
 		}
 		else {
 			c->data->cont--;

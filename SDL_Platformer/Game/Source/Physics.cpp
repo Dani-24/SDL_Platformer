@@ -48,7 +48,7 @@ bool Physics::Start() {
 
 bool Physics::PreUpdate() {
 
-	if (pause != true) {
+	if (app->scene->pause != true) {
 		
 		// Physics framerate:
 		dt = app->getDeltaTime();
@@ -193,7 +193,6 @@ bool Physics::CleanUp() {
 
 	delete world;
 
-	pause = false;
 	playerDieCooldown = fallCont = healthCont = 0;
 
 	return true;

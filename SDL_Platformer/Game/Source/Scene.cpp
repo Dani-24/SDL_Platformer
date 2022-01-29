@@ -50,6 +50,10 @@ bool Scene::Start()
 	
 	coins = score = wCoins = 0;
 
+	pause = false;
+
+	fxEnter = app->audio->LoadFx("Assets/audio/fx/enter.wav");
+
 	//// Delete Save data to disable checkpoint tp if replay the game
 	//delSaveData = true;
 	//app->SaveGameRequest();
@@ -209,16 +213,10 @@ bool Scene::PreUpdate()
 
 	// ================== Win ====================
 	if (app->player->win == true) {
-		app->physics->pause;
+		pause = true;
 		app->fade->StartFadeToBlack(this, (Module*)app->sceneTitle, 60);
 	}
 
-	return true;
-}
-
-// Called each loop iteration
-bool Scene::Update(float dt)
-{
 	// EasterEGG()
 	if (app->input->GetKey(SDL_SCANCODE_7) == KEY_UP) {
 		easterEgg = !easterEgg;
@@ -227,9 +225,22 @@ bool Scene::Update(float dt)
 
 	// Back
 	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {
-		app->fade->StartFadeToBlack(this, (Module*)app->sceneTitle, 10);
+		if (app->scene->pause != true) {
+			pause = true;
+			LOG("Game Paused");
+		}
+		else {
+			pause = false;
+			LOG("Game UnPaused");
+		}
 	}
 
+	return true;
+}
+
+// Called each loop iteration
+bool Scene::Update(float dt)
+{
 	// Death
 	if (app->player->death == true) {
 
@@ -488,6 +499,41 @@ bool Scene::PostUpdate()
 
 	return ret;
 }
+
+//bool OnGuiMouseClickEvent(GuiControl* control) {
+//	switch (control->type)
+//	{
+//	case GuiControlType::BUTTON:
+//	{
+//		//Checks the GUI element ID
+//		if (control->id == 1) //Resume
+//		{
+//			LOG("Click on button 1");
+//		}
+//
+//		if (control->id == 2) //Settings
+//		{
+//			LOG("Click on button 2");
+//		}
+//
+//		if (control->id == 3) //BackToTitle
+//		{
+//			LOG("Click on button 3");
+//		}
+//
+//		if (control->id == 4) //Exit
+//		{
+//			LOG("Click on button 4");
+//		}
+//	}
+//	//Other cases here
+//	default: 
+//		break;
+//	}
+//
+//	//control->state = GuiControlState::NORMAL;
+//	return true;
+//}
 
 // Called before quitting
 bool Scene::CleanUp()
