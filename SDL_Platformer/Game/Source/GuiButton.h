@@ -19,6 +19,9 @@ public:
 	int mouseX, mouseY;
 	unsigned int click;
 
+	uint focusFx = 0;
+	uint pressFx = 0;
+	bool focusSound = false;
 	bool canClick = true;
 	bool drawBasic = false;
 };

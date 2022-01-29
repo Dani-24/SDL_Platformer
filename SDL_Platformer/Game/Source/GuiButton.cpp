@@ -9,6 +9,8 @@ GuiButton::GuiButton(uint32 id, SDL_Rect bounds, const char* text) : GuiControl(
 	this->bounds = bounds;
 	this->text = text;
 
+	focusFx = app->audio->LoadFx("Assets/audio/fx/focusButton.wav");
+	pressFx = app->audio->LoadFx("Assets/audio/fx/pressButton.wav");
 	canClick = true;
 	drawBasic = false;
 }
@@ -31,10 +33,15 @@ bool GuiButton::Update(float dt)
 			(mouseY > bounds.y) && (mouseY < (bounds.y + bounds.h)))
 		{
 			state = GuiControlState::FOCUSED;
-
+			if (focusSound == false) {
+				app->audio->PlayFx(focusFx);
+				focusSound = true;
+			}
+			
 			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
 			{
 				state = GuiControlState::PRESSED;
+				app->audio->PlayFx(pressFx);
 				NotifyObserver();
 			}
 
@@ -44,7 +51,10 @@ bool GuiButton::Update(float dt)
 				NotifyObserver();
 			}*/
 		}
-		else state = GuiControlState::NORMAL;
+		else { 
+			state = GuiControlState::NORMAL; 
+			focusSound = false;
+		}
 	}
 
 	return false;
