@@ -382,170 +382,169 @@ bool Player::Update(float dt)
 	}
 
 	if (death != true && win != true) {
+		if (app->scene->pause == false) {
+			// --- Player movement ---
+			if (godMode != true) {
 
-		// --- Player movement ---
-		if (godMode != true) {
+				currentVel = METERS_TO_PIXELS(playerBody->body->GetLinearVelocity().x);
 
-			currentVel = METERS_TO_PIXELS(playerBody->body->GetLinearVelocity().x);
-
-			if (currentVel < velMax && currentVel > -velMax)
-			{
-				if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)	// MOVE TO RIGHT
+				if (currentVel < velMax && currentVel > -velMax)
 				{
-					// --- walk ---
-					if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
-						if (currentVel < velSlowMax && currentVel > -velSlowMax) {
-							playerBody->body->ApplyLinearImpulse(b2Vec2(speed * dt, 0), b2Vec2(0, 0), 1);
+					if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)	// MOVE TO RIGHT
+					{
+						// --- walk ---
+						if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
+							if (currentVel < velSlowMax && currentVel > -velSlowMax) {
+								playerBody->body->ApplyLinearImpulse(b2Vec2(speed * dt, 0), b2Vec2(0, 0), 1);
 
-							if (currentAnimation != &walkR)
+								if (currentAnimation != &walkR)
+								{
+									walkR.Reset();
+									currentAnimation = &walkR;
+									Player_Dir = true;
+								}
+							}
+							else {
+								playerBody->body->ApplyLinearImpulse(b2Vec2(-lowSpeed * dt, 0), b2Vec2(0, 0), 1);
+							}
+						}
+						else {
+							// --- Run ---	
+							playerBody->body->ApplyLinearImpulse(b2Vec2(lowSpeed * dt, 0), b2Vec2(0, 0), 1);
+
+							if (currentAnimation != &runR)
 							{
-								walkR.Reset();
-								currentAnimation = &walkR;
+								runR.Reset();
+								currentAnimation = &runR;
 								Player_Dir = true;
 							}
 						}
+					}
+					else if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)	// MOVE TO LEFT
+					{
+						// --- he walk ---
+						if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
+
+							if (currentVel < velSlowMax && currentVel > -velSlowMax) {
+								playerBody->body->ApplyLinearImpulse(b2Vec2(-speed * dt, 0), b2Vec2(0, 0), 1);
+
+								if (currentAnimation != &walkL)
+								{
+									walkL.Reset();
+									currentAnimation = &walkL;
+									Player_Dir = false;
+								}
+							}
+							else {
+								playerBody->body->ApplyLinearImpulse(b2Vec2(lowSpeed * dt, 0), b2Vec2(0, 0), 1);
+							}
+						} // --- He run ---
 						else {
+
 							playerBody->body->ApplyLinearImpulse(b2Vec2(-lowSpeed * dt, 0), b2Vec2(0, 0), 1);
-						}
-					}
-					else {
-						// --- Run ---	
-						playerBody->body->ApplyLinearImpulse(b2Vec2(lowSpeed * dt, 0), b2Vec2(0, 0), 1);
 
-						if (currentAnimation != &runR)
-						{
-							runR.Reset();
-							currentAnimation = &runR;
-							Player_Dir = true;
-						}
-					}
-				}
-				else if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)	// MOVE TO LEFT
-				{
-					// --- he walk ---
-					if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
-
-						if (currentVel < velSlowMax && currentVel > -velSlowMax) {
-							playerBody->body->ApplyLinearImpulse(b2Vec2(-speed * dt, 0), b2Vec2(0, 0), 1);
-
-							if (currentAnimation != &walkL)
+							if (currentAnimation != &runL)
 							{
-								walkL.Reset();
-								currentAnimation = &walkL;
+								runL.Reset();
+								currentAnimation = &runL;
 								Player_Dir = false;
 							}
 						}
-						else {
-							playerBody->body->ApplyLinearImpulse(b2Vec2(lowSpeed * dt, 0), b2Vec2(0, 0), 1);
-						}
-					} // --- He run ---
+					}
 					else {
+						// ------------------------ FRICTION When stop moving --------------------------------
+						if (currentVel > 3) {
+							playerBody->body->ApplyLinearImpulse(b2Vec2(-speed * 0.5f * dt, 0), b2Vec2(0, 0), 1);
+						}
+						else if (currentVel < -16) {
+							playerBody->body->ApplyLinearImpulse(b2Vec2(speed * 0.5f * dt, 0), b2Vec2(0, 0), 1);
+						}
+					}
+				}
+				// ------------------ JUMP -----------------
+				if (canJump == true && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+				{
+					if (dt < 20) {
+						playerBody->body->ApplyForceToCenter(b2Vec2(0, -355), 1);
+					}
+					else {
+						playerBody->body->ApplyForceToCenter(b2Vec2(0, -180), 1);
+					}
 
-						playerBody->body->ApplyLinearImpulse(b2Vec2(-lowSpeed * dt, 0), b2Vec2(0, 0), 1);
-
-						if (currentAnimation != &runL)
+					if (Player_Dir == true) {
+						if (currentAnimation != &jumpR)
 						{
-							runL.Reset();
-							currentAnimation = &runL;
-							Player_Dir = false;
+							jumpR.Reset();
+							currentAnimation = &jumpR;
+						}
+					}
+					else {
+						if (currentAnimation != &jumpL)
+						{
+							jumpL.Reset();
+							currentAnimation = &jumpL;
 						}
 					}
 				}
 				else {
-					// ------------------------ FRICTION When stop moving --------------------------------
-					if (currentVel > 3) {
-						playerBody->body->ApplyLinearImpulse(b2Vec2(-speed * 0.5f * dt, 0), b2Vec2(0, 0), 1);
+					// Allow move when jumping / falling
+					if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && Player_Dir == true) {
+						playerBody->body->ApplyLinearImpulse(b2Vec2(-speed * 0.07f * dt, 0), b2Vec2(0, 0), 1);
 					}
-					else if (currentVel < -16) {
-						playerBody->body->ApplyLinearImpulse(b2Vec2(speed * 0.5f* dt, 0), b2Vec2(0, 0), 1);
+					if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT && Player_Dir == false) {
+						playerBody->body->ApplyLinearImpulse(b2Vec2(speed * 0.07f * dt, 0), b2Vec2(0, 0), 1);
 					}
-				}
-			}
-			// ------------------ JUMP -----------------
-			if (canJump == true && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) 
-			{
-				if (dt < 20) {
-					playerBody->body->ApplyForceToCenter(b2Vec2(0, -355), 1);
-				}
-				else {
-					playerBody->body->ApplyForceToCenter(b2Vec2(0, -180), 1);
 				}
 
-				if (Player_Dir == true) {
-					if (currentAnimation != &jumpR)
-					{
-						jumpR.Reset();
-						currentAnimation = &jumpR;
+				// --- but most importantly, he Attack (with cooldown) ---
+				if (app->input->GetKey(SDL_SCANCODE_J) == KEY_DOWN && hitTimeL <= 0 && hitTimeR <= 0)
+				{
+					app->audio->PlayFx(playerAttackFx);
+					if (Player_Dir == true) {
+						if (currentAnimation != &punchR)
+						{
+							punchR.Reset();
+							currentAnimation = &punchR;
+							Player_Dir = true;
+
+							hitTimeR = 20;
+						}
+					}
+					else {
+						if (currentAnimation != &punchL)
+						{
+							punchL.Reset();
+							currentAnimation = &punchL;
+							Player_Dir = false;
+
+							hitTimeL = 20;
+						}
 					}
 				}
+
+				if (hitTimeR > 0)
+				{
+					attackR = true;
+					hitTimeR--;
+				}
+				else if (hitTimeL > 0) {
+					attackL = true;
+					hitTimeL--;
+				}
 				else {
-					if (currentAnimation != &jumpL)
-					{
-						jumpL.Reset();
-						currentAnimation = &jumpL;
-					}
+					attackR = false;
+					attackL = false;
 				}
 			}
 			else {
-				// Allow move when jumping / falling
-				if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && Player_Dir == true) {
-					playerBody->body->ApplyLinearImpulse(b2Vec2(-speed * 0.07f * dt, 0), b2Vec2(0, 0), 1);
-				}
-				if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT && Player_Dir == false) {
-					playerBody->body->ApplyLinearImpulse(b2Vec2(speed * 0.07f * dt, 0), b2Vec2(0, 0), 1);
-				}
+				GodMode();
 			}
-
-			// --- but most importantly, he Attack (with cooldown) ---
-			if (app->input->GetKey(SDL_SCANCODE_J) == KEY_DOWN && hitTimeL <= 0 && hitTimeR <= 0)
-			{
-				app->audio->PlayFx(playerAttackFx);
-				if (Player_Dir == true) {
-					if (currentAnimation != &punchR)
-					{
-						punchR.Reset();
-						currentAnimation = &punchR;
-						Player_Dir = true;
-
-						hitTimeR = 20;
-					}
-				}
-				else {
-					if (currentAnimation != &punchL)
-					{
-						punchL.Reset();
-						currentAnimation = &punchL;
-						Player_Dir = false;
-
-						hitTimeL = 20;
-					}
-				}
-			}
-
-			//LOG("R %d L %d", hitTimeR, hitTimeL);
-
-			if (hitTimeR > 0 )
-			{
-				attackR = true;
-				hitTimeR--;
-			}
-			else if (hitTimeL > 0){
-				attackL = true;
-				hitTimeL--;
-			}
-			else {
-				attackR = false;
-				attackL = false;
-			}
+			// Get body position
+			playerBody->GetPosition(position.x, position.y);
 		}
-		else {
-			GodMode();
-		}
-		// Get body position
-		playerBody->GetPosition(position.x, position.y);
 	}
 	else if(death == true){
-		app->physics->pause = true;
+		app->scene->pause = true;
 	
 		// When you die, this makes the player go washingmachine 
 		int w, h, width, height;

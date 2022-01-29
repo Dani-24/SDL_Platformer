@@ -29,10 +29,16 @@ public:
 
 	void ResetCamera();
 
+	// Define multiple Gui Event methods
+	//bool OnGuiMouseClickEvent(GuiControl* control);
+
 	// EasterEgg
 	void EasterEgg();
 
 public:
+
+	bool pause;
+
 	// Checkpoint
 	bool checked = false;
 	PhysBody* checkPointSensor;
@@ -40,11 +46,19 @@ public:
 	int coins, score, wCoins;
 private:
 
+	uint fxEnter;
 	// HUD
 	SDL_Texture* hud_bg_texture, *wCoin1tex, *wCoin2tex;
 	iPoint hudPos;
 	int contHud = 100;
 	char coinText[100], scoreText[100];
+
+	// PAUSE GUI
+	GuiButton* btn1;
+	GuiButton* btn2;
+	GuiButton* btn3;
+	GuiButton* btn4;
+
 
 	// EasterEGG
 	Animation eggAnim;

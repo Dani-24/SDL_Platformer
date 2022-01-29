@@ -68,7 +68,7 @@ public:
 	// Box2D World
 	b2World* world;
 
-	bool pause = false, debug;
+	bool debug;
 
 private:
 	// Main ground
