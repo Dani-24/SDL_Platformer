@@ -10,6 +10,7 @@
 #include "Log.h"
 #include "GuiButton.h"
 #include "GuiManager.h"
+#include "Map.h"
 
 SceneTitle::SceneTitle(App* application, bool start_enabled) : Module(application, start_enabled)
 {
@@ -53,9 +54,10 @@ bool SceneTitle::Start()
 	fxEnter = app->audio->LoadFx("Assets/audio/fx/enter.wav");
 	app->render->camera.x = 0; app->render->camera.y = 0;
 
+	app->guiManager->Enable();
 	// GUI Buttons
-	btn1 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 1, "Test1", { (app->win->GetWidth() / 2) - 300, app->win->GetWidth() / 10, 160, 40 }, this);
-	btn2 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 2, "Test2", { (app->win->GetWidth() / 2) + 300, app->win->GetWidth() / 10, 160, 40 }, this);
+	btn1 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 1, "Test1", { 40, 275, 80, 40 }, this);
+	btn2 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 2, "Test2", { 180, 275, 80, 40 }, this);
 
 
 	// ----------- Velocity ------------
@@ -119,10 +121,17 @@ bool SceneTitle::Update(float dt)
 		enemyFlyX -= scrollVelocity;
 	}
 	enemyAngle += scrollVelocity;
+	if (app->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN) {
+		int mousex, mousey;
+		app->input->GetMousePosition(mousex, mousey);
 
-	//Draw GUI
-	app->guiManager->Draw();
+		// Transform mouse position into map position
+		iPoint m = app->render->ScreenToWorld(mousex, mousey);
+		m = app->map->WorldToMap(m.x, m.y);
+		LOG("%d, %d", &m.x, &m.y);
 
+	}
+	
 	return true;
 }
 
@@ -150,11 +159,43 @@ bool SceneTitle::PostUpdate()
 	// Title
 	app->render->DrawTexture(titleText, 180, titleY);
 
+
 	if (titleMove == false) {
 		app->render->DrawTexture(pressEnter, 220, titleY + 150);
 	}
 
+	//Draw GUI
+	app->guiManager->Draw();
+	
 	return ret;
+}
+
+bool SceneTitle::OnGuiMouseClickEvent(GuiControl* control)
+{
+
+	switch (control->type)
+	{
+	case GuiControlType::BUTTON:
+	{
+		//Checks the GUI element ID
+		if (control->id == 1)
+		{
+			LOG("Click on button 1");
+		}
+
+		if (control->id == 2)
+		{
+			LOG("Click on button 2");
+		}
+
+	}
+	//Other cases here
+
+	default: break;
+	}
+
+	control->state = GuiControlState::NORMAL;
+	return true;
 }
 
 bool SceneTitle::CleanUp()

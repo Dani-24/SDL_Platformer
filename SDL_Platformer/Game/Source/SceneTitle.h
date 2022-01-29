@@ -22,6 +22,9 @@ public:
 	bool Update(float dt);
 	bool PostUpdate();
 
+	// Define multiple Gui Event methods
+	bool OnGuiMouseClickEvent(GuiControl* control);
+
 	bool CleanUp();
 
 private:

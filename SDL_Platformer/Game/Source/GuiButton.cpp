@@ -2,6 +2,7 @@
 #include "Render.h"
 #include "App.h"
 #include "Audio.h"
+#include "Map.h"
 
 GuiButton::GuiButton(uint32 id, SDL_Rect bounds, const char* text) : GuiControl(GuiControlType::BUTTON, id)
 {
@@ -16,30 +17,32 @@ GuiButton::~GuiButton()
 {
 
 }
-
+//app->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN
 bool GuiButton::Update(float dt)
 {
 	if (state != GuiControlState::DISABLED)
 	{
 		// L14: TODO 3: Update the state of the GUiButton according to the mouse position
+		// Get mouse position
 		int mouseX, mouseY;
 		app->input->GetMousePosition(mouseX, mouseY);
 
-		if ((mouseX > bounds.x ) && (mouseX < (bounds.x + bounds.w )) &&
-			(mouseY > bounds.y ) && (mouseY < (bounds.y + bounds.h )))
+		if ((mouseX > bounds.x) && (mouseX < (bounds.x + bounds.w)) &&
+			(mouseY > bounds.y) && (mouseY < (bounds.y + bounds.h)))
 		{
 			state = GuiControlState::FOCUSED;
 
-			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_REPEAT)
+			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
 			{
 				state = GuiControlState::PRESSED;
+				NotifyObserver();
 			}
 
 			// If mouse button pressed -> Generate event!
-			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_UP)
+			/*if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP)
 			{
 				NotifyObserver();
-			}
+			}*/
 		}
 		else state = GuiControlState::NORMAL;
 	}
