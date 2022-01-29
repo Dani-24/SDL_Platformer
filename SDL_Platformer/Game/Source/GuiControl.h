@@ -81,7 +81,7 @@ public:
 	GuiControlType type;
 	GuiControlState state;
 
-	SString text;           // Control text (if required)
+	const char* text;           // Control text (if required)
 	SDL_Rect bounds;        // Position and size
 	SDL_Color color;        // Tint color
 

@@ -3,6 +3,7 @@
 #include "App.h"
 #include "Audio.h"
 #include "Map.h"
+#include "ModuleQFonts.h"
 
 GuiButton::GuiButton(uint32 id, SDL_Rect bounds, const char* text) : GuiControl(GuiControlType::BUTTON, id)
 {
@@ -11,6 +12,7 @@ GuiButton::GuiButton(uint32 id, SDL_Rect bounds, const char* text) : GuiControl(
 
 	focusFx = app->audio->LoadFx("Assets/audio/fx/focusButton.wav");
 	pressFx = app->audio->LoadFx("Assets/audio/fx/pressButton.wav");
+	app->font->LoadFont("Assets/textures/AmongUs-Regular.ttf");
 	canClick = true;
 	drawBasic = false;
 }
@@ -75,6 +77,7 @@ bool GuiButton::Draw(Render* render)
 	case GuiControlState::NORMAL:
 	{
 		render->DrawRectangle(bounds, 255, 0, 0, 255);
+		app->font->drawText(text, bounds.x, bounds.y, 0, 0, 0);
 
 	} break;
 
@@ -82,10 +85,12 @@ bool GuiButton::Draw(Render* render)
 	case GuiControlState::FOCUSED:
 	{
 		render->DrawRectangle(bounds, 255, 255, 255, 160);
+		app->font->drawText(text, bounds.x, bounds.y, 0, 0, 0);
 	} break;
 	case GuiControlState::PRESSED:
 	{
 		render->DrawRectangle(bounds, 255, 255, 255, 255);
+		app->font->drawText(text, bounds.x, bounds.y, 0, 0, 0);
 	} break;
 
 	/******/
