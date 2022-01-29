@@ -18,8 +18,6 @@ Item::Item(App* application, bool start_enabled) : Module(application, start_ena
 }
 
 Item::~Item() {
-	
-
 }
 
 bool Item::Start() {
@@ -86,7 +84,7 @@ void Item::AddItem(int x, int y, int type) {
 		thisItem->spawn = true;
 		thisItem->type = 1;
 		thisItem->sprite = ItemSprite;
-		thisItem->body = app->physics->CreateRectangleSensor(x, y, 16, 16);
+		thisItem->body = app->physics->CreateRectangleSensor(x + 8, y + 8, 16, 16);
 		thisItem->currentAnimation = &coinIdle;
 		thisItem->position.x = x;
 		thisItem->position.y = y;
@@ -97,7 +95,7 @@ void Item::AddItem(int x, int y, int type) {
 	case 2: //WILLYCOIN
 		thisItem->spawn = true;
 		thisItem->type = 2;
-		thisItem->body = app->physics->CreateRectangleSensor(x, y, 64, 64);
+		thisItem->body = app->physics->CreateRectangleSensor(x + 8, y + 8, 64, 64);
 		thisItem->position.x = x;
 		thisItem->position.y = y;
 		break;
@@ -105,7 +103,7 @@ void Item::AddItem(int x, int y, int type) {
 		thisItem->spawn = true;
 		thisItem->type = 3;
 		thisItem->sprite = ItemSprite;
-		thisItem->body = app->physics->CreateRectangleSensor(x, y, 16, 16);
+		thisItem->body = app->physics->CreateRectangleSensor(x + 8, y + 8, 16, 16);
 		thisItem->position.x = x;
 		thisItem->position.y = y;
 		if (anim == 1) {
@@ -288,7 +286,7 @@ bool Item::PostUpdate() {
 			{
 			case 1:
 				SDL_Rect rect = c->data->currentAnimation->GetCurrentFrame();
-				app->render->DrawTexture(c->data->sprite, c->data->position.x - 8, c->data->position.y - 8, &rect);
+				app->render->DrawTexture(c->data->sprite, c->data->position.x, c->data->position.y, &rect);
 				c = c->next;
 				break;
 			case 2:
@@ -297,7 +295,7 @@ bool Item::PostUpdate() {
 				break;
 			case 3:
 				SDL_Rect rect2 = c->data->currentAnimation->GetCurrentFrame();
-				app->render->DrawTexture(c->data->sprite, c->data->position.x - 8, c->data->position.y - 8, &rect2);
+				app->render->DrawTexture(c->data->sprite, c->data->position.x, c->data->position.y, &rect2);
 				c = c->next;
 				break;
 			}

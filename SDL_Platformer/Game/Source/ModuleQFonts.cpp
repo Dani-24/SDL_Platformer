@@ -34,7 +34,7 @@ bool ModuleQFonts::Start() {
 }
 
 void ModuleQFonts::LoadFont(const char* fontPath) {
-	font = TTF_OpenFont(fontPath, 30);
+	font = TTF_OpenFont(fontPath, 15);
 	if (!font) {
 		LOG("Error loading font || TTF_OpenFont: %s", TTF_GetError());
 	}

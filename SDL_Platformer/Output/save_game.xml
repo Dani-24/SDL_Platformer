@@ -130,9 +130,9 @@
 		<enemy type="1" x="2880" y="912" />
 		<enemy type="0" x="639" y="1047" />
 		<enemy type="0" x="1711" y="103" />
-		<enemy type="0" x="1871" y="391" />
+		<enemy type="0" x="1871" y="358" />
 		<enemy type="0" x="2176" y="1159" />
-		<enemy type="0" x="2864" y="519" />
+		<enemy type="0" x="2864" y="518" />
 	</scene>
 	<map />
 	<player />

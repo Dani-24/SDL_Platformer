@@ -44,9 +44,9 @@ bool Scene::Start()
 {
 	LOG("Start Scene and load assets");
 
-	// Delete Save data to disable checkpoint tp if replay the game
-	delSaveData = true;
-	app->SaveGameRequest();
+	//// Delete Save data to disable checkpoint tp if replay the game
+	//delSaveData = true;
+	//app->SaveGameRequest();
 
 	// Player position for Scene 1
 	app->player->initPos.x = initPosX;
@@ -62,7 +62,10 @@ bool Scene::Start()
 	app->player->Enable();
 	app->map->Enable();
 	// Enable is use fonts
-	//app->font->Enable();
+	
+	app->font->Init();
+
+	app->font->LoadFont("Assets/textures/AmongUs-Regular.ttf");
 
 	app->enemy->Enable();
 	app->item->Enable();
@@ -414,6 +417,12 @@ bool Scene::PostUpdate()
 		app->render->DrawTexture(dieWindow, w, h, &dieWRect);
 	}
 
+	// =========================================
+	//					Text
+	// =========================================
+
+	app->font->drawText("AMOGUS SUS", app->player->position.x, app->player->position.y, 255, 0, 0);
+
 	return ret;
 }
 
@@ -421,6 +430,8 @@ bool Scene::PostUpdate()
 bool Scene::CleanUp()
 {
 	LOG("Freeing scene");
+
+	app->font->UnloadFont();
 
 	app->audio->PlayMusic(NULL);
 
