@@ -37,6 +37,9 @@ private:
 	// GUI Button
 	GuiButton* btn1;
 	GuiButton* btn2;
+	GuiButton* btn3;
+	GuiButton* btn4;
+	GuiButton* btn5;
 
 	float scroller[4];
 

@@ -76,21 +76,21 @@ bool GuiButton::Draw(Render* render)
 
 	case GuiControlState::NORMAL:
 	{
-		render->DrawRectangle(bounds, 255, 0, 0, 255);
-		app->font->drawText(text, bounds.x, bounds.y, 0, 0, 0);
+		render->DrawRectangle(bounds, 0, 0, 0, 0);
+		//app->font->drawText(text, bounds.x, bounds.y, 0, 0, 0);
 
 	} break;
 
 	//L14: TODO 4: Draw the button according the GuiControl State
 	case GuiControlState::FOCUSED:
 	{
-		render->DrawRectangle(bounds, 255, 255, 255, 160);
-		app->font->drawText(text, bounds.x, bounds.y, 0, 0, 0);
+		render->DrawRectangle(bounds, 255, 255, 255, 80);
+		//app->font->drawText(text, bounds.x, bounds.y, 0, 0, 0);
 	} break;
 	case GuiControlState::PRESSED:
 	{
-		render->DrawRectangle(bounds, 255, 255, 255, 255);
-		app->font->drawText(text, bounds.x, bounds.y, 0, 0, 0);
+		render->DrawRectangle(bounds, 146, 76, 36, 255);
+		//app->font->drawText(text, bounds.x, bounds.y, 0, 0, 0);
 	} break;
 
 	/******/
