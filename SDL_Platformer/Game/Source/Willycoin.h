@@ -74,15 +74,12 @@ public:
 	uint willyFx = 0;
 	uint foodFx = 0;
 
-private:
-
 	// The ITEMS spritesheet loaded into an SDL_Texture
 	SDL_Texture* ItemSprite = nullptr;
 	SDL_Texture* Willycoin; // The WILLYCOIN texture loaded into an SDL_Texture
 
 	//Items Animations
 	Animation coinSpin, coinFlash, coinIdle, lollipop, candy, chocolate, can, iceCream1, iceCream2, cherry, banana, strawberry, apple, orange;
-	
 };
 
 #endif // !__WILLCOIN_H__

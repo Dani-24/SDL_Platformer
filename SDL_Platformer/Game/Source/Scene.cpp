@@ -21,6 +21,10 @@
 #include "ModuleQFonts.h"
 #include "Pathfinder.h"
 
+#include <sstream>
+#include <string.h>
+using namespace std;
+
 Scene::Scene(App* application, bool start_enabled) : Module(application, start_enabled)
 {
 	name.Create("scene");
@@ -43,6 +47,8 @@ bool Scene::Awake()
 bool Scene::Start()
 {
 	LOG("Start Scene and load assets");
+	
+	coins = score = wCoins = 0;
 
 	//// Delete Save data to disable checkpoint tp if replay the game
 	//delSaveData = true;
@@ -64,7 +70,6 @@ bool Scene::Start()
 	// Enable is use fonts
 	
 	app->font->Init();
-
 	app->font->LoadFont("Assets/textures/AmongUs-Regular.ttf");
 
 	app->enemy->Enable();
@@ -75,6 +80,11 @@ bool Scene::Start()
 	app->map->Blocks();
 
 	// --- Load Assets ---
+
+	// Hud
+	hud_bg_texture = app->tex->Load("Assets/textures/sceneHUD.png");
+	wCoin1tex = app->tex->Load("Assets/textures/wCoinHUD.png");
+	wCoin2tex = app->tex->Load("Assets/textures/wCoinHUD2.png");
 
 	// Background
 	app->audio->PlayMusic("Assets/audio/music/music_bg.ogg");
@@ -89,7 +99,6 @@ bool Scene::Start()
 		forestX[i] = hillsX[i] = cloudsDownX[i] = cloudsUpX[i] = i* textureWidth;
 	}
 
-	
 	// Die effect
 	dieWindow = app->tex->Load("Assets/textures/dieTexture.png");
 
@@ -249,7 +258,7 @@ bool Scene::Update(float dt)
 		app->fade->StartFadeToBlack(this, (Module*)app->scene, 10);
 	}
 
-	// --------------- Go to 2nd level -------------------- (there isn't 2nd lvl yet)
+	// --------------- Go to 2nd level -------------------- (there isn't 2nd lvl yet :P)
 	/*if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN) {
 		app->fade->StartFadeToBlack(this, (Module*)app->sceneLevel2, 10);
 	}*/
@@ -261,8 +270,6 @@ bool Scene::Update(float dt)
 
 	// ======================================================
 	// BackGround
-
-	
 
 	if (playerPosForScroll < METERS_TO_PIXELS(app->player->playerBody->body->GetPosition().x)) {
 		for (int i = 0; i < Scroller; i++) {
@@ -418,10 +425,66 @@ bool Scene::PostUpdate()
 	}
 
 	// =========================================
-	//					Text
+	//					HUD
 	// =========================================
 
-	app->font->drawText("AMOGUS SUS", app->player->position.x, app->player->position.y, 255, 0, 0);
+	// ( *Lives at player.cpp )
+
+	hudPos.x = -app->render->camera.x / 2;
+	hudPos.y = -app->render->camera.y / 2;
+
+	//bg
+	app->render->DrawTexture(hud_bg_texture, hudPos.x, hudPos.y);
+
+	app->font->drawText("LIVES", hudPos.x + 120, hudPos.y + 15, 255, 255, 255);
+	
+	// coins
+	if (contHud >= 0) {
+		contHud--;
+		app->item->coinSpin.Update();
+	}
+	else {
+		contHud = 100;
+		app->item->coinSpin.Reset();
+	}
+	app->render->DrawTexture(app->item->ItemSprite, hudPos.x + 200, hudPos.y + 17, &app->item->coinSpin.GetCurrentFrame());
+	
+	// Coins
+	sprintf_s(coinText, "%d", coins);	// Text to string
+
+	app->font->drawText(coinText, hudPos.x + 225, hudPos.y + 15, 255, 255, 255);
+
+	// Score
+	sprintf_s(scoreText, "Score = %d", score);
+
+	app->font->drawText(scoreText, hudPos.x + 275, hudPos.y + 15, 255, 255, 255);
+
+	// Willycoins
+	app->font->drawText("Willycoins: ", hudPos.x + 425, hudPos.y + 15, 255, 255, 255);
+
+	switch (wCoins)
+	{
+	case 0:
+		app->render->DrawTexture(wCoin2tex, hudPos.x + 525, hudPos.y + 11);
+		app->render->DrawTexture(wCoin2tex, hudPos.x + 560, hudPos.y + 11);
+		app->render->DrawTexture(wCoin2tex, hudPos.x + 595, hudPos.y + 11);
+		break;
+	case 1:
+		app->render->DrawTexture(wCoin1tex, hudPos.x + 525, hudPos.y + 11);
+		app->render->DrawTexture(wCoin2tex, hudPos.x + 560, hudPos.y + 11);
+		app->render->DrawTexture(wCoin2tex, hudPos.x + 595, hudPos.y + 11);
+		break;
+	case 2:
+		app->render->DrawTexture(wCoin1tex, hudPos.x + 525, hudPos.y + 11);
+		app->render->DrawTexture(wCoin1tex, hudPos.x + 560, hudPos.y + 11);
+		app->render->DrawTexture(wCoin2tex, hudPos.x + 595, hudPos.y + 11);
+		break;
+	case 3:
+		app->render->DrawTexture(wCoin1tex, hudPos.x + 525, hudPos.y + 11);
+		app->render->DrawTexture(wCoin1tex, hudPos.x + 560, hudPos.y + 11);
+		app->render->DrawTexture(wCoin1tex, hudPos.x + 595, hudPos.y + 11);
+		break;
+	}
 
 	return ret;
 }
@@ -432,6 +495,7 @@ bool Scene::CleanUp()
 	LOG("Freeing scene");
 
 	app->font->UnloadFont();
+	app->font->CleanUp();
 
 	app->audio->PlayMusic(NULL);
 
@@ -441,6 +505,8 @@ bool Scene::CleanUp()
 
 	eggAnim.DeleteAnim();
 	panderetAnim.DeleteAnim();
+
+	app->tex->UnLoad(hud_bg_texture);
 
 	// BackGround
 	app->tex->UnLoad(forestTex);
@@ -492,6 +558,11 @@ bool Scene::LoadState(pugi::xml_node& data){
 	// --------------- LOAD SAVE DATA -----------------
 	LOG("Loading saved data");
 
+	// Score & coins
+	coins = data.child("coins").attribute("value").as_int();
+	score = data.child("score").attribute("value").as_int();
+	wCoins = data.child("willycoins").attribute("value").as_int();
+
 	// ====================
 	//	  reset player
 	// ====================
@@ -503,7 +574,6 @@ bool Scene::LoadState(pugi::xml_node& data){
 	app->player->initPos.y = pNode.attribute("y").as_int();
 
 	app->player->Enable();
-
 
 	app->player->HP = pNode.attribute("hp").as_int();
 
@@ -571,6 +641,10 @@ bool Scene::SaveState(pugi::xml_node& data) const
 		pNode.append_attribute("x") = app->player->position.x;
 		pNode.append_attribute("y") = app->player->position.y;
 		pNode.append_attribute("hp") = app->player->HP;
+
+		data.append_child("coins").append_attribute("value") = coins;
+		data.append_child("score").append_attribute("value") = score;
+		data.append_child("willycoins").append_attribute("value") = wCoins;
 	}
 	else if(delSaveData == true) {
 		// ---------------- DELETE SAVE DATA ----------------------
@@ -579,6 +653,10 @@ bool Scene::SaveState(pugi::xml_node& data) const
 		pNode.append_attribute("x") = initPosX;
 		pNode.append_attribute("y") = initPosY;
 		pNode.append_attribute("hp") = app->player->max_HP;
+
+		data.append_child("coins").append_attribute("value") = 0;
+		data.append_child("score").append_attribute("value") = 0;
+		data.append_child("willycoins").append_attribute("value") = 0;
 	}
 	
 	// ---------------- ITEM SAVE DATA -----------------------------

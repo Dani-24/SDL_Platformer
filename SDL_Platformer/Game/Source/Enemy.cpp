@@ -31,6 +31,7 @@ bool Enemy::Start() {
 
 	detectPlayerFx = app->audio->LoadFx("Assets/audio/fx/enemyDetectPlayer.wav");
 	deathFx = app->audio->LoadFx("Assets/audio/fx/enemyDeath.wav");
+	death2Fx = app->audio->LoadFx("Assets/audio/fx/boom.wav");
 
 	alertTexture = app->tex->Load("Assets/textures/alert.png");
 	lostTexture = app->tex->Load("Assets/textures/stopChase.png");
@@ -302,7 +303,8 @@ bool Enemy::Update(float dt) {
 
 				app->physics->world->DestroyBody(c->data->body->body);
 				app->physics->world->DestroyBody(c->data->collider->body);
-
+				app->scene->score += 669;
+				app->audio->PlayFx(death2Fx);
 				enemies.del(c);
 				break;
 			}
@@ -354,14 +356,20 @@ bool Enemy::PostUpdate() {
 
 			// Draw interactions
 			if (c->data->alert == true) {
-				app->render->DrawTexture(alertTexture, c->data->position.x + 5, c->data->position.y - 25);
+				if (c->data->position.y > (-app->render->camera.y / 2) + 50) {
+					app->render->DrawTexture(alertTexture, c->data->position.x + 5, c->data->position.y - 25);
+				}
 			}
 			if (c->data->lost == true) {
-				app->render->DrawTexture(lostTexture, c->data->position.x + 5, c->data->position.y - 25);
+				if (c->data->position.y > (-app->render->camera.y / 2) + 50) {
+					app->render->DrawTexture(lostTexture, c->data->position.x + 5, c->data->position.y - 25);
+				}
 			}
 
-			app->render->DrawTexture(c->data->sprite, c->data->position.x - 5, c->data->position.y - 5, &rect);
-			
+			if (c->data->position.y > (-app->render->camera.y / 2) + 50) {
+				app->render->DrawTexture(c->data->sprite, c->data->position.x - 5, c->data->position.y - 5, &rect);
+			}
+
 			// ======================================================
 			//                  Pathfinding Debug
 			// ======================================================
