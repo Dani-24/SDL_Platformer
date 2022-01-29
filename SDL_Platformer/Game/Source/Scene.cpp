@@ -50,6 +50,8 @@ bool Scene::Start()
 	
 	coins = score = wCoins = 0;
 
+	time = 400000;
+
 	pause = false;
 
 	fxEnter = app->audio->LoadFx("Assets/audio/fx/enter.wav");
@@ -97,6 +99,8 @@ bool Scene::Start()
 	btn11 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 11, "Settings", { 178, 275, 83, 51 }, this);
 	btn12 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 12, "Back To Title", { 280, 275, 83, 51 }, this);
 	btn13 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 13, "Exit", { 384, 275, 83, 51 }, this);
+
+	timeControl.Start();
 
 	// Background
 	app->audio->PlayMusic("Assets/audio/music/music_bg.ogg");
@@ -240,6 +244,7 @@ bool Scene::PreUpdate()
 		else {
 			pause = false;
 			LOG("Game UnPaused");
+			timeControl.Start();
 		}
 	}
 
@@ -249,6 +254,17 @@ bool Scene::PreUpdate()
 // Called each loop iteration
 bool Scene::Update(float dt)
 {
+	if (pause == false) {
+		time -= timeControl.ReadSec();
+	}
+	else {
+		timeControl.Stop();
+	}
+
+	if (time <= 0) {
+		app->player->death = true;
+	}
+
 	// Death
 	if (app->player->death == true) {
 
@@ -466,17 +482,22 @@ bool Scene::PostUpdate()
 		contHud = 100;
 		app->item->coinSpin.Reset();
 	}
-	app->render->DrawTexture(app->item->ItemSprite, hudPos.x + 200, hudPos.y + 17, &app->item->coinSpin.GetCurrentFrame());
+	app->render->DrawTexture(app->item->ItemSprite, hudPos.x + 185, hudPos.y + 17, &app->item->coinSpin.GetCurrentFrame());
 	
 	// Coins
 	sprintf_s(coinText, "%d", coins);	// Text to string
 
-	app->font->drawText(coinText, hudPos.x + 225, hudPos.y + 15, 255, 255, 255);
+	app->font->drawText(coinText, hudPos.x + 210, hudPos.y + 15, 255, 255, 255);
+
+	// time
+	sprintf_s(timeText, "Time: %d", time/1000);
+
+	app->font->drawText(timeText, hudPos.x + 235, hudPos.y + 15, 255, 255, 255);
 
 	// Score
-	sprintf_s(scoreText, "Score = %d", score);
+	sprintf_s(scoreText, "Score: %d", score);
 
-	app->font->drawText(scoreText, hudPos.x + 275, hudPos.y + 15, 255, 255, 255);
+	app->font->drawText(scoreText, hudPos.x + 325, hudPos.y + 15, 255, 255, 255);
 
 	// Willycoins
 	app->font->drawText("Willycoins: ", hudPos.x + 425, hudPos.y + 15, 255, 255, 255);
@@ -505,7 +526,7 @@ bool Scene::PostUpdate()
 		break;
 	}
 
-	if (pause == true) {
+	if (pause == true && app->player->death == false) {
 		app->render->DrawTexture(pauseTexture, hudPos.x + 15, hudPos.y + 50);
 
 		if (btn10->state == GuiControlState::DISABLED) {
@@ -621,9 +642,6 @@ bool Scene::CleanUp()
 	app->map->Disable();
 	app->player->Disable();
 
-	// Enable when used
-	//app->font->Disable();
-
 	if (app->enemy->isEnabled()) {
 		app->enemy->Disable();
 	}
@@ -656,6 +674,7 @@ bool Scene::LoadState(pugi::xml_node& data){
 	coins = data.child("coins").attribute("value").as_int();
 	score = data.child("score").attribute("value").as_int();
 	wCoins = data.child("willycoins").attribute("value").as_int();
+	time = data.child("time").attribute("value").as_int();
 
 	// ====================
 	//	  reset player
@@ -739,6 +758,7 @@ bool Scene::SaveState(pugi::xml_node& data) const
 		data.append_child("coins").append_attribute("value") = coins;
 		data.append_child("score").append_attribute("value") = score;
 		data.append_child("willycoins").append_attribute("value") = wCoins;
+		data.append_child("time").append_attribute("value") = time;
 	}
 	else if(delSaveData == true) {
 		// ---------------- DELETE SAVE DATA ----------------------
@@ -751,6 +771,7 @@ bool Scene::SaveState(pugi::xml_node& data) const
 		data.append_child("coins").append_attribute("value") = 0;
 		data.append_child("score").append_attribute("value") = 0;
 		data.append_child("willycoins").append_attribute("value") = 0;
+		data.append_child("time").append_attribute("value") = 400000;
 	}
 	
 	// ---------------- ITEM SAVE DATA -----------------------------

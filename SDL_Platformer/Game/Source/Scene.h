@@ -44,6 +44,8 @@ public:
 	PhysBody* checkPointSensor;
 
 	int coins, score, wCoins;
+	int time;
+
 private:
 
 	uint fxEnter;
@@ -51,13 +53,15 @@ private:
 	SDL_Texture* hud_bg_texture, *wCoin1tex, *wCoin2tex, *pauseTexture;
 	iPoint hudPos;
 	int contHud = 100;
-	char coinText[100], scoreText[100];
+	char coinText[100], scoreText[100], timeText[100];
 
 	// PAUSE GUI
 	GuiButton* btn10;
 	GuiButton* btn11;
 	GuiButton* btn12;
 	GuiButton* btn13;
+
+	Timer timeControl;
 
 	// EasterEGG
 	Animation eggAnim;

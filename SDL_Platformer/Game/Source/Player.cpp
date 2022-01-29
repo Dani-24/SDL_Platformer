@@ -677,6 +677,9 @@ bool Player::PostUpdate() {
 	if (app->scene->pause == false) {
 		app->render->DrawTexture(playerSprite, position.x - 3, position.y - 5, &currentAnimation->GetCurrentFrame(), 1.0f, angle, 34, 34); // -3 and -5 are for hitbox adjustments
 	}
+	if (death == true) {
+		app->render->DrawTexture(playerSprite, position.x - 3, position.y - 5, &currentAnimation->GetCurrentFrame(), 1.0f, angle, 34, 34);
+	}
 
 	// --------------------- DRAW LIVES HUD --------------------------------------
 
