@@ -24,7 +24,7 @@ GuiButton::~GuiButton()
 //app->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN
 bool GuiButton::Update(float dt)
 {
-	if (state != GuiControlState::DISABLED)
+	if (state != GuiControlState::DISABLED && state != GuiControlState::UNABAILABLE)
 	{
 		// L14: TODO 3: Update the state of the GUiButton according to the mouse position
 		// Get mouse position
@@ -72,6 +72,11 @@ bool GuiButton::Draw(Render* render)
 	case GuiControlState::DISABLED: 
 	{
 		render->DrawRectangle(bounds, 0, 0, 0, 0);
+	} break; 
+
+	case GuiControlState::UNABAILABLE:
+	{
+		render->DrawRectangle(bounds, 0, 0, 0, 80);
 	} break;
 
 	case GuiControlState::NORMAL:
