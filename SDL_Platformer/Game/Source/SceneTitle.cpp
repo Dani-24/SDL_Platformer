@@ -58,6 +58,7 @@ bool SceneTitle::Start()
 
 	app->font->Init();
 	app->guiManager->Enable();
+	
 	// GUI Buttons
 	btn1 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 1, "TEST", { 80, 275, 83, 51 }, this);
 	btn2 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 2, "TEST", { 178, 275, 83, 51 }, this);
@@ -303,6 +304,8 @@ bool SceneTitle::CleanUp()
 	app->tex->UnLoad(titleText);
 	app->tex->UnLoad(pressEnter);
 	app->font->UnloadFont();
+
+	//app->guiManager->Disable();
 
 	fxEnter = scrollVelocity = 0;
 	enemyFlyX = 700;

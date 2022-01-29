@@ -278,35 +278,36 @@ bool Item::Update(float dt) {
 }
 
 bool Item::PostUpdate() {
-
-	if (app->player->death != true && app->player->win != true) {
-		ListItem<Items*>* c = items.start;
-		// ======================================================
-		//						Draw items
-		// ======================================================
-		while (c != NULL) {
-			switch (c->data->type)
-			{
-			case 1:
-				SDL_Rect rect = c->data->currentAnimation->GetCurrentFrame();
-				if (c->data->position.y > (-app->render->camera.y / 2) + 50) {
-					app->render->DrawTexture(c->data->sprite, c->data->position.x, c->data->position.y, &rect);
+	if (app->scene->pause == false) {
+		if (app->player->death != true && app->player->win != true) {
+			ListItem<Items*>* c = items.start;
+			// ======================================================
+			//						Draw items
+			// ======================================================
+			while (c != NULL) {
+				switch (c->data->type)
+				{
+				case 1:
+					SDL_Rect rect = c->data->currentAnimation->GetCurrentFrame();
+					if (c->data->position.y > (-app->render->camera.y / 2) + 50) {
+						app->render->DrawTexture(c->data->sprite, c->data->position.x, c->data->position.y, &rect);
+					}
+					c = c->next;
+					break;
+				case 2:
+					if (c->data->position.y > (-app->render->camera.y / 2) + 50) {
+						app->render->DrawTexture(Willycoin, c->data->position.x - 32, c->data->position.y - 32);
+					}
+					c = c->next;
+					break;
+				case 3:
+					SDL_Rect rect2 = c->data->currentAnimation->GetCurrentFrame();
+					if (c->data->position.y > (-app->render->camera.y / 2) + 50) {
+						app->render->DrawTexture(c->data->sprite, c->data->position.x, c->data->position.y, &rect2);
+					}
+					c = c->next;
+					break;
 				}
-				c = c->next;
-				break;
-			case 2:
-				if (c->data->position.y > (-app->render->camera.y / 2) + 50) {
-					app->render->DrawTexture(Willycoin, c->data->position.x - 32, c->data->position.y - 32);
-				}
-				c = c->next;
-				break;
-			case 3:
-				SDL_Rect rect2 = c->data->currentAnimation->GetCurrentFrame();
-				if (c->data->position.y > (-app->render->camera.y / 2) + 50) {
-					app->render->DrawTexture(c->data->sprite, c->data->position.x, c->data->position.y, &rect2);
-				}
-				c = c->next;
-				break;
 			}
 		}
 	}

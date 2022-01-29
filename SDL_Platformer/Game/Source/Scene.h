@@ -30,7 +30,7 @@ public:
 	void ResetCamera();
 
 	// Define multiple Gui Event methods
-	//bool OnGuiMouseClickEvent(GuiControl* control);
+	bool OnGuiMouseClickEvent(GuiControl* control);
 
 	// EasterEgg
 	void EasterEgg();
@@ -48,17 +48,16 @@ private:
 
 	uint fxEnter;
 	// HUD
-	SDL_Texture* hud_bg_texture, *wCoin1tex, *wCoin2tex;
+	SDL_Texture* hud_bg_texture, *wCoin1tex, *wCoin2tex, *pauseTexture;
 	iPoint hudPos;
 	int contHud = 100;
 	char coinText[100], scoreText[100];
 
 	// PAUSE GUI
-	GuiButton* btn1;
-	GuiButton* btn2;
-	GuiButton* btn3;
-	GuiButton* btn4;
-
+	GuiButton* btn10;
+	GuiButton* btn11;
+	GuiButton* btn12;
+	GuiButton* btn13;
 
 	// EasterEGG
 	Animation eggAnim;

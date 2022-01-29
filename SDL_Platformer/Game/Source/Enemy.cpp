@@ -347,52 +347,53 @@ bool Enemy::DeleteEnemy(Enemies* e) {
 
 bool Enemy::PostUpdate() {
 
-	if (app->player->death != true && app->player->win != true) {
-		ListItem<Enemies*>* c = enemies.start;
+	if (app->scene->pause == false) {
+		if (app->player->death != true && app->player->win != true) {
+			ListItem<Enemies*>* c = enemies.start;
 
-		while (c != NULL) {
-			// ======================================================
-			//                    Draw enemies
-			// ======================================================
-			SDL_Rect rect = c->data->currentAnimation->GetCurrentFrame();
+			while (c != NULL) {
+				// ======================================================
+				//                    Draw enemies
+				// ======================================================
+				SDL_Rect rect = c->data->currentAnimation->GetCurrentFrame();
 
-			// Draw interactions
-			if (c->data->alert == true) {
+				// Draw interactions
+				if (c->data->alert == true) {
+					if (c->data->position.y > (-app->render->camera.y / 2) + 50) {
+						app->render->DrawTexture(alertTexture, c->data->position.x + 5, c->data->position.y - 25);
+					}
+				}
+				if (c->data->lost == true) {
+					if (c->data->position.y > (-app->render->camera.y / 2) + 50) {
+						app->render->DrawTexture(lostTexture, c->data->position.x + 5, c->data->position.y - 25);
+					}
+				}
+
 				if (c->data->position.y > (-app->render->camera.y / 2) + 50) {
-					app->render->DrawTexture(alertTexture, c->data->position.x + 5, c->data->position.y - 25);
-				}
-			}
-			if (c->data->lost == true) {
-				if (c->data->position.y > (-app->render->camera.y / 2) + 50) {
-					app->render->DrawTexture(lostTexture, c->data->position.x + 5, c->data->position.y - 25);
-				}
-			}
-
-			if (c->data->position.y > (-app->render->camera.y / 2) + 50) {
-				app->render->DrawTexture(c->data->sprite, c->data->position.x - 5, c->data->position.y - 5, &rect);
-			}
-
-			// ======================================================
-			//                  Pathfinding Debug
-			// ======================================================
-			if (app->physics->debug == true) {
-
-				const DynArray<iPoint>* path = app->pathfinder->GetLastPath();
-
-				for (uint i = 0; i < path->Count(); ++i)
-				{
-					iPoint pos = app->map->MapToWorld(path->At(i)->x, path->At(i)->y);
-					app->render->DrawTexture(app->pathfinder->pathTexture, pos.x, pos.y);
+					app->render->DrawTexture(c->data->sprite, c->data->position.x - 5, c->data->position.y - 5, &rect);
 				}
 
-				iPoint originScreen = app->map->MapToWorld(c->data->position.x, c->data->position.y);
-				app->render->DrawTexture(app->pathfinder->pathOriginTexture, originScreen.x, originScreen.y);
+				// ======================================================
+				//                  Pathfinding Debug
+				// ======================================================
+				if (app->physics->debug == true) {
+
+					const DynArray<iPoint>* path = app->pathfinder->GetLastPath();
+
+					for (uint i = 0; i < path->Count(); ++i)
+					{
+						iPoint pos = app->map->MapToWorld(path->At(i)->x, path->At(i)->y);
+						app->render->DrawTexture(app->pathfinder->pathTexture, pos.x, pos.y);
+					}
+
+					iPoint originScreen = app->map->MapToWorld(c->data->position.x, c->data->position.y);
+					app->render->DrawTexture(app->pathfinder->pathOriginTexture, originScreen.x, originScreen.y);
+				}
+
+				c = c->next;
 			}
-						
-			c = c->next;
 		}
 	}
-
 	return true;
 }
 

@@ -1,7 +1,7 @@
 #include "GuiManager.h"
 #include "App.h"
 #include "Textures.h"
-
+#include "Log.h"
 #include "GuiButton.h"
 #include "GuiCheckBox.h"
 #include "Audio.h"

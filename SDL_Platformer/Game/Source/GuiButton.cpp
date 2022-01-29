@@ -12,7 +12,6 @@ GuiButton::GuiButton(uint32 id, SDL_Rect bounds, const char* text) : GuiControl(
 
 	focusFx = app->audio->LoadFx("Assets/audio/fx/focusButton.wav");
 	pressFx = app->audio->LoadFx("Assets/audio/fx/pressButton.wav");
-	app->font->LoadFont("Assets/textures/AmongUs-Regular.ttf");
 	canClick = true;
 	drawBasic = false;
 }
@@ -68,39 +67,34 @@ bool GuiButton::Draw(Render* render)
 	// Draw the right button depending on state
 	switch (state)
 	{
-
 	case GuiControlState::DISABLED: 
-	{
 		render->DrawRectangle(bounds, 0, 0, 0, 0);
-	} break; 
+		break; 
 
 	case GuiControlState::UNABAILABLE:
-	{
-		render->DrawRectangle(bounds, 0, 0, 0, 80);
-	} break;
+		render->DrawRectangle(bounds, 0, 0, 0, 80); 
+		break;
 
 	case GuiControlState::NORMAL:
-	{
 		render->DrawRectangle(bounds, 0, 0, 0, 0);
 		//app->font->drawText(text, bounds.x, bounds.y, 0, 0, 0);
+		break;
 
-	} break;
-
-	//L14: TODO 4: Draw the button according the GuiControl State
+	//Draw the button according the GuiControl State
 	case GuiControlState::FOCUSED:
-	{
 		render->DrawRectangle(bounds, 255, 255, 255, 80);
 		//app->font->drawText(text, bounds.x, bounds.y, 0, 0, 0);
-	} break;
+		break;
 	case GuiControlState::PRESSED:
-	{
 		render->DrawRectangle(bounds, 146, 76, 36, 255);
 		//app->font->drawText(text, bounds.x, bounds.y, 0, 0, 0);
-	} break;
+		break;
 
 	/******/
 
-	case GuiControlState::SELECTED: render->DrawRectangle(bounds, 0, 255, 0, 255);
+	case GuiControlState::SELECTED: 
+		render->DrawRectangle(bounds, 0, 255, 0, 255);
+	
 		break;
 
 	default:

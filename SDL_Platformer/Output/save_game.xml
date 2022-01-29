@@ -9,10 +9,25 @@
 	<sceneLogo />
 	<sceneTitle />
 	<scene>
-		<player x="3010" y="1077" hp="2" />
-		<coins value="30" />
-		<score value="5177" />
-		<willycoins value="1" />
+		<player x="32" y="1090" hp="3" />
+		<coins value="0" />
+		<score value="0" />
+		<willycoins value="0" />
+		<item type="1" x="224" y="1024" />
+		<item type="1" x="240" y="1024" />
+		<item type="1" x="256" y="1024" />
+		<item type="1" x="272" y="1024" />
+		<item type="1" x="560" y="1056" />
+		<item type="1" x="576" y="1056" />
+		<item type="1" x="592" y="1056" />
+		<item type="1" x="608" y="1056" />
+		<item type="1" x="832" y="1104" />
+		<item type="1" x="832" y="1168" />
+		<item type="1" x="848" y="1168" />
+		<item type="1" x="864" y="1168" />
+		<item type="1" x="880" y="1168" />
+		<item type="1" x="896" y="1104" />
+		<item type="1" x="896" y="1168" />
 		<item type="1" x="928" y="800" />
 		<item type="1" x="928" y="880" />
 		<item type="1" x="944" y="880" />
@@ -37,9 +52,17 @@
 		<item type="1" x="1088" y="880" />
 		<item type="1" x="1104" y="800" />
 		<item type="1" x="1104" y="880" />
+		<item type="1" x="1312" y="1088" />
+		<item type="1" x="1328" y="1088" />
+		<item type="1" x="1344" y="1088" />
 		<item type="1" x="1360" y="288" />
 		<item type="1" x="1456" y="384" />
+		<item type="1" x="1456" y="1040" />
 		<item type="1" x="1520" y="448" />
+		<item type="1" x="1536" y="992" />
+		<item type="1" x="1552" y="992" />
+		<item type="1" x="1568" y="992" />
+		<item type="1" x="1584" y="992" />
 		<item type="1" x="1632" y="464" />
 		<item type="1" x="1712" y="288" />
 		<item type="1" x="1840" y="112" />
@@ -53,6 +76,11 @@
 		<item type="1" x="1920" y="960" />
 		<item type="1" x="1936" y="112" />
 		<item type="1" x="1952" y="112" />
+		<item type="1" x="1984" y="1168" />
+		<item type="1" x="2000" y="1168" />
+		<item type="1" x="2016" y="1168" />
+		<item type="1" x="2032" y="1168" />
+		<item type="1" x="2048" y="1168" />
 		<item type="1" x="2272" y="464" />
 		<item type="1" x="2288" y="464" />
 		<item type="1" x="2304" y="464" />
@@ -81,7 +109,9 @@
 		<item type="1" x="2848" y="656" />
 		<item type="1" x="2960" y="240" />
 		<item type="1" x="2976" y="224" />
+		<item type="1" x="2976" y="1152" />
 		<item type="1" x="2992" y="208" />
+		<item type="1" x="2992" y="1152" />
 		<item type="1" x="3008" y="192" />
 		<item type="1" x="3024" y="208" />
 		<item type="1" x="3040" y="224" />
@@ -89,15 +119,22 @@
 		<item type="1" x="3056" y="1024" />
 		<item type="1" x="3152" y="880" />
 		<item type="2" x="1008" y="752" />
+		<item type="2" x="1744" y="896" />
 		<item type="2" x="2688" y="336" />
+		<item type="3" x="1008" y="1152" />
 		<item type="3" x="1760" y="320" />
 		<item type="3" x="2368" y="192" />
+		<item type="3" x="2656" y="1168" />
 		<item type="3" x="2720" y="608" />
+		<enemy type="1" x="1200" y="959" />
 		<enemy type="1" x="1648" y="319" />
 		<enemy type="1" x="2143" y="96" />
 		<enemy type="1" x="2480" y="400" />
+		<enemy type="1" x="2880" y="912" />
+		<enemy type="0" x="639" y="1047" />
 		<enemy type="0" x="1711" y="103" />
 		<enemy type="0" x="1871" y="391" />
+		<enemy type="0" x="2176" y="1159" />
 		<enemy type="0" x="2864" y="519" />
 	</scene>
 	<map />

@@ -79,6 +79,8 @@ bool Scene::Start()
 	app->enemy->Enable();
 	app->item->Enable();
 
+	app->guiManager->Enable();
+
 	// Load map
 	app->map->Load("mapa.tmx");
 	app->map->Blocks();
@@ -89,6 +91,12 @@ bool Scene::Start()
 	hud_bg_texture = app->tex->Load("Assets/textures/sceneHUD.png");
 	wCoin1tex = app->tex->Load("Assets/textures/wCoinHUD.png");
 	wCoin2tex = app->tex->Load("Assets/textures/wCoinHUD2.png");
+	pauseTexture = app->tex->Load("Assets/textures/pause.png");
+
+	btn10 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 10, "Resume", { 80, 275, 83, 51 }, this);
+	btn11 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 11, "Settings", { 178, 275, 83, 51 }, this);
+	btn12 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 12, "Back To Title", { 280, 275, 83, 51 }, this);
+	btn13 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 13, "Exit", { 384, 275, 83, 51 }, this);
 
 	// Background
 	app->audio->PlayMusic("Assets/audio/music/music_bg.ogg");
@@ -497,48 +505,88 @@ bool Scene::PostUpdate()
 		break;
 	}
 
+	if (pause == true) {
+		app->render->DrawTexture(pauseTexture, hudPos.x + 15, hudPos.y + 50);
+
+		if (btn10->state == GuiControlState::DISABLED) {
+			btn10->state = GuiControlState::NORMAL;
+		}
+		if (btn11->state == GuiControlState::DISABLED) {
+			btn11->state = GuiControlState::NORMAL;
+		}
+		if (btn12->state == GuiControlState::DISABLED) {
+			btn12->state = GuiControlState::NORMAL;
+		}
+		if (btn13->state == GuiControlState::DISABLED) {
+			btn13->state = GuiControlState::NORMAL;
+		}
+
+		//Draw GUI
+		app->guiManager->Draw();
+	}
+	else {
+		if (btn10->state == GuiControlState::NORMAL) {
+			btn10->state = GuiControlState::DISABLED;
+		}
+		if (btn11->state == GuiControlState::NORMAL) {
+			btn11->state = GuiControlState::DISABLED;
+		}
+		if (btn12->state == GuiControlState::NORMAL) {
+			btn12->state = GuiControlState::DISABLED;
+		}
+		if (btn13->state == GuiControlState::NORMAL) {
+			btn13->state = GuiControlState::DISABLED;
+		}
+	}
+
 	return ret;
 }
 
-//bool OnGuiMouseClickEvent(GuiControl* control) {
-//	switch (control->type)
-//	{
-//	case GuiControlType::BUTTON:
-//	{
-//		//Checks the GUI element ID
-//		if (control->id == 1) //Resume
-//		{
-//			LOG("Click on button 1");
-//		}
-//
-//		if (control->id == 2) //Settings
-//		{
-//			LOG("Click on button 2");
-//		}
-//
-//		if (control->id == 3) //BackToTitle
-//		{
-//			LOG("Click on button 3");
-//		}
-//
-//		if (control->id == 4) //Exit
-//		{
-//			LOG("Click on button 4");
-//		}
-//	}
-//	//Other cases here
-//	default: 
-//		break;
-//	}
-//
-//	//control->state = GuiControlState::NORMAL;
-//	return true;
-//}
+bool Scene::OnGuiMouseClickEvent(GuiControl* control){
+	switch (control->type)
+	{
+	case GuiControlType::BUTTON:
+	{
+		//Checks the GUI element ID
+		if (control->id == 10) //Resume
+		{
+			LOG("Click on button Resume");
+		}
+
+		if (control->id == 11) //Settings
+		{
+			LOG("Click on button Settings");
+		}
+
+		if (control->id == 12) //BackToTitle
+		{
+			LOG("Click on button Back to title");
+		}
+
+		if (control->id == 13) //Exit
+		{
+			LOG("Click on button Exit");
+		}
+	}
+	//Other cases here
+	default: 
+		break;
+	}
+
+	//control->state = GuiControlState::NORMAL;
+	return true;
+}
 
 // Called before quitting
 bool Scene::CleanUp()
 {
 	LOG("Freeing scene");
+
+	btn10->state = GuiControlState::DISABLED;
+	btn11->state = GuiControlState::DISABLED;
+	btn12->state = GuiControlState::DISABLED;
+	btn13->state = GuiControlState::DISABLED;
+	//app->guiManager->Disable();
 
 	app->font->UnloadFont();
 	app->font->CleanUp();
