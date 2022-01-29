@@ -60,9 +60,9 @@ bool SceneTitle::Start()
 	// GUI Buttons
 	btn1 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 1, "TEST", { 80, 275, 83, 51 }, this);
 	btn2 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 2, "TEST", { 178, 275, 83, 51 }, this);
-	btn3 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 1, "TEST", { 280, 275, 83, 51 }, this);
-	btn4 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 2, "TEST", { 384, 275, 83, 51 }, this);
-	btn5 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 2, "TEST", { 485, 275, 83, 51 }, this);
+	btn3 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 3, "TEST", { 280, 275, 83, 51 }, this);
+	btn4 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 4, "TEST", { 384, 275, 83, 51 }, this);
+	btn5 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 5, "TEST", { 485, 275, 83, 51 }, this);
 
 	// ----------- Velocity ------------
 
@@ -74,13 +74,13 @@ bool SceneTitle::Start()
 // Called each loop iteration
 bool SceneTitle::PreUpdate()
 {
-	// Go to Scene 
-	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
-		app->audio->PlayFx(fxEnter);
-		app->fade->StartFadeToBlack(this, (Module*)app->scene, 0);
-	}
+	//// Go to Scene 
+	//if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
+	//	app->audio->PlayFx(fxEnter);
+	//	app->fade->StartFadeToBlack(this, (Module*)app->scene, 0);
+	//}
 
-	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {
+	if (exit == true) {
 		return false; // QUIT
 	}
 
@@ -176,12 +176,31 @@ bool SceneTitle::OnGuiMouseClickEvent(GuiControl* control)
 		if (control->id == 1)
 		{
 			LOG("Click on button 1");
+			app->audio->PlayFx(fxEnter);
+			app->fade->StartFadeToBlack(this, (Module*)app->scene, 0);
 		}
 
 		if (control->id == 2)
 		{
 			LOG("Click on button 2");
 		}
+		
+		if (control->id == 3)
+		{
+			LOG("Click on button 3");
+		}
+
+		if (control->id == 4)
+		{
+			LOG("Click on button 4");
+		}
+
+		if (control->id == 5)
+		{
+			LOG("Click on button 5");
+			exit = true; // QUIT
+		}
+
 
 	}
 	//Other cases here

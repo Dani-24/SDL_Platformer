@@ -51,6 +51,8 @@ private:
 	SDL_Texture* enemyFlying;
 	int enemyFlyX = 700, enemyAngle = 0; 
 
+	bool exit = false;
+
 	uint fxEnter;
 
 	float scrollVelocity;
