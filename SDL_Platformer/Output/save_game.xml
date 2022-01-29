@@ -9,7 +9,7 @@
 	<sceneLogo />
 	<sceneTitle />
 	<scene>
-		<player x="29" y="1093" hp="3" />
+		<player x="32" y="1090" hp="3" />
 		<item type="1" x="224" y="1024" />
 		<item type="1" x="240" y="1024" />
 		<item type="1" x="256" y="1024" />
