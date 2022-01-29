@@ -62,8 +62,6 @@ public:
 	bool PostUpdate();
 	bool CleanUp() override;
 
-	int enemyNum;
-
 	// Pos X, Y, and enemy type. ("default" = 0 or "fly" = 1)
 	bool AddEnemy(int x, int y, int type);
 

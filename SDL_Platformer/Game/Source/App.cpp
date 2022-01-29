@@ -20,7 +20,6 @@
 #include "Defs.h"
 #include "Log.h"
 #include "Pathfinder.h"
-#include "Entity.h"
 #include "GuiManager.h"
 
 #include <iostream>
@@ -44,7 +43,6 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	sceneTitle = new SceneTitle(this, false);
 	scene = new Scene(this, false);
 	player = new Player(this, false);
-	entity = new Entity(this, false);
 
 	// Delete this
 	enemy = new Enemy(this, false);
@@ -73,7 +71,6 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(map);
 
 	AddModule(player);
-	AddModule(entity);
 
 	// Delete i guess (anyways, whatever)
 	AddModule(enemy);

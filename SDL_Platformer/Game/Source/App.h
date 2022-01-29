@@ -23,7 +23,6 @@ class SceneTitle;
 class RestartLvl1;
 class Scene;
 class Player;
-class Entity;
 class Enemy;	// delete this
 class Item;		// delete this
 class Map;
@@ -110,7 +109,6 @@ public:
 	Scene* scene;
 	RestartLvl1* restartLvl1;
 	Player* player;
-	Entity* entity;
 
 	// Delete:
 	Enemy* enemy;
