@@ -136,7 +136,6 @@
 	</scene>
 	<map />
 	<player />
-	<entity />
 	<enemy />
 	<coin />
 	<fonts />
