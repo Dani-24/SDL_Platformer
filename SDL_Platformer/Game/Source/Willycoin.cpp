@@ -243,7 +243,6 @@ bool Item::Update(float dt) {
 				}
 				c->data->cont += 1;
 				c = c->next;
-
 			}
 			break;
 		case 2:
@@ -269,7 +268,6 @@ bool Item::Update(float dt) {
 			}
 			break;
 		}
-
 	}	
 	return true;
 }
