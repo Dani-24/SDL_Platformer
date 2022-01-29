@@ -131,7 +131,7 @@ bool SceneTitle::Update(float dt)
 			btn1->state = GuiControlState::NORMAL;
 		}
 		if (btn2->state == GuiControlState::DISABLED) {
-			btn2->state = GuiControlState::NORMAL;
+			btn2->state = GuiControlState::UNABAILABLE;
 		}
 		if (btn3->state == GuiControlState::DISABLED) {
 			btn3->state = GuiControlState::NORMAL;
