@@ -3,6 +3,7 @@
 
 #include "Module.h"
 #include "GuiButton.h"
+#include "GuiCheckBox.h"
 
 struct SDL_Texture;
 
@@ -40,6 +41,8 @@ private:
 	GuiButton* btn3;
 	GuiButton* btn4;
 	GuiButton* btn5;
+	GuiCheckBox* chk1;
+	GuiCheckBox* chk2;
 
 	float scroller[4];
 
@@ -54,6 +57,7 @@ private:
 	int enemyFlyX = 700, enemyAngle = 0; 
 
 	bool activeGui = false, settings = false;
+	bool activeGuiSettings = false;
 	bool exit = false;
 
 	uint fxEnter;

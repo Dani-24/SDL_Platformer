@@ -73,6 +73,9 @@
     <ClCompile Include="Source\GuiManager.cpp">
       <Filter>Platformer\Scenes\UI</Filter>
     </ClCompile>
+    <ClCompile Include="Source\GuiCheckBox.cpp">
+      <Filter>Platformer\Scenes\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Defs.h">
@@ -172,6 +175,9 @@
       <Filter>Platformer\Scenes\UI</Filter>
     </ClInclude>
     <ClInclude Include="Source\GuiManager.h">
+      <Filter>Platformer\Scenes\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GuiCheckBox.h">
       <Filter>Platformer\Scenes\UI</Filter>
     </ClInclude>
   </ItemGroup>
