@@ -206,6 +206,7 @@ bool Item::Update(float dt) {
 	
 	ListItem<Items*>* c = items.start;
 	int anim = rand() % 2 + 1;
+
 	while (c != NULL) {
 		// ======================================================
 		//        Destroy Items when player collects them
@@ -217,7 +218,8 @@ bool Item::Update(float dt) {
 				LOG("Deleting Coin");
 				app->physics->world->DestroyBody(c->data->body->body);
 				items.del(c);
-				
+				app->scene->coins += 1;
+				app->scene->score += 50;
 				c = NULL;
 			}
 			else {
@@ -247,10 +249,12 @@ bool Item::Update(float dt) {
 			break;
 		case 2:
 			if (c->data->spawn == false) {
-				LOG("Deleting Coin");
+				LOG("Deleting WillyCoin");
 				app->physics->world->DestroyBody(c->data->body->body);
 				items.del(c);
 				c = NULL;
+				app->scene->score += 777;
+				app->scene->wCoins += 1;
 			}
 			else {
 				c = c->next;
@@ -262,6 +266,7 @@ bool Item::Update(float dt) {
 				app->physics->world->DestroyBody(c->data->body->body);
 				items.del(c);
 				c = NULL;
+				app->scene->score += 112;
 			}
 			else {
 				c = c->next;
@@ -284,16 +289,22 @@ bool Item::PostUpdate() {
 			{
 			case 1:
 				SDL_Rect rect = c->data->currentAnimation->GetCurrentFrame();
-				app->render->DrawTexture(c->data->sprite, c->data->position.x, c->data->position.y, &rect);
+				if (c->data->position.y > (-app->render->camera.y / 2) + 50) {
+					app->render->DrawTexture(c->data->sprite, c->data->position.x, c->data->position.y, &rect);
+				}
 				c = c->next;
 				break;
 			case 2:
-				app->render->DrawTexture(Willycoin, c->data->position.x - 32, c->data->position.y - 32);
+				if (c->data->position.y > (-app->render->camera.y / 2) + 50) {
+					app->render->DrawTexture(Willycoin, c->data->position.x - 32, c->data->position.y - 32);
+				}
 				c = c->next;
 				break;
 			case 3:
 				SDL_Rect rect2 = c->data->currentAnimation->GetCurrentFrame();
-				app->render->DrawTexture(c->data->sprite, c->data->position.x, c->data->position.y, &rect2);
+				if (c->data->position.y > (-app->render->camera.y / 2) + 50) {
+					app->render->DrawTexture(c->data->sprite, c->data->position.x, c->data->position.y, &rect2);
+				}
 				c = c->next;
 				break;
 			}

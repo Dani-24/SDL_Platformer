@@ -82,7 +82,7 @@ private:
 
 	// Sound effects indices
 	uint detectPlayerFx = 0;
-	uint deathFx = 0;
+	uint deathFx = 0, death2Fx = 0;
 
 	// Chain collider
 	int enemyChain[16]{ // Enemy is 40x40

@@ -37,7 +37,14 @@ public:
 	bool checked = false;
 	PhysBody* checkPointSensor;
 
+	int coins, score, wCoins;
 private:
+
+	// HUD
+	SDL_Texture* hud_bg_texture, *wCoin1tex, *wCoin2tex;
+	iPoint hudPos;
+	int contHud = 100;
+	char coinText[100], scoreText[100];
 
 	// EasterEGG
 	Animation eggAnim;
@@ -84,8 +91,6 @@ private:
 	iPoint originPos;
 	bool originSelected = false;
 	uint pathFx;
-
-	
 };
 
 #endif // __SCENE_H__

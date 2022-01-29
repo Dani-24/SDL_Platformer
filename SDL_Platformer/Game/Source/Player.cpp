@@ -677,31 +677,34 @@ bool Player::PostUpdate() {
 	// --- Draw Player ---	
 	app->render->DrawTexture(playerSprite, position.x-3, position.y-5, &currentAnimation->GetCurrentFrame(), 1.0f, angle, 34, 34); // -3 and -5 are for hitbox adjustments
 
-	// --------------------- DRAW HUD --------------------------------------
+	// --------------------- DRAW LIVES HUD --------------------------------------
 
 	// Lives:
+
+	int Xdist = 10;
+	int Ydist = 10;
 
 	switch (HP)
 	{
 	case 0:
-		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2), -app->render->camera.y / 2, &liveOff.GetCurrentFrame());
-		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 35, -app->render->camera.y / 2, &liveOff.GetCurrentFrame());
-		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 70, -app->render->camera.y / 2, &liveOff.GetCurrentFrame());
+		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + Xdist, (-app->render->camera.y / 2) + Ydist, &liveOff.GetCurrentFrame());
+		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 35 + Xdist, (-app->render->camera.y / 2) + Ydist, &liveOff.GetCurrentFrame());
+		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 70 + Xdist, (-app->render->camera.y / 2) + Ydist, &liveOff.GetCurrentFrame());
 		break;
 	case 1:
-		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2), -app->render->camera.y / 2, &liveOn.GetCurrentFrame());
-		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 35, -app->render->camera.y / 2, &liveOff.GetCurrentFrame());
-		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 70, -app->render->camera.y / 2, &liveOff.GetCurrentFrame());
+		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + Xdist, (-app->render->camera.y / 2) + Ydist, &liveOn.GetCurrentFrame());
+		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 35 + Xdist, (-app->render->camera.y / 2) + Ydist, &liveOff.GetCurrentFrame());
+		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 70 + Xdist, (-app->render->camera.y / 2) + Ydist, &liveOff.GetCurrentFrame());
 		break;
 	case 2:
-		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2), -app->render->camera.y / 2, &liveOn.GetCurrentFrame());
-		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 35, -app->render->camera.y / 2, &liveOn.GetCurrentFrame());
-		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 70, -app->render->camera.y / 2, &liveOff.GetCurrentFrame());
+		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + Xdist, (-app->render->camera.y / 2) + Ydist, &liveOn.GetCurrentFrame());
+		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 35 + Xdist, (-app->render->camera.y / 2) + Ydist, &liveOn.GetCurrentFrame());
+		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 70 + Xdist, (-app->render->camera.y / 2) + Ydist, &liveOff.GetCurrentFrame());
 		break;
 	case 3:
-		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2), -app->render->camera.y / 2, &liveOn.GetCurrentFrame());
-		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 35, -app->render->camera.y / 2, &liveOn.GetCurrentFrame());
-		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 70, -app->render->camera.y / 2, &liveOn.GetCurrentFrame());
+		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + Xdist, (-app->render->camera.y / 2) + Ydist, &liveOn.GetCurrentFrame());
+		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 35 + Xdist, (-app->render->camera.y / 2) + Ydist, &liveOn.GetCurrentFrame());
+		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 70 + Xdist, (-app->render->camera.y / 2) + Ydist, &liveOn.GetCurrentFrame());
 		break;
 	}
 
