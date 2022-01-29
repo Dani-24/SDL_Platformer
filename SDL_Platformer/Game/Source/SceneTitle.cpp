@@ -43,6 +43,7 @@ bool SceneTitle::Start()
 	scroller[2] = 288 * 2;
 	scroller[3] = 288 * 3;
 
+	settingsMenu = app->tex->Load("Assets/textures/settings.png");
 	titleText = app->tex->Load("Assets/textures/title.png");
 	titleY = -200;
 	pressEnter = app->tex->Load("Assets/textures/titleButtons.png");
@@ -74,11 +75,10 @@ bool SceneTitle::Start()
 // Called each loop iteration
 bool SceneTitle::PreUpdate()
 {
-	//// Go to Scene 
-	//if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
-	//	app->audio->PlayFx(fxEnter);
-	//	app->fade->StartFadeToBlack(this, (Module*)app->scene, 0);
-	//}
+	// Go to Scene 
+	if (settings == true && app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {
+		settings = false;
+	}
 
 	if (exit == true) {
 		return false; // QUIT
@@ -125,6 +125,32 @@ bool SceneTitle::Update(float dt)
 		enemyFlyX -= scrollVelocity;
 	}
 	enemyAngle += scrollVelocity;
+
+	if (activeGui == true) {
+		if (btn1->state == GuiControlState::DISABLED) {
+			btn1->state = GuiControlState::NORMAL;
+		}
+		if (btn2->state == GuiControlState::DISABLED) {
+			btn2->state = GuiControlState::NORMAL;
+		}
+		if (btn3->state == GuiControlState::DISABLED) {
+			btn3->state = GuiControlState::NORMAL;
+		}
+		if (btn4->state == GuiControlState::DISABLED) {
+			btn4->state = GuiControlState::NORMAL;
+		}
+		if (btn5->state == GuiControlState::DISABLED) {
+			btn5->state = GuiControlState::NORMAL;
+		}
+	}
+
+	if (activeGui == false) {
+		btn1->state = GuiControlState::DISABLED;
+		btn2->state = GuiControlState::DISABLED;
+		btn3->state = GuiControlState::DISABLED;
+		btn4->state = GuiControlState::DISABLED;
+		btn5->state = GuiControlState::DISABLED;
+	}
 	
 	return true;
 }
@@ -153,14 +179,26 @@ bool SceneTitle::PostUpdate()
 	// Title
 	app->render->DrawTexture(titleText, 180, titleY);
 
-
+	//Title buttons
 	if (titleMove == false) {
 		app->render->DrawTexture(pressEnter, 80, 275);
-		//Draw GUI
-		app->guiManager->Draw();
 	}
 
-	
+	//Settings
+	if (settings == true) {
+		app->render->DrawTexture(settingsMenu, 50, 15);
+	}
+
+	//Active Title Gui
+	if (titleMove == false && settings == false) {
+		activeGui = true;
+	}
+	else {
+		activeGui = false;
+	}
+
+	//Draw GUI
+		app->guiManager->Draw();
 	
 	return ret;
 }
@@ -173,29 +211,30 @@ bool SceneTitle::OnGuiMouseClickEvent(GuiControl* control)
 	case GuiControlType::BUTTON:
 	{
 		//Checks the GUI element ID
-		if (control->id == 1)
+		if (control->id == 1) //Play
 		{
 			LOG("Click on button 1");
 			app->audio->PlayFx(fxEnter);
 			app->fade->StartFadeToBlack(this, (Module*)app->scene, 0);
 		}
 
-		if (control->id == 2)
+		if (control->id == 2) //Continue
 		{
 			LOG("Click on button 2");
 		}
 		
-		if (control->id == 3)
+		if (control->id == 3) //Settings
 		{
 			LOG("Click on button 3");
+			settings = true;
 		}
 
-		if (control->id == 4)
+		if (control->id == 4) //Credits
 		{
 			LOG("Click on button 4");
 		}
 
-		if (control->id == 5)
+		if (control->id == 5) //Exit
 		{
 			LOG("Click on button 5");
 			exit = true; // QUIT
@@ -208,7 +247,7 @@ bool SceneTitle::OnGuiMouseClickEvent(GuiControl* control)
 	default: break;
 	}
 
-	control->state = GuiControlState::NORMAL;
+	//control->state = GuiControlState::NORMAL;
 	return true;
 }
 

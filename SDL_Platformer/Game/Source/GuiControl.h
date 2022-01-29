@@ -37,11 +37,11 @@ class GuiControl
 {
 public:
 
-	GuiControl(GuiControlType type, uint32 id) : type(type), id(id), state(GuiControlState::NORMAL) {}
+	GuiControl(GuiControlType type, uint32 id) : type(type), id(id), state(GuiControlState::DISABLED) {}
 
 	GuiControl(GuiControlType type, SDL_Rect bounds, const char* text) :
 		type(type),
-		state(GuiControlState::NORMAL),
+		state(GuiControlState::DISABLED),
 		bounds(bounds),
 		text(text)
 	{
