@@ -64,6 +64,9 @@ bool SceneTitle::Start()
 	btn3 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 3, "TEST", { 280, 275, 83, 51 }, this);
 	btn4 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 4, "TEST", { 384, 275, 83, 51 }, this);
 	btn5 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 5, "TEST", { 485, 275, 83, 51 }, this);
+	chk1 = (GuiCheckBox*)app->guiManager->CreateGuiControl(GuiControlType::CHECKBOX, 1, "TEST", { 406, 189, 49, 42 }, this);
+	chk2 = (GuiCheckBox*)app->guiManager->CreateGuiControl(GuiControlType::CHECKBOX, 2, "TEST", { 406, 240, 49, 42 }, this);
+	chk2->check = true;
 
 	// ----------- Velocity ------------
 
@@ -78,6 +81,7 @@ bool SceneTitle::PreUpdate()
 	// Go to Scene 
 	if (settings == true && app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {
 		settings = false;
+		activeGuiSettings = false;
 	}
 
 	if (exit == true) {
@@ -151,7 +155,21 @@ bool SceneTitle::Update(float dt)
 		btn4->state = GuiControlState::DISABLED;
 		btn5->state = GuiControlState::DISABLED;
 	}
-	
+
+	if (activeGuiSettings == true) {
+		if (chk1->state == GuiControlState::DISABLED) {
+			chk1->state = GuiControlState::NORMAL;
+		}
+		if (chk2->state == GuiControlState::DISABLED) {
+			chk2->state = GuiControlState::NORMAL;
+		}
+	}
+
+	if (activeGuiSettings == false) {
+		chk1->state = GuiControlState::DISABLED;
+		chk2->state = GuiControlState::DISABLED;
+	}
+
 	return true;
 }
 
@@ -173,7 +191,7 @@ bool SceneTitle::PostUpdate()
 	}
 
 	// Scrolling enemy
-	
+
 	app->render->DrawTexture(enemyFlying, enemyFlyX, 100, 0, 1, enemyAngle);
 
 	// Title
@@ -187,6 +205,7 @@ bool SceneTitle::PostUpdate()
 	//Settings
 	if (settings == true) {
 		app->render->DrawTexture(settingsMenu, 50, 15);
+		activeGuiSettings = true;
 	}
 
 	//Active Title Gui
@@ -198,13 +217,14 @@ bool SceneTitle::PostUpdate()
 	}
 
 	//Draw GUI
-		app->guiManager->Draw();
-	
+	app->guiManager->Draw();
+
 	return ret;
 }
 
 bool SceneTitle::OnGuiMouseClickEvent(GuiControl* control)
 {
+
 	switch (control->type)
 	{
 	case GuiControlType::BUTTON:
@@ -221,7 +241,7 @@ bool SceneTitle::OnGuiMouseClickEvent(GuiControl* control)
 		{
 			LOG("Click on button 2");
 		}
-		
+
 		if (control->id == 3) //Settings
 		{
 			LOG("Click on button 3");
@@ -240,6 +260,25 @@ bool SceneTitle::OnGuiMouseClickEvent(GuiControl* control)
 		}
 
 
+	}
+	case GuiControlType::CHECKBOX:
+	{
+		//Checks the GUI element ID
+		if (control->id == 1) //FullScreen
+		{
+			LOG("Click on check 1");
+		}
+
+		if (control->id == 2) //Vsync
+		{
+			LOG("Click on check 2");
+			if (chk2->check == true) {
+				app->render->vSyncOn = true;
+			}
+			else {
+				app->render->vSyncOn = false;
+			}
+		}
 	}
 	//Other cases here
 
