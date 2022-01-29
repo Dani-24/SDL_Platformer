@@ -274,21 +274,26 @@ void Physics::BeginContact(b2Contact* contact)
 
 	// Check enemy collision that kills them
 	
-	ListItem<Enemies*>* c = app->enemy->enemies.start;
-	while (c != NULL) {
+	for (ListItem<Enemies*>* c = app->enemy->enemies.start; c != NULL; c = c->next) {
 		if (physA == c->data->body && physB->type == "death") {
 			LOG("Enemy fall from map");
-			c->data->death = true;
+			if (app->enemy->DeleteEnemy(c->data) == true) {
+				physA == NULL;
+				break;
+			}
 		}
 		if (physA == c->data->body && physB == app->player->attackSensorLeft && app->player->attackL == true) {
 			LOG("Enemy killed");
-			c->data->death = true;
+			if (app->enemy->DeleteEnemy(c->data) == true) {
+				break;
+			}
 		}
 		if (physA == c->data->body && physB == app->player->attackSensorRight && app->player->attackR == true) {
 			LOG("Enemy killed");
-			c->data->death = true;
+			if (app->enemy->DeleteEnemy(c->data) == true) {
+				break;
+			}
 		}
-		c = c->next;
 	}
 
 	//Coin collision

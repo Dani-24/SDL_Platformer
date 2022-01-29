@@ -36,15 +36,14 @@ struct Enemies {
 	float speed;
 
 	// Animations
-	Animation animRunL, animRunR, animDieL, animDieR;
+	Animation animRunL, animRunR, animDie;
 	Animation* currentAnimation = nullptr;
 
 	// Variables
-	bool death, dir, playDetectFx;
+	bool dead, dir, playDetectFx;
 	bool alert = false;
 	bool lost = false;
 	int cont = 0;
-	bool dieAnim = false;
 };
 
 class Enemy : public Module
@@ -65,6 +64,8 @@ public:
 	// Pos X, Y, and enemy type. ("default" = 0 or "fly" = 1)
 	bool AddEnemy(int x, int y, int type);
 
+	bool DeleteEnemy(Enemies* e);
+
 public:
 	List<Enemies*> enemies;
 
@@ -77,7 +78,7 @@ private:
 	SDL_Texture* lostTexture;
 
 	// Animations
-	Animation animIdleL, animIdleR, animRunL, animRunR, animDieL, animDieR;
+	Animation animIdleL, animIdleR, animRunL, animRunR, animDie;
 
 	// Sound effects indices
 	uint detectPlayerFx = 0;

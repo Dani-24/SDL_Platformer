@@ -43,15 +43,10 @@ bool Enemy::Start() {
 	animIdleR.PushBack({ 0, 0, 50, 50 });
 	animIdleR.loop = false;
 
-	animDieL.PushBack({ 50, 150, 50, 50});
-	animDieL.PushBack({ 0, 150, 50, 50 });
-	animDieL.loop = false;
-	animDieL.speed = 0.05f;
-
-	animDieR.PushBack({ 100, 50, 50, 50 });
-	animDieR.PushBack({ 150, 50, 50, 50 });
-	animDieR.loop = false;
-	animDieR.speed = 0.05f;
+	animDie.PushBack({ 100, 50, 50, 50 });
+	animDie.PushBack({ 150, 50, 50, 50 });
+	animDie.loop = false;
+	animDie.speed = 0.05f;
 
 	animRunR.PushBack({ 0, 0, 50, 50 });
 	animRunR.PushBack({ 50, 0, 50, 50 });
@@ -77,7 +72,6 @@ bool Enemy::AddEnemy(int x, int y, int type) {
 	LOG("Adding new enemy at X: %d and Y: %d", x, y);
 	Enemies* thisEnemy = new Enemies();
 
-	thisEnemy->death = false;
 	thisEnemy->position.x = x;
 	thisEnemy->position.y = y;
 	thisEnemy->speed = 0.01f;
@@ -89,10 +83,9 @@ bool Enemy::AddEnemy(int x, int y, int type) {
 	thisEnemy->body->body->SetType(b2_dynamicBody);
 	thisEnemy->body->body->SetFixedRotation(true);
 
-	thisEnemy->animDieL = animDieL;
-	thisEnemy->animDieR = animDieR;
 	thisEnemy->animRunL = animRunL;
 	thisEnemy->animRunR = animRunR;
+	thisEnemy->animDie = animDie;
 
 	thisEnemy->currentAnimation = &animIdleL;
 	thisEnemy->type = type;
@@ -155,10 +148,8 @@ bool Enemy::PreUpdate() {
 
 bool Enemy::Update(float dt) {
 
-	ListItem<Enemies*>* c = enemies.start;
-	while (c != NULL) {
-		if (c->data->death == false) {
-
+	for (ListItem<Enemies*>* c = enemies.start; c != NULL; c = c->next) {
+		if (c->data->dead == false) {
 			// ENEMIES ALIVE:
 
 			// Move sensor to enemy body position
@@ -166,7 +157,6 @@ bool Enemy::Update(float dt) {
 
 			// Detect player
 			int chaseDistance = 200, limitVel = 100;
-
 			if (c->data->type == 0) {
 				// ==================================================
 				//					  Walking Enemy
@@ -176,20 +166,15 @@ bool Enemy::Update(float dt) {
 					if (c->data->playDetectFx != true) {
 						app->audio->PlayFx(detectPlayerFx);
 						c->data->playDetectFx = true;
-
 						c->data->alert = true;
 						c->data->lost = false;
 					}
-
 					// ----------- Chase player --------------
-
 					// Pathfinding
 					iPoint origin = app->map->WorldToMap(c->data->position.x, c->data->position.y);
 					iPoint destination = app->map->WorldToMap(app->player->position.x, app->player->position.y);
 
 					int a = app->pathfinder->CreatePath(origin, destination);
-
-					//LOG("%d", a);
 
 					int vel = METERS_TO_PIXELS(c->data->body->body->GetLinearVelocity().x);	 // limit velocity
 
@@ -211,12 +196,10 @@ bool Enemy::Update(float dt) {
 				}
 				else {
 					c->data->playDetectFx = false;
-
 					if (c->data->lost == false && c->data->currentAnimation == &c->data->animRunL || c->data->currentAnimation == &c->data->animRunR) {
 						c->data->lost = true;
 						c->data->alert = false;
 					}
-
 					if (c->data->currentAnimation == &c->data->animRunL) {
 						c->data->currentAnimation = &animIdleL;
 					}
@@ -234,7 +217,6 @@ bool Enemy::Update(float dt) {
 					if (c->data->playDetectFx != true) {
 						app->audio->PlayFx(detectPlayerFx);
 						c->data->playDetectFx = true;
-
 						c->data->alert = true;
 						c->data->lost = false;
 					}
@@ -249,7 +231,7 @@ bool Enemy::Update(float dt) {
 
 					// limit velocity
 					iPoint vel;
-					vel.x = METERS_TO_PIXELS(c->data->body->body->GetLinearVelocity().x);	
+					vel.x = METERS_TO_PIXELS(c->data->body->body->GetLinearVelocity().x);
 					vel.y = METERS_TO_PIXELS(c->data->body->body->GetLinearVelocity().y);
 
 					if (-limitVel < vel.x && vel.x < limitVel) {
@@ -263,13 +245,12 @@ bool Enemy::Update(float dt) {
 						}
 						else if (app->player->position.x > c->data->position.x) {
 							c->data->body->body->ApplyLinearImpulse(b2Vec2(c->data->speed * dt, 0), b2Vec2(0, 0), 1);
-
 							if (c->data->currentAnimation != &c->data->animRunR) {
 								c->data->currentAnimation = &c->data->animRunR;
 							}
 						}
 					}
-					if(-limitVel < vel.y && vel.y < limitVel){
+					if (-limitVel < vel.y && vel.y < limitVel) {
 						// Y axis
 						if (app->player->position.y < c->data->position.y) {
 							c->data->body->body->ApplyLinearImpulse(b2Vec2(0, -c->data->speed * dt), b2Vec2(0, 0), 1);
@@ -314,48 +295,50 @@ bool Enemy::Update(float dt) {
 			// Update animation and position
 			c->data->currentAnimation->Update();
 			c->data->body->GetPosition(c->data->position.x, c->data->position.y);
-			c = c->next;
 		}
 		else {
-			// =======================
-			//      ENEMIES DEAD
-			// =======================
-
-			if (c->data->dieAnim == false) {
-
-				app->audio->PlayFx(deathFx);
-
-				c->data->dieAnim = true;
-				c->data->cont = 0;
-				c->data->animDieL.Reset();
-
-				LOG("Preparing enemy dead");
+			c->data->cont--;
+			if (c->data->cont <= 0) {
 
 				app->physics->world->DestroyBody(c->data->body->body);
 				app->physics->world->DestroyBody(c->data->collider->body);
-				
-				c->data->currentAnimation == &c->data->animDieL;
-			}
 
-			if (c->data->cont > 60) {
-				c->data->cont = 0;
-
-				LOG("Deleting enemy");
 				enemies.del(c);
-				c = NULL;
+				break;
 			}
 			else {
-				c->data->cont++;
-				c->data->animDieL.Update();
-			}
-
-			if (c != NULL) {
-				c = c->next;
+				c->data->currentAnimation = &c->data->animDie;
+				c->data->currentAnimation->Update();
 			}
 		}
 	}
 
 	return true;
+}
+
+bool Enemy::DeleteEnemy(Enemies* e) {
+
+	// Iniciar borrado del enemigo
+	
+	ListItem<Enemies*>* c = enemies.start;
+
+	bool cosaBorrada = false;
+
+	while (c != NULL && cosaBorrada == false) {
+
+		if (c->data == e) {
+			
+			app->audio->PlayFx(deathFx);
+
+			c->data->dead = true;
+			c->data->cont = 100;
+
+			cosaBorrada = true;
+			return true;
+		}
+		c = c->next;
+	}
+	return false;
 }
 
 bool Enemy::PostUpdate() {
@@ -367,21 +350,16 @@ bool Enemy::PostUpdate() {
 			// ======================================================
 			//                    Draw enemies
 			// ======================================================
-			SDL_Rect rect;
-			if (c->data->death != true) {
-				rect = c->data->currentAnimation->GetCurrentFrame();
+			SDL_Rect rect = c->data->currentAnimation->GetCurrentFrame();
 
-				// Draw interactions
-				if (c->data->alert == true) {
-					app->render->DrawTexture(alertTexture, c->data->position.x + 5, c->data->position.y - 25);
-				}
-				if (c->data->lost == true) {
-					app->render->DrawTexture(lostTexture, c->data->position.x + 5, c->data->position.y - 25);
-				}
+			// Draw interactions
+			if (c->data->alert == true) {
+				app->render->DrawTexture(alertTexture, c->data->position.x + 5, c->data->position.y - 25);
 			}
-			else {
-				rect = c->data->animDieL.GetCurrentFrame();
+			if (c->data->lost == true) {
+				app->render->DrawTexture(lostTexture, c->data->position.x + 5, c->data->position.y - 25);
 			}
+
 			app->render->DrawTexture(c->data->sprite, c->data->position.x - 5, c->data->position.y - 5, &rect);
 			
 			// ======================================================
@@ -412,10 +390,8 @@ bool Enemy::CleanUp() {
 
 	ListItem<Enemies*>* c = enemies.start;
 	while (c != NULL) {
-		if (c->data->body->body != NULL) {
-			app->physics->world->DestroyBody(c->data->body->body);
-			app->physics->world->DestroyBody(c->data->collider->body);
-		}
+		app->physics->world->DestroyBody(c->data->body->body);
+		app->physics->world->DestroyBody(c->data->collider->body);
 		c = c->next;
 	}
 	enemies.clear();
@@ -427,8 +403,7 @@ bool Enemy::CleanUp() {
 
 	animIdleL.DeleteAnim();
 	animIdleR.DeleteAnim();
-	animDieL.DeleteAnim();
-	animDieR.DeleteAnim();
+	animDie.DeleteAnim();
 	animRunL.DeleteAnim();
 	animRunR.DeleteAnim();
 
