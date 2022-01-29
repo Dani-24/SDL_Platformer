@@ -75,7 +75,6 @@ bool Enemy::Start() {
 bool Enemy::AddEnemy(int x, int y, int type) {
 
 	LOG("Adding new enemy at X: %d and Y: %d", x, y);
-	enemyNum += 1;
 	Enemies* thisEnemy = new Enemies();
 
 	thisEnemy->death = false;
@@ -342,7 +341,6 @@ bool Enemy::Update(float dt) {
 				c->data->cont = 0;
 
 				LOG("Deleting enemy");
-				enemyNum -= 1;
 				enemies.del(c);
 				c = NULL;
 			}

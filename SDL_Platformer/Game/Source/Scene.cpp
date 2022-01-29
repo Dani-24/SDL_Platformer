@@ -11,7 +11,6 @@
 #include "Log.h"
 #include "Player.h"
 #include "Physics.h"
-#include "Entity.h"
 #include "GuiButton.h"
 #include "GuiManager.h"
 
@@ -533,7 +532,6 @@ bool Scene::LoadState(pugi::xml_node& data){
 	app->enemy->Disable();
 	app->enemy->Enable();
 	pugi::xml_node eNode = data.child("enemy");
-	app->enemy->enemyNum = 0;
 	for (int i = 0; i < 10; i++) { //Edit the nunber (10) in case of adding more enemies
 		int x, y, type;
 		x = eNode.attribute("x").as_int();
