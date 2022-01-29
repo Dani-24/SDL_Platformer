@@ -497,7 +497,7 @@ bool Player::Update(float dt)
 			}
 
 			// --- but most importantly, he Attack (with cooldown) ---
-			if (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN && hitTimeL <= 0 && hitTimeR <= 0)
+			if (app->input->GetKey(SDL_SCANCODE_J) == KEY_DOWN && hitTimeL <= 0 && hitTimeR <= 0)
 			{
 				app->audio->PlayFx(playerAttackFx);
 				if (Player_Dir == true) {

@@ -35,7 +35,7 @@ We are MacacoSerapios, a pair of students from CITM, leads of Macacos and Serapi
 
     - SPACE for jump
     
-    - E for kick
+    - J for kick
 
 ### Debug
    
