@@ -65,8 +65,6 @@ public:
 	//All the items saved in a list
 	List<Items*> items;
 
-	int itemNum;
-
 	//Add an item to the Items List: POS X, POS Y, TYPE (1 = COIN, 2 = WILLYCOIN, 3 = FOOD)
 	void AddItem(int x, int y, int type);
 	

@@ -78,7 +78,7 @@ private:
 	// Player Initial Position for Scene 1
 	int initPosX = 32, initPosY = 1090;
 
-	bool delSaveData = false, checkPointSave = false;
+	bool delSaveData = false;
 
 	// Pathfinding
 	iPoint originPos;

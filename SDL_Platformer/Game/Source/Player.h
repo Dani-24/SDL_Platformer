@@ -37,7 +37,6 @@ public:
 	iPoint initPos;
 	bool death = false;
 	bool win = false;
-	bool saved = false;
 	int HP, hpCheck, max_HP = 3;
 	PhysBody* playerBody;
 	PhysBody* attackSensorLeft;

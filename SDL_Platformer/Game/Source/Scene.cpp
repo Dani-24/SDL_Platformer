@@ -46,7 +46,6 @@ bool Scene::Start()
 
 	// Delete Save data to disable checkpoint tp if replay the game
 	delSaveData = true;
-	checkPointSave = false;
 	app->SaveGameRequest();
 
 	// Player position for Scene 1
@@ -65,10 +64,6 @@ bool Scene::Start()
 	// Enable is use fonts
 	//app->font->Enable();
 
-	// Enable when entities ok
-	//app->entity->Enable();
-
-	// delete when entities is ok
 	app->enemy->Enable();
 	app->item->Enable();
 
@@ -183,13 +178,10 @@ bool Scene::PreUpdate()
 	}
 	if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN) {
 		delSaveData = false;
-		checkPointSave = false;
-		app->player->saved = true;
 		app->SaveGameRequest();
 	}
 	if (app->input->GetKey(SDL_SCANCODE_6) == KEY_DOWN) {
 		delSaveData = true;
-		checkPointSave = false;
 		app->SaveGameRequest();
 	}
 
@@ -379,8 +371,6 @@ bool Scene::PostUpdate()
 
 			// Save
 			delSaveData = false;
-			checkPointSave = true;
-			app->player->saved = true;
 			app->SaveGameRequest();
 		}
 	}
@@ -463,10 +453,6 @@ bool Scene::CleanUp()
 	// Enable when used
 	//app->font->Disable();
 
-	// Enable when used
-	//app->entity->Disable();
-
-	// Delete when entities ok
 	if (app->enemy->isEnabled()) {
 		app->enemy->Disable();
 	}
@@ -478,7 +464,7 @@ bool Scene::CleanUp()
 
 	// Reset Variables
 	cont = w = h = playerPosForScroll = checkPfx = pathFx = NULL;
-	loadEgg = delSaveData = checkPointSave = checked = checkfxPlayed = false;
+	loadEgg = delSaveData = checked = checkfxPlayed = false;
 	for (int a = 0; a < Scroller; a++) {
 		forestX[a] = hillsX[a] = cloudsDownX[a] = cloudsUpX[a] = NULL;
 	}
@@ -495,6 +481,9 @@ bool Scene::LoadState(pugi::xml_node& data){
 	// --------------- LOAD SAVE DATA -----------------
 	LOG("Loading saved data");
 
+	// ====================
+	//	  reset player
+	// ====================
 	app->player->Disable();
 
 	pugi::xml_node pNode = data.child("player");
@@ -504,9 +493,11 @@ bool Scene::LoadState(pugi::xml_node& data){
 
 	app->player->Enable();
 
+
 	app->player->HP = pNode.attribute("hp").as_int();
 
 	LOG("Loaded : X: %d, Y: %d, HP: %d", app->player->initPos.x, app->player->initPos.y, app->player->HP);
+	// ====================
 
 	// Reset Camera
 	app->render->camera.x = 0 - (app->player->position.x * 2);
@@ -519,28 +510,39 @@ bool Scene::LoadState(pugi::xml_node& data){
 	app->item->Disable();
 	app->item->Enable();
 	pugi::xml_node iNode = data.child("item");
-	app->item->itemNum = 0;
-	for (int i = 0; i < 110; i++) { //Edit the nunber (110) in case of adding more items
+
+	for (iNode; iNode.next_sibling("item"); iNode = iNode.next_sibling("item")) {
 		int x, y, type;
+
 		x = iNode.attribute("x").as_int();
 		y = iNode.attribute("y").as_int();
 		type = iNode.attribute("type").as_int();
+
 		app->item->AddItem(x, y, type);
-		iNode = iNode.next_sibling("item");
 	}
+
+	//for (int i = 0; i < 110; i++) { //Edit the number (110) in case of adding more items
+	//	int x, y, type;
+	//	x = iNode.attribute("x").as_int();
+	//	y = iNode.attribute("y").as_int();
+	//	type = iNode.attribute("type").as_int();
+	//	app->item->AddItem(x, y, type);
+	//	iNode = iNode.next_sibling("item");
+	//}
+
 	//enemy
 	app->enemy->Disable();
 	app->enemy->Enable();
 	pugi::xml_node eNode = data.child("enemy");
-	for (int i = 0; i < 10; i++) { //Edit the nunber (10) in case of adding more enemies
+	for(eNode; eNode.next_sibling("enemy"); eNode = eNode.next_sibling("enemy")){
 		int x, y, type;
+
 		x = eNode.attribute("x").as_int();
 		y = eNode.attribute("y").as_int();
 		type = eNode.attribute("type").as_int();
+
 		app->enemy->AddEnemy(x, y, type);
-		eNode = eNode.next_sibling("enemy");
 	}
-	
 
 	return true;
 }
@@ -551,7 +553,7 @@ bool Scene::SaveState(pugi::xml_node& data) const
 	ListItem<Items*>* d = app->item->items.start;
 	ListItem<Enemies*>* c = app->enemy->enemies.start;
 
-	if (delSaveData == false && checkPointSave == false) {
+	if (delSaveData == false) {
 		// ---------------- SAVE DATA -----------------------------
 		LOG("Saving data");
 
@@ -559,7 +561,7 @@ bool Scene::SaveState(pugi::xml_node& data) const
 		pNode.append_attribute("y") = app->player->position.y;
 		pNode.append_attribute("hp") = app->player->HP;
 	}
-	else if(delSaveData == true && checkPointSave == false) {
+	else if(delSaveData == true) {
 		// ---------------- DELETE SAVE DATA ----------------------
 		LOG("Deleting saved data");
 
@@ -567,14 +569,7 @@ bool Scene::SaveState(pugi::xml_node& data) const
 		pNode.append_attribute("y") = initPosY;
 		pNode.append_attribute("hp") = app->player->max_HP;
 	}
-	else if (checkPointSave == true && delSaveData == false) {
-		// ---------------- CHECKPOINT SAVE DATA -----------------------------
-		LOG("Saving checkpoint data");
-
-		pNode.append_attribute("x") = checkPos.x - 16;
-		pNode.append_attribute("y") = checkPos.y;
-		pNode.append_attribute("hp") = app->player->HP;
-	}
+	
 	// ---------------- ITEM SAVE DATA -----------------------------
 	while (d != NULL) {
 		pugi::xml_node iNode = data.append_child("item");
@@ -582,7 +577,7 @@ bool Scene::SaveState(pugi::xml_node& data) const
 		iNode.append_attribute("x") = d->data->position.x;
 		iNode.append_attribute("y") = d->data->position.y;
 		d = d->next;
-		
+
 	}
 	// ---------------- ENEMY SAVE DATA -----------------------------
 	while (c != NULL) {
@@ -592,6 +587,7 @@ bool Scene::SaveState(pugi::xml_node& data) const
 		aNode.append_attribute("y") = c->data->position.y;
 		c = c->next;
 	}
+
 	return true;
 }
 

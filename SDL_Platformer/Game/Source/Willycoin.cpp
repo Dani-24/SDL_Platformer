@@ -79,7 +79,6 @@ void Item::AddItem(int x, int y, int type) {
 	LOG("Adding new Item at X: %d and Y: %d", x, y);
 
 	Items* thisItem = new Items();
-	itemNum += 1;
 	int anim = rand() % 11 + 1;
 	switch (type)
 	{
@@ -218,7 +217,6 @@ bool Item::Update(float dt) {
 		case 1:
 			if (c->data->spawn == false) {
 				LOG("Deleting Coin");
-				itemNum -= 1;
 				app->physics->world->DestroyBody(c->data->body->body);
 				items.del(c);
 				
@@ -253,7 +251,6 @@ bool Item::Update(float dt) {
 		case 2:
 			if (c->data->spawn == false) {
 				LOG("Deleting Coin");
-				itemNum -= 1;
 				app->physics->world->DestroyBody(c->data->body->body);
 				items.del(c);
 				c = NULL;
@@ -265,7 +262,6 @@ bool Item::Update(float dt) {
 		case 3:
 			if (c->data->spawn == false) {
 				LOG("Deleting Item");
-				itemNum -= 1;
 				app->physics->world->DestroyBody(c->data->body->body);
 				items.del(c);
 				c = NULL;
