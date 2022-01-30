@@ -23,7 +23,7 @@ We are MacacoSerapios, a pair of students from CITM, leads of Macacos and Serapi
     - An amazing and incredible history, suspicious enemies and crypto coins are 
       awaiting for you in SDL PLATFORMER, 
       the best indie platformer game made by students that has ever existed.
-    - Could you end the misery when everybody wants to by your enemy? Those SUSpicious enemies are dangerous, 
+    - Could you end the misery when everybody wants to be your enemy? Those SUSpicious enemies are dangerous, 
       even when they are dead they can HURT YOU !
     - Falling wont hurt you BUT care, the SUS enemies will try to kill you.
     - Download it now FOR FREE.
