@@ -41,6 +41,8 @@ public:
 	int Volume = 128, Fx = 128;
 	bool exit = false;
 
+	//bool LoadState(pugi::xml_node&);
+
 	bool CleanUp();
 
 private:
