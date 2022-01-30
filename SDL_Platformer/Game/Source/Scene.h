@@ -60,6 +60,9 @@ private:
 	char coinText[100], scoreText[100], timeText[100];
 	Timer timeControl;
 
+	SDL_Texture* livesSprite;
+	Animation liveOn, liveOff;
+
 	// PAUSE GUI
 	GuiButton* btn10;
 	GuiButton* btn11;

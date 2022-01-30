@@ -312,11 +312,6 @@ bool Player::Start()
 
 	cooldownTex = app->tex->Load("Assets/textures/playerDieCooldown.png");
 
-	livesSprite = app->tex->Load("Assets/textures/lives.png");
-	liveOn.PushBack({0, 0, 30, 30});
-	liveOff.PushBack({30, 0, 30, 30});
-	liveOn.loop = liveOff.loop = false;
-
 	// Audio
 	deathFx = app->audio->LoadFx("Assets/audio/fx/death.wav");
 	killedFx = app->audio->LoadFx("Assets/audio/fx/killedBySus.wav");
@@ -681,37 +676,6 @@ bool Player::PostUpdate() {
 		app->render->DrawTexture(playerSprite, position.x - 3, position.y - 5, &currentAnimation->GetCurrentFrame(), 1.0f, angle, 34, 34);
 	}
 
-	// --------------------- DRAW LIVES HUD --------------------------------------
-
-	// Lives:
-
-	int Xdist = 10;
-	int Ydist = 10;
-
-	switch (HP)
-	{
-	case 0:
-		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + Xdist, (-app->render->camera.y / 2) + Ydist, &liveOff.GetCurrentFrame());
-		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 35 + Xdist, (-app->render->camera.y / 2) + Ydist, &liveOff.GetCurrentFrame());
-		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 70 + Xdist, (-app->render->camera.y / 2) + Ydist, &liveOff.GetCurrentFrame());
-		break;
-	case 1:
-		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + Xdist, (-app->render->camera.y / 2) + Ydist, &liveOn.GetCurrentFrame());
-		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 35 + Xdist, (-app->render->camera.y / 2) + Ydist, &liveOff.GetCurrentFrame());
-		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 70 + Xdist, (-app->render->camera.y / 2) + Ydist, &liveOff.GetCurrentFrame());
-		break;
-	case 2:
-		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + Xdist, (-app->render->camera.y / 2) + Ydist, &liveOn.GetCurrentFrame());
-		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 35 + Xdist, (-app->render->camera.y / 2) + Ydist, &liveOn.GetCurrentFrame());
-		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 70 + Xdist, (-app->render->camera.y / 2) + Ydist, &liveOff.GetCurrentFrame());
-		break;
-	case 3:
-		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + Xdist, (-app->render->camera.y / 2) + Ydist, &liveOn.GetCurrentFrame());
-		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 35 + Xdist, (-app->render->camera.y / 2) + Ydist, &liveOn.GetCurrentFrame());
-		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 70 + Xdist, (-app->render->camera.y / 2) + Ydist, &liveOn.GetCurrentFrame());
-		break;
-	}
-
 	if (app->physics->playerDieCooldown != 0 && death == false && win == false) {
 		app->render->DrawTexture(cooldownTex, position.x, position.y);
 	}
@@ -749,12 +713,9 @@ bool Player::CleanUp() {
 	walkL.DeleteAnim();
 	walkPunchR.DeleteAnim();
 	walkPunchL.DeleteAnim();
-	liveOff.DeleteAnim();
-	liveOn.DeleteAnim();
 
 	// Textures
 	app->tex->UnLoad(playerSprite);
-	app->tex->UnLoad(livesSprite);
 	app->tex->UnLoad(cooldownTex);
 
 	// Physbody

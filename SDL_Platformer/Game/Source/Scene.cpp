@@ -58,6 +58,11 @@ bool Scene::Start()
 	fxEnter = app->audio->LoadFx("Assets/audio/fx/enter.wav");
 	settingsMenu = app->tex->Load("Assets/textures/settings.png");
 
+	livesSprite = app->tex->Load("Assets/textures/lives.png");
+	liveOn.PushBack({ 0, 0, 30, 30 });
+	liveOff.PushBack({ 30, 0, 30, 30 });
+	liveOn.loop = liveOff.loop = false;
+
 	//// Delete Save data to disable checkpoint tp if replay the game
 	//delSaveData = true;
 	//app->SaveGameRequest();
@@ -587,6 +592,35 @@ bool Scene::PostUpdate()
 
 	app->font->drawText("LIVES", hudPos.x + 120, hudPos.y + 15, 255, 255, 255);
 	
+	// Lives:
+
+	int Xdist = 10;
+	int Ydist = 10;
+
+	switch (app->player->HP)
+	{
+	case 0:
+		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + Xdist, (-app->render->camera.y / 2) + Ydist, &liveOff.GetCurrentFrame());
+		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 35 + Xdist, (-app->render->camera.y / 2) + Ydist, &liveOff.GetCurrentFrame());
+		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 70 + Xdist, (-app->render->camera.y / 2) + Ydist, &liveOff.GetCurrentFrame());
+		break;
+	case 1:
+		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + Xdist, (-app->render->camera.y / 2) + Ydist, &liveOn.GetCurrentFrame());
+		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 35 + Xdist, (-app->render->camera.y / 2) + Ydist, &liveOff.GetCurrentFrame());
+		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 70 + Xdist, (-app->render->camera.y / 2) + Ydist, &liveOff.GetCurrentFrame());
+		break;
+	case 2:
+		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + Xdist, (-app->render->camera.y / 2) + Ydist, &liveOn.GetCurrentFrame());
+		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 35 + Xdist, (-app->render->camera.y / 2) + Ydist, &liveOn.GetCurrentFrame());
+		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 70 + Xdist, (-app->render->camera.y / 2) + Ydist, &liveOff.GetCurrentFrame());
+		break;
+	case 3:
+		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + Xdist, (-app->render->camera.y / 2) + Ydist, &liveOn.GetCurrentFrame());
+		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 35 + Xdist, (-app->render->camera.y / 2) + Ydist, &liveOn.GetCurrentFrame());
+		app->render->DrawTexture(livesSprite, (-app->render->camera.x / 2) + 70 + Xdist, (-app->render->camera.y / 2) + Ydist, &liveOn.GetCurrentFrame());
+		break;
+	}
+
 	// coins
 	if (contHud >= 0) {
 		contHud--;
@@ -808,7 +842,12 @@ bool Scene::CleanUp()
 	eggAnim.DeleteAnim();
 	panderetAnim.DeleteAnim();
 
+	// HUD
 	app->tex->UnLoad(hud_bg_texture);
+
+	app->tex->UnLoad(livesSprite);
+	liveOff.DeleteAnim();
+	liveOn.DeleteAnim();
 
 	// BackGround
 	app->tex->UnLoad(forestTex);

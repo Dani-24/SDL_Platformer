@@ -77,9 +77,7 @@ private:
 	// The player spritesheet loaded into an SDL_Texture
 	SDL_Texture* playerSprite = nullptr;
 
-	SDL_Texture* livesSprite, *cooldownTex;
-
-	Animation liveOn, liveOff;
+	SDL_Texture* cooldownTex;
 
 	// The pointer to the current player animation
 	// It will be switched depending on the player's movement direction
