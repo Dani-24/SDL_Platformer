@@ -71,4 +71,4 @@ This game has been done thanks to [SDL](https://www.libsdl.org/index.php) and [T
   
   
 ## License
-This project is licensed under an unmodified MIT license, which is an OSI-certified license that allows static linking with closed source software. Check (LICENSE)[https://github.com/Dani-24/SDL_Platformer/blob/main/LICENSE] for further details.
+This project is licensed under an unmodified MIT license, which is an OSI-certified license that allows static linking with closed source software. Check [LICENSE](https://github.com/Dani-24/SDL_Platformer/blob/main/LICENSE) for further details.
