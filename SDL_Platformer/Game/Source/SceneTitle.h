@@ -23,7 +23,7 @@ public:
 	bool Update(float dt);
 	bool PostUpdate();
 
-	// Define multiple Gui Event methods
+	// GUI
 	bool OnGuiMouseClickEvent(GuiControl* control);
 
 	GuiButton* btn1;
@@ -50,9 +50,6 @@ private:
 	SDL_Texture* bg;
 	SDL_Texture* bgSky;
 
-	// GUI Button
-	
-
 	float scroller[4];
 
 	SDL_Texture* titleText;
@@ -68,11 +65,11 @@ private:
 	bool activeGui = false, settings = false;
 	bool activeGuiSettings = false;
 	
-
 	uint fxEnter;
 
 	float scrollVelocity;
 
+	char githubLink[100];
 };
 
 #endif // __SCENETITLE_H__

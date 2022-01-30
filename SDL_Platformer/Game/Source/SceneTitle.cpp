@@ -56,9 +56,11 @@ bool SceneTitle::Start()
 	fxEnter = app->audio->LoadFx("Assets/audio/fx/enter.wav");
 	app->render->camera.x = 0; app->render->camera.y = 0;
 
-	app->font->Init();
 	app->guiManager->Enable();
-	
+
+	// Credits
+	strcpy_s(githubLink, "https://github.com/Dani-24/SDL_Platformer");
+
 	// GUI Buttons
 	btn1 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 1, "TEST", { 80, 275, 83, 51 }, this);
 	btn2 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 2, "TEST", { 178, 275, 83, 51 }, this);
@@ -291,35 +293,37 @@ bool SceneTitle::OnGuiMouseClickEvent(GuiControl* control)
 		//Checks the GUI element ID
 		if (control->id == 1) //Play
 		{
-			LOG("Click on button 1");
+			LOG("Click on Play");
 			app->audio->PlayFx(fxEnter);
 			app->fade->StartFadeToBlack(this, (Module*)app->scene, 0);
 		}
 
 		if (control->id == 2) //Continue
 		{
-			LOG("Click on button 2");
+			LOG("Click on Continue");
 		}
 
 		if (control->id == 3) //Settings
 		{
-			LOG("Click on button 3");
+			LOG("Opening Settings");
 			settings = true;
 		}
 
 		if (control->id == 4) //Credits
 		{
-			LOG("Click on button 4");
+			// Open Website
+			LOG("Opening Link : %s", githubLink);
+			SDL_OpenURL(githubLink);
 		}
 
 		if (control->id == 5) //Exit
 		{
-			LOG("Click on button 5");
+			LOG("Click on Exit");
 			exit = true; // QUIT
 		}
 		if (control->id == 6) //- Volume
 		{
-			LOG("Click on button 6");
+			LOG("Less Volume");
 			Volume -= 10;
 			if(Volume < 0){
 				Volume = 0;
@@ -328,7 +332,7 @@ bool SceneTitle::OnGuiMouseClickEvent(GuiControl* control)
 		}
 		if (control->id == 7) //+ Volume
 		{
-			LOG("Click on button 7");
+			LOG("More Volume");
 			Volume += 10;
 			if (Volume > 128) {
 				Volume = 128;
@@ -337,7 +341,7 @@ bool SceneTitle::OnGuiMouseClickEvent(GuiControl* control)
 		}
 		if (control->id == 8) //- Sound
 		{
-			LOG("Click on button 8");
+			LOG("Less fx volume");
 			Fx -= 10;
 			if (Fx < 0) {
 				Fx = 0;
@@ -346,7 +350,7 @@ bool SceneTitle::OnGuiMouseClickEvent(GuiControl* control)
 		}
 		if (control->id == 9) //+ Sound
 		{
-			LOG("Click on button 9");
+			LOG("More fx volume");
 			Fx += 10;
 			if (Fx > 128) {
 				Fx = 128;
@@ -355,7 +359,7 @@ bool SceneTitle::OnGuiMouseClickEvent(GuiControl* control)
 		}
 		if (control->id == 0) //Close Settings
 		{
-			LOG("Click on button 0");
+			LOG("Closing settings");
 			settings = false;
 			activeGuiSettings = false;
 		}

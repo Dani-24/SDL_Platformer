@@ -4,6 +4,12 @@
 https://github.com/Dani-24/SDL_Platformer
 
 
+## Members
+  
+   * David Benages as [Divangus](https://github.com/Divangus).
+   * Dani Toledo as [Dani24](https://github.com/Dani-24).
+
+
 ## Description
 We are MacacoSerapios, a pair of students from CITM, leads of Macacos and Serapios: creators from [Super Soukoban](https://github.com/Dani-24/Serapios) and [Teen Mutant Ninja Turtles](https://github.com/Divangus/Macacos) SDL versions.
   
@@ -11,12 +17,7 @@ We are MacacoSerapios, a pair of students from CITM, leads of Macacos and Serapi
 <img width="500" height="300" src="https://i.ytimg.com/vi/yXGCelvsACA/maxresdefault.jpg">
   
 [Serapio & Macaco happy friends](https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DyXGCelvsACA&psig=AOvVaw1ojBmRr-Ds0ulyodcVXuIT&ust=1635418923703000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCNiNgLy46vMCFQAAAAAdAAAAABAD)
-  
 
-## Members
-  
-   * David Benages as [Divangus](https://github.com/Divangus).
-   * Dani Toledo as [Dani24](https://github.com/Dani-24).
 
 ## Game Description
     - An amazing and incredible history, suspicious enemies and crypto coins are 
@@ -36,6 +37,8 @@ We are MacacoSerapios, a pair of students from CITM, leads of Macacos and Serapi
     - SPACE for jump
     
     - J for kick
+
+    - ESCAPE for pause (ingame)
 
 ### Debug
    
@@ -67,4 +70,4 @@ This game has been done thanks to [SDL](https://www.libsdl.org/index.php) and [T
   
   
 ## License
-This project is licensed under an unmodified MIT license, which is an OSI-certified license that allows static linking with closed source software. Check LICENSE for further details.
+This project is licensed under an unmodified MIT license, which is an OSI-certified license that allows static linking with closed source software. Check (LICENSE)[https://github.com/Dani-24/SDL_Platformer/blob/main/LICENSE] for further details.
