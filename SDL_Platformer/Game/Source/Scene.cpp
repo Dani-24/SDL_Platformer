@@ -113,6 +113,7 @@ bool Scene::Start()
 	chk3 = (GuiCheckBox*)app->guiManager->CreateGuiControl(GuiControlType::CHECKBOX, 3, "TEST", { 387, 189, 49, 42 }, this);
 	chk4 = (GuiCheckBox*)app->guiManager->CreateGuiControl(GuiControlType::CHECKBOX, 4, "TEST", { 387, 240, 49, 42 }, this);
 	chk4->check = app->sceneTitle->chk2->check;
+	chk3->check = app->sceneTitle->chk1->check;
 
 	timeControl.Start();
 
