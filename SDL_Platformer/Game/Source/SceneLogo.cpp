@@ -64,7 +64,6 @@ bool SceneLogo::Update(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
 		app->audio->PlayFx(fxEnter);
 		app->fade->StartFadeToBlack(this, (Module*)app->sceneTitle, 0);
-		LOG("aaaaa");
 	}
 
 	return true;

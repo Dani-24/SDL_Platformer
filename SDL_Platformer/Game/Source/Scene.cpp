@@ -63,10 +63,6 @@ bool Scene::Start()
 	liveOff.PushBack({ 30, 0, 30, 30 });
 	liveOn.loop = liveOff.loop = false;
 
-	//// Delete Save data to disable checkpoint tp if replay the game
-	//delSaveData = true;
-	//app->SaveGameRequest();
-
 	// Player position for Scene 1
 	app->player->initPos.x = initPosX;
 	app->player->initPos.y = initPosY;
@@ -121,6 +117,9 @@ bool Scene::Start()
 	chk3->check = app->sceneTitle->chk1->check;
 
 	timeControl.Start();
+
+	loadFx = app->audio->LoadFx("Assets/audio/fx/loadSaveData.wav");
+	deleteSaveFx = app->audio->LoadFx("Assets/audio/fx/deleteSaveData.wav");
 
 	// Background
 	app->audio->PlayMusic("Assets/audio/music/music_bg.ogg");
@@ -809,8 +808,6 @@ bool Scene::OnGuiMouseClickEvent(GuiControl* control){
 	default: 
 		break;
 	}
-
-	//control->state = GuiControlState::NORMAL;
 	return true;
 }
 
@@ -892,10 +889,15 @@ bool Scene::CleanUp()
 }
 
 void Scene::ResetCamera() {
-	if (app->player->position.x < 2880) {
+	
+	if (app->player->position.x < 310) {
+		// Left map part
+		app->render->camera.x = 0;
+	}
+	else if (app->player->position.x < 2880) {
 		app->render->camera.x = 0 - (app->player->position.x * 2);
 	}
-	else {
+	else{
 		// Right map part
 		app->render->camera.x = -5114;
 	}
@@ -957,15 +959,6 @@ bool Scene::LoadState(pugi::xml_node& data){
 		app->item->AddItem(x, y, type);
 	}
 
-	//for (int i = 0; i < 110; i++) { //Edit the number (110) in case of adding more items
-	//	int x, y, type;
-	//	x = iNode.attribute("x").as_int();
-	//	y = iNode.attribute("y").as_int();
-	//	type = iNode.attribute("type").as_int();
-	//	app->item->AddItem(x, y, type);
-	//	iNode = iNode.next_sibling("item");
-	//}
-
 	//enemy
 	app->enemy->Disable();
 	app->enemy->Enable();
@@ -981,6 +974,8 @@ bool Scene::LoadState(pugi::xml_node& data){
 	}
 
 	ResetCamera();
+
+	app->audio->PlayFx(loadFx);
 
 	return true;
 }
@@ -1015,7 +1010,9 @@ bool Scene::SaveState(pugi::xml_node& data) const
 		data.append_child("coins").append_attribute("value") = 0;
 		data.append_child("score").append_attribute("value") = 0;
 		data.append_child("willycoins").append_attribute("value") = 0;
-		data.append_child("time").append_attribute("value") = 400000;
+		data.append_child("time").append_attribute("value") = 600000;
+
+		app->audio->PlayFx(deleteSaveFx);
 	}
 	
 	// ---------------- ITEM SAVE DATA -----------------------------

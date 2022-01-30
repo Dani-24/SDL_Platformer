@@ -133,6 +133,8 @@ private:
 	iPoint originPos;
 	bool originSelected = false;
 	uint pathFx;
+
+	uint loadFx, deleteSaveFx;
 };
 
 #endif // __SCENE_H__
