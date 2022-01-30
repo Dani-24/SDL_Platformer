@@ -12,6 +12,7 @@
 #include "GuiManager.h"
 #include "ModuleQFonts.h"
 #include "Map.h"
+#include "Scene.h"
 
 SceneTitle::SceneTitle(App* application, bool start_enabled) : Module(application, start_enabled)
 {
@@ -143,7 +144,7 @@ bool SceneTitle::Update(float dt)
 			btn1->state = GuiControlState::NORMAL;
 		}
 		if (btn2->state == GuiControlState::DISABLED) {
-			btn2->state = GuiControlState::UNABAILABLE;
+			btn2->state = GuiControlState::NORMAL;
 		}
 		if (btn3->state == GuiControlState::DISABLED) {
 			btn3->state = GuiControlState::NORMAL;
@@ -301,6 +302,8 @@ bool SceneTitle::OnGuiMouseClickEvent(GuiControl* control)
 		if (control->id == 2) //Continue
 		{
 			LOG("Click on Continue");
+			app->scene->continueButton = true;
+			app->fade->StartFadeToBlack(this, (Module*)app->scene, 0);
 		}
 
 		if (control->id == 3) //Settings

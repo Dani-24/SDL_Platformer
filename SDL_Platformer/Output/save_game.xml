@@ -15,6 +15,9 @@
 		<willycoins value="0" />
 		<time value="400000" />
 		<item type="1" x="224" y="1024" />
+		<item type="1" x="240" y="1024" />
+		<item type="1" x="256" y="1024" />
+		<item type="1" x="272" y="1024" />
 		<item type="1" x="560" y="1056" />
 		<item type="1" x="576" y="1056" />
 		<item type="1" x="592" y="1056" />
@@ -122,14 +125,18 @@
 		<item type="3" x="1008" y="1152" />
 		<item type="3" x="1760" y="320" />
 		<item type="3" x="2368" y="192" />
+		<item type="3" x="2656" y="1168" />
+		<item type="3" x="2720" y="608" />
 		<enemy type="1" x="1200" y="959" />
-		<enemy type="1" x="1648" y="317" />
+		<enemy type="1" x="1648" y="319" />
 		<enemy type="1" x="2143" y="96" />
 		<enemy type="1" x="2480" y="400" />
 		<enemy type="1" x="2880" y="912" />
 		<enemy type="0" x="639" y="1047" />
-		<enemy type="0" x="1710" y="103" />
-		<enemy type="0" x="1869" y="391" />
+		<enemy type="0" x="1711" y="103" />
+		<enemy type="0" x="1871" y="365" />
+		<enemy type="0" x="2176" y="1159" />
+		<enemy type="0" x="2864" y="519" />
 	</scene>
 	<map />
 	<player />

@@ -180,6 +180,11 @@ bool Scene::Start()
 
 	LOG("Spawn player at X = %d Y = %d", initPosX, initPosY);
 
+	if (continueButton == true) {
+		app->LoadGameRequest();
+		continueButton = false;
+	}
+
 	return true;
 }
 
@@ -655,6 +660,7 @@ bool Scene::PostUpdate()
 
 	//Draw GUI
 	app->guiManager->Draw();
+
 	return ret;
 }
 
@@ -733,6 +739,7 @@ bool Scene::OnGuiMouseClickEvent(GuiControl* control){
 			pauseGui = false;
 			LOG("Game UnPaused");
 			timeControl.Start();
+			ResetCamera();
 		}
 	}
 	//Other cases here
@@ -838,12 +845,26 @@ bool Scene::CleanUp()
 		forestX[a] = hillsX[a] = cloudsDownX[a] = cloudsUpX[a] = NULL;
 	}
 
+	continueButton = false;
+
 	return true;
 }
 
 void Scene::ResetCamera() {
-	app->render->camera.x = 0 - (app->player->position.x * 2);
-	app->render->camera.y = 0 - ((app->player->position.y * 2) - 720 / 2);
+	if (app->player->position.x < 2880) {
+		app->render->camera.x = 0 - (app->player->position.x * 2);
+	}
+	else {
+		// Right map part
+		app->render->camera.x = -5114;
+	}
+	if (app->player->position.y > 1866) {
+		app->render->camera.y = 0 - ((app->player->position.y * 2) - 720 / 2);
+	}
+	else {
+		// Lower map parts
+		app->render->camera.y = -1866;
+	}
 }
 
 bool Scene::LoadState(pugi::xml_node& data){
@@ -917,6 +938,8 @@ bool Scene::LoadState(pugi::xml_node& data){
 
 		app->enemy->AddEnemy(x, y, type);
 	}
+
+	ResetCamera();
 
 	return true;
 }

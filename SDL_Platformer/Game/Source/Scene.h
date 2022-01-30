@@ -40,6 +40,8 @@ public:
 
 	bool pause;
 
+	bool continueButton = false;
+
 	// Checkpoint
 	bool checked = false;
 	PhysBody* checkPointSensor;
