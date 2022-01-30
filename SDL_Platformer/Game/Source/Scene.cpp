@@ -5,6 +5,7 @@
 #include "Render.h"
 #include "Window.h"
 #include "Scene.h"
+#include "SceneTitle.h"
 #include "Map.h"
 #include "FadeToBlack.h"
 #include "Defs.h"
@@ -55,6 +56,7 @@ bool Scene::Start()
 	pause = false;
 
 	fxEnter = app->audio->LoadFx("Assets/audio/fx/enter.wav");
+	settingsMenu = app->tex->Load("Assets/textures/settings.png");
 
 	//// Delete Save data to disable checkpoint tp if replay the game
 	//delSaveData = true;
@@ -95,10 +97,22 @@ bool Scene::Start()
 	wCoin2tex = app->tex->Load("Assets/textures/wCoinHUD2.png");
 	pauseTexture = app->tex->Load("Assets/textures/pause.png");
 
-	btn10 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 10, "Resume", { 80, 275, 83, 51 }, this);
-	btn11 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 11, "Settings", { 178, 275, 83, 51 }, this);
-	btn12 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 12, "Back To Title", { 280, 275, 83, 51 }, this);
-	btn13 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 13, "Exit", { 384, 275, 83, 51 }, this);
+	Volume = app->sceneTitle->Volume;
+	Fx = app->sceneTitle->Fx;
+
+	btn10 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 10, "Settings", { 98, 160, 136, 83 }, this);
+	btn11 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 11, "Back To Title", { 247, 160, 136, 83 }, this);
+	btn12 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 12, "Exit", { 397, 160, 136, 83 }, this);
+	btn13 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 13, "Resume", { 462, 74, 116, 35 }, this);
+
+	btn14 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 14, "TEST", { 332, 86, 43, 42 }, this);
+	btn15 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 15, "TEST", { 436, 86, 43, 42 }, this);
+	btn16 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 16, "TEST", { 332, 133, 43, 42 }, this);
+	btn17 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 17, "TEST", { 436, 133, 43, 42 }, this);
+	btn18 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 18, "TEST", { 50, 307, 87, 35 }, this);
+	chk3 = (GuiCheckBox*)app->guiManager->CreateGuiControl(GuiControlType::CHECKBOX, 3, "TEST", { 387, 189, 49, 42 }, this);
+	chk4 = (GuiCheckBox*)app->guiManager->CreateGuiControl(GuiControlType::CHECKBOX, 4, "TEST", { 387, 240, 49, 42 }, this);
+	chk4->check = app->sceneTitle->chk2->check;
 
 	timeControl.Start();
 
@@ -214,7 +228,7 @@ bool Scene::PreUpdate()
 	}
 
 	// ---------------- Camera (Follows player) ----------------------
-	if (app->player->death != true) {
+	if (app->player->death != true && pause == false) {
 		if (app->player->position.x > 352 && app->player->position.x < 2880) {
 			app->render->camera.x = 0 - ((app->player->position.x * 2) - 1280 / 2);
 		}
@@ -235,14 +249,21 @@ bool Scene::PreUpdate()
 		EasterEgg();
 	}
 
+	//Settings
+	if (settings == true && app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {
+		settings = false;
+		activeGuiSettings = false;
+	}
+
 	// Back
-	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {
+	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN && settings == false) {
 		if (app->scene->pause != true) {
 			pause = true;
 			LOG("Game Paused");
 		}
 		else {
 			pause = false;
+			pauseGui = false;
 			LOG("Game UnPaused");
 			timeControl.Start();
 		}
@@ -341,6 +362,94 @@ bool Scene::Update(float dt)
 		}
 	}
 
+	if (pauseGui == true) {
+		if (btn10->state == GuiControlState::DISABLED) {
+			btn10->state = GuiControlState::NORMAL;
+		}
+		if (btn11->state == GuiControlState::DISABLED) {
+			btn11->state = GuiControlState::NORMAL;
+		}
+		if (btn12->state == GuiControlState::DISABLED) {
+			btn12->state = GuiControlState::NORMAL;
+		}
+		if (btn13->state == GuiControlState::DISABLED) {
+			btn13->state = GuiControlState::NORMAL;
+		}
+	}
+
+	if (pauseGui == false) {
+		btn10->state = GuiControlState::DISABLED;
+		btn11->state = GuiControlState::DISABLED;
+		btn12->state = GuiControlState::DISABLED;
+		btn13->state = GuiControlState::DISABLED;
+	}
+
+	if (activeGuiSettings == true) {
+		if (btn14->state == GuiControlState::DISABLED) {
+			btn14->state = GuiControlState::NORMAL;
+		}
+		if (btn14->state == GuiControlState::UNABAILABLE && Volume != 0)
+		{
+			btn14->state = GuiControlState::NORMAL;
+		}
+		if ((btn14->state == GuiControlState::NORMAL || btn14->state == GuiControlState::FOCUSED || btn14->state == GuiControlState::PRESSED) && Volume == 0)
+		{
+			btn14->state = GuiControlState::UNABAILABLE;
+		}
+		if (btn15->state == GuiControlState::DISABLED) {
+			btn15->state = GuiControlState::NORMAL;
+		}
+		if (btn15->state == GuiControlState::UNABAILABLE && Volume != 128)
+		{
+			btn15->state = GuiControlState::NORMAL;
+		}
+		if ((btn15->state == GuiControlState::NORMAL || btn15->state == GuiControlState::FOCUSED || btn15->state == GuiControlState::PRESSED) && Volume == 128)
+		{
+			btn15->state = GuiControlState::UNABAILABLE;
+		}
+		if (btn16->state == GuiControlState::DISABLED) {
+			btn16->state = GuiControlState::NORMAL;
+		}
+		if (btn16->state == GuiControlState::UNABAILABLE && Fx != 0)
+		{
+			btn16->state = GuiControlState::NORMAL;
+		}
+		if ((btn16->state == GuiControlState::NORMAL || btn16->state == GuiControlState::FOCUSED || btn16->state == GuiControlState::PRESSED) && Fx == 0)
+		{
+			btn16->state = GuiControlState::UNABAILABLE;
+		}
+		if (btn17->state == GuiControlState::DISABLED) {
+			btn17->state = GuiControlState::NORMAL;
+		}
+		if (btn17->state == GuiControlState::UNABAILABLE && Fx != 128)
+		{
+			btn17->state = GuiControlState::NORMAL;
+		}
+		if ((btn17->state == GuiControlState::NORMAL || btn17->state == GuiControlState::FOCUSED || btn17->state == GuiControlState::PRESSED) && Fx == 128)
+		{
+			btn17->state = GuiControlState::UNABAILABLE;
+		}
+		if (btn18->state == GuiControlState::DISABLED) {
+			btn18->state = GuiControlState::NORMAL;
+		}
+		if (chk3->state == GuiControlState::DISABLED) {
+			chk3->state = GuiControlState::NORMAL;
+		}
+		
+		if (chk4->state == GuiControlState::DISABLED) {
+			chk4->state = GuiControlState::NORMAL;
+		}
+	}
+
+	if (activeGuiSettings == false) {
+		btn14->state = GuiControlState::DISABLED;
+		btn15->state = GuiControlState::DISABLED;
+		btn16->state = GuiControlState::DISABLED;
+		btn17->state = GuiControlState::DISABLED;
+		btn18->state = GuiControlState::DISABLED;
+		chk3->state = GuiControlState::DISABLED;
+		chk4->state = GuiControlState::DISABLED;
+	}
 	return true;
 }
 
@@ -527,39 +636,25 @@ bool Scene::PostUpdate()
 	}
 
 	if (pause == true && app->player->death == false) {
+		app->render->camera.x = 0;
+		app->render->camera.y = 0;
 		app->render->DrawTexture(pauseTexture, hudPos.x + 15, hudPos.y + 50);
-
-		if (btn10->state == GuiControlState::DISABLED) {
-			btn10->state = GuiControlState::NORMAL;
+		if (settings == false) {
+			pauseGui = true;
 		}
-		if (btn11->state == GuiControlState::DISABLED) {
-			btn11->state = GuiControlState::NORMAL;
-		}
-		if (btn12->state == GuiControlState::DISABLED) {
-			btn12->state = GuiControlState::NORMAL;
-		}
-		if (btn13->state == GuiControlState::DISABLED) {
-			btn13->state = GuiControlState::NORMAL;
-		}
-
-		//Draw GUI
-		app->guiManager->Draw();
-	}
-	else {
-		if (btn10->state == GuiControlState::NORMAL) {
-			btn10->state = GuiControlState::DISABLED;
-		}
-		if (btn11->state == GuiControlState::NORMAL) {
-			btn11->state = GuiControlState::DISABLED;
-		}
-		if (btn12->state == GuiControlState::NORMAL) {
-			btn12->state = GuiControlState::DISABLED;
-		}
-		if (btn13->state == GuiControlState::NORMAL) {
-			btn13->state = GuiControlState::DISABLED;
+		else {
+			pauseGui = false;
 		}
 	}
 
+	//Settings
+	if (settings == true) {
+		app->render->DrawTexture(settingsMenu, 50, 15);
+		activeGuiSettings = true;
+	}
+
+	//Draw GUI
+	app->guiManager->Draw();
 	return ret;
 }
 
@@ -569,27 +664,105 @@ bool Scene::OnGuiMouseClickEvent(GuiControl* control){
 	case GuiControlType::BUTTON:
 	{
 		//Checks the GUI element ID
-		if (control->id == 10) //Resume
+		if (control->id == 14) //- Volume
 		{
-			LOG("Click on button Resume");
+			LOG("Click on button 6");
+			Volume -= 10;
+			if (Volume < 0) {
+				Volume = 0;
+			}
+			app->audio->ChangeVolume(Volume);
+		}
+		if (control->id == 15) //+ Volume
+		{
+			LOG("Click on button 7");
+			Volume += 10;
+			if (Volume > 128) {
+				Volume = 128;
+			}
+			app->audio->ChangeVolume(Volume);
+		}
+		if (control->id == 16) //- Sound
+		{
+			LOG("Click on button 8");
+			Fx -= 10;
+			if (Fx < 0) {
+				Fx = 0;
+			}
+			app->audio->ChangeFXVolume(Fx);
+		}
+		if (control->id == 17) //+ Sound
+		{
+			LOG("Click on button 9");
+			Fx += 10;
+			if (Fx > 128) {
+				Fx = 128;
+			}
+			app->audio->ChangeFXVolume(Fx);
+		}
+		if (control->id == 18) //Close Settings
+		{
+			LOG("Click on button Close Settings");
+			settings = false;
+			activeGuiSettings = false;
 		}
 
-		if (control->id == 11) //Settings
+		if (control->id == 10) //Settings
 		{
 			LOG("Click on button Settings");
+			settings = true;
 		}
 
-		if (control->id == 12) //BackToTitle
+		if (control->id == 11) //BackToTitle
 		{
 			LOG("Click on button Back to title");
+			app->fade->StartFadeToBlack(this, (Module*)app->sceneTitle, 0);
 		}
 
-		if (control->id == 13) //Exit
+		if (control->id == 12) //Exit
 		{
 			LOG("Click on button Exit");
+			app->sceneTitle->exit = true; // QUIT
+			app->fade->StartFadeToBlack(this, (Module*)app->sceneTitle, 0);
+		}
+
+		if (control->id == 13) //Resume
+		{
+			LOG("Click on button Resume");
+			pause = false;
+			pauseGui = false;
+			LOG("Game UnPaused");
+			timeControl.Start();
 		}
 	}
 	//Other cases here
+	case GuiControlType::CHECKBOX:
+	{
+		//Checks the GUI element ID
+		if (control->id == 3) //FullScreen
+		{
+			LOG("Click on check 1");
+			if (chk3->check == true) {
+				app->win->fullscreen_window = true;
+				app->win->ToggleFullscreen();
+			}
+			else {
+				app->win->fullscreen_window = false;
+				app->win->ToggleFullscreen();
+			}
+		}
+
+		if (control->id == 4) //Vsync
+		{
+			LOG("Click on check 2");
+			if (chk4->check == true) {
+				app->render->vSyncOn = true;
+			}
+			else {
+				app->render->vSyncOn = false;
+			}
+		}
+	}
 	default: 
 		break;
 	}

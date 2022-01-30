@@ -70,8 +70,8 @@ bool SceneTitle::Start()
 	btn8 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 8, "TEST", { 332, 133, 43, 42 }, this);
 	btn9 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 9, "TEST", { 436, 133, 43, 42 }, this);
 	btn0 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 0, "TEST", { 50, 307, 87, 35 }, this);
-	chk1 = (GuiCheckBox*)app->guiManager->CreateGuiControl(GuiControlType::CHECKBOX, 1, "TEST", { 406, 189, 49, 42 }, this);
-	chk2 = (GuiCheckBox*)app->guiManager->CreateGuiControl(GuiControlType::CHECKBOX, 2, "TEST", { 406, 240, 49, 42 }, this);
+	chk1 = (GuiCheckBox*)app->guiManager->CreateGuiControl(GuiControlType::CHECKBOX, 1, "TEST", { 387, 189, 49, 42 }, this);
+	chk2 = (GuiCheckBox*)app->guiManager->CreateGuiControl(GuiControlType::CHECKBOX, 2, "TEST", { 387, 240, 49, 42 }, this);
 	chk2->check = true;
 
 	// ----------- Velocity ------------
@@ -207,12 +207,13 @@ bool SceneTitle::Update(float dt)
 		{
 			btn9->state = GuiControlState::UNABAILABLE;
 		}
-		if (chk1->state == GuiControlState::DISABLED) {
-			chk1->state = GuiControlState::NORMAL;
-		}
 		if (btn0->state == GuiControlState::DISABLED) {
 			btn0->state = GuiControlState::NORMAL;
 		}
+		if (chk1->state == GuiControlState::DISABLED) {
+			chk1->state = GuiControlState::NORMAL;
+		}
+		
 		if (chk2->state == GuiControlState::DISABLED) {
 			chk2->state = GuiControlState::NORMAL;
 		}
@@ -358,10 +359,6 @@ bool SceneTitle::OnGuiMouseClickEvent(GuiControl* control)
 			settings = false;
 			activeGuiSettings = false;
 		}
-
-		
-
-
 	}
 	case GuiControlType::CHECKBOX:
 	{

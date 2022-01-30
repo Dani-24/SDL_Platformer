@@ -4,6 +4,7 @@
 #include "Module.h"
 #include "Animation.h"
 #include "GuiButton.h"
+#include "GuiCheckBox.h"
 
 #define Scroller 5
 
@@ -60,6 +61,23 @@ private:
 	GuiButton* btn11;
 	GuiButton* btn12;
 	GuiButton* btn13;
+
+	GuiButton* btn14;
+	GuiButton* btn15;
+	GuiButton* btn16;
+	GuiButton* btn17;
+	GuiButton* btn18;
+	GuiCheckBox* chk3;
+	GuiCheckBox* chk4;
+
+	bool settings = false;
+	bool activeGuiSettings = false;
+	bool pauseGui = false;
+	bool exit = false;
+
+	int Volume, Fx;
+
+	SDL_Texture* settingsMenu;
 
 	Timer timeControl;
 

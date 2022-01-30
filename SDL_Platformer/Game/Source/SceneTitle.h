@@ -26,16 +26,6 @@ public:
 	// Define multiple Gui Event methods
 	bool OnGuiMouseClickEvent(GuiControl* control);
 
-	bool CleanUp();
-
-private:
-
-	// Textures 
-
-	SDL_Texture* bg;
-	SDL_Texture* bgSky;
-
-	// GUI Button
 	GuiButton* btn1;
 	GuiButton* btn2;
 	GuiButton* btn3;
@@ -48,8 +38,20 @@ private:
 	GuiButton* btn0;
 	GuiCheckBox* chk1;
 	GuiCheckBox* chk2;
-
 	int Volume = 128, Fx = 128;
+	bool exit = false;
+
+	bool CleanUp();
+
+private:
+
+	// Textures 
+
+	SDL_Texture* bg;
+	SDL_Texture* bgSky;
+
+	// GUI Button
+	
 
 	float scroller[4];
 
@@ -65,7 +67,7 @@ private:
 
 	bool activeGui = false, settings = false;
 	bool activeGuiSettings = false;
-	bool exit = false;
+	
 
 	uint fxEnter;
 
