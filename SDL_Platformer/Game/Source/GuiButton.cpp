@@ -93,7 +93,7 @@ bool GuiButton::Draw(Render* render)
 	/******/
 
 	case GuiControlState::SELECTED: 
-		render->DrawRectangle(bounds, 0, 255, 0, 255);
+		render->DrawRectangle(bounds, 0, 255, 0, 80);
 	
 		break;
 

@@ -41,8 +41,15 @@ private:
 	GuiButton* btn3;
 	GuiButton* btn4;
 	GuiButton* btn5;
+	GuiButton* btn6;
+	GuiButton* btn7;
+	GuiButton* btn8;
+	GuiButton* btn9;
+	GuiButton* btn0;
 	GuiCheckBox* chk1;
 	GuiCheckBox* chk2;
+
+	int Volume = 128, Fx = 128;
 
 	float scroller[4];
 

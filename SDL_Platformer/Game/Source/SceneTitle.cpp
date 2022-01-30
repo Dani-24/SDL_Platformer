@@ -65,6 +65,11 @@ bool SceneTitle::Start()
 	btn3 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 3, "TEST", { 280, 275, 83, 51 }, this);
 	btn4 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 4, "TEST", { 384, 275, 83, 51 }, this);
 	btn5 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 5, "TEST", { 485, 275, 83, 51 }, this);
+	btn6 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 6, "TEST", { 332, 86, 43, 42 }, this);
+	btn7 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 7, "TEST", { 436, 86, 43, 42 }, this);
+	btn8 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 8, "TEST", { 332, 133, 43, 42 }, this);
+	btn9 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 9, "TEST", { 436, 133, 43, 42 }, this);
+	btn0 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 0, "TEST", { 50, 307, 87, 35 }, this);
 	chk1 = (GuiCheckBox*)app->guiManager->CreateGuiControl(GuiControlType::CHECKBOX, 1, "TEST", { 406, 189, 49, 42 }, this);
 	chk2 = (GuiCheckBox*)app->guiManager->CreateGuiControl(GuiControlType::CHECKBOX, 2, "TEST", { 406, 240, 49, 42 }, this);
 	chk2->check = true;
@@ -158,8 +163,55 @@ bool SceneTitle::Update(float dt)
 	}
 
 	if (activeGuiSettings == true) {
+		if (btn6->state == GuiControlState::DISABLED) {
+			btn6->state = GuiControlState::NORMAL;
+		}
+		if (btn6->state == GuiControlState::UNABAILABLE && Volume != 0)
+		{
+			btn6->state = GuiControlState::NORMAL;
+		}
+		if ((btn6->state == GuiControlState::NORMAL || btn6->state == GuiControlState::FOCUSED || btn6->state == GuiControlState::PRESSED)&& Volume == 0)
+		{
+			btn6->state = GuiControlState::UNABAILABLE;
+		}
+		if (btn7->state == GuiControlState::DISABLED) {
+			btn7->state = GuiControlState::NORMAL;
+		}
+		if (btn7->state == GuiControlState::UNABAILABLE && Volume != 128)
+		{
+			btn7->state = GuiControlState::NORMAL;
+		}
+		if ((btn7->state == GuiControlState::NORMAL || btn7->state == GuiControlState::FOCUSED || btn7->state == GuiControlState::PRESSED) && Volume == 128)
+		{
+			btn7->state = GuiControlState::UNABAILABLE;
+		}
+		if (btn8->state == GuiControlState::DISABLED) {
+			btn8->state = GuiControlState::NORMAL;
+		}
+		if (btn8->state == GuiControlState::UNABAILABLE && Fx != 0)
+		{
+			btn8->state = GuiControlState::NORMAL;
+		}
+		if ((btn8->state == GuiControlState::NORMAL || btn8->state == GuiControlState::FOCUSED || btn8->state == GuiControlState::PRESSED) && Fx == 0)
+		{
+			btn8->state = GuiControlState::UNABAILABLE;
+		}
+		if (btn9->state == GuiControlState::DISABLED) {
+			btn9->state = GuiControlState::NORMAL;
+		}
+		if (btn9->state == GuiControlState::UNABAILABLE && Fx != 128)
+		{
+			btn9->state = GuiControlState::NORMAL;
+		}
+		if ((btn9->state == GuiControlState::NORMAL || btn9->state == GuiControlState::FOCUSED || btn9->state == GuiControlState::PRESSED) && Fx == 128)
+		{
+			btn9->state = GuiControlState::UNABAILABLE;
+		}
 		if (chk1->state == GuiControlState::DISABLED) {
 			chk1->state = GuiControlState::NORMAL;
+		}
+		if (btn0->state == GuiControlState::DISABLED) {
+			btn0->state = GuiControlState::NORMAL;
 		}
 		if (chk2->state == GuiControlState::DISABLED) {
 			chk2->state = GuiControlState::NORMAL;
@@ -167,6 +219,11 @@ bool SceneTitle::Update(float dt)
 	}
 
 	if (activeGuiSettings == false) {
+		btn6->state = GuiControlState::DISABLED;
+		btn7->state = GuiControlState::DISABLED;
+		btn8->state = GuiControlState::DISABLED;
+		btn9->state = GuiControlState::DISABLED;
+		btn0->state = GuiControlState::DISABLED;
 		chk1->state = GuiControlState::DISABLED;
 		chk2->state = GuiControlState::DISABLED;
 	}
@@ -259,6 +316,50 @@ bool SceneTitle::OnGuiMouseClickEvent(GuiControl* control)
 			LOG("Click on button 5");
 			exit = true; // QUIT
 		}
+		if (control->id == 6) //- Volume
+		{
+			LOG("Click on button 6");
+			Volume -= 10;
+			if(Volume < 0){
+				Volume = 0;
+			}
+			app->audio->ChangeVolume(Volume);
+		}
+		if (control->id == 7) //+ Volume
+		{
+			LOG("Click on button 7");
+			Volume += 10;
+			if (Volume > 128) {
+				Volume = 128;
+			}
+			app->audio->ChangeVolume(Volume);
+		}
+		if (control->id == 8) //- Sound
+		{
+			LOG("Click on button 8");
+			Fx -= 10;
+			if (Fx < 0) {
+				Fx = 0;
+			}
+			app->audio->ChangeFXVolume(Fx);
+		}
+		if (control->id == 9) //+ Sound
+		{
+			LOG("Click on button 9");
+			Fx += 10;
+			if (Fx > 128) {
+				Fx = 128;
+			}
+			app->audio->ChangeFXVolume(Fx);
+		}
+		if (control->id == 0) //Close Settings
+		{
+			LOG("Click on button 0");
+			settings = false;
+			activeGuiSettings = false;
+		}
+
+		
 
 
 	}
@@ -268,6 +369,14 @@ bool SceneTitle::OnGuiMouseClickEvent(GuiControl* control)
 		if (control->id == 1) //FullScreen
 		{
 			LOG("Click on check 1");
+			if (chk1->check == true) {
+				app->win->fullscreen_window = true;
+				app->win->ToggleFullscreen();
+			}
+			else {
+				app->win->fullscreen_window = false;
+				app->win->ToggleFullscreen();
+			}
 		}
 
 		if (control->id == 2) //Vsync

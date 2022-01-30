@@ -113,11 +113,9 @@ bool GuiCheckBox::Draw(Render* render)
 	{
 		if (check == false) {
 			app->render->DrawTexture(checkbox, bounds.x, bounds.y);
-			render->DrawRectangle(bounds, 0, 0, 0, 255);
 		}
 		else {
 			app->render->DrawTexture(checkedbox, bounds.x, bounds.y);
-			render->DrawRectangle(bounds, 0, 0, 0, 255);
 		}
 	} break;
 
