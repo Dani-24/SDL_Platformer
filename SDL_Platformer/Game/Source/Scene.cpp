@@ -51,7 +51,7 @@ bool Scene::Start()
 	
 	coins = score = wCoins = 0;
 
-	time = 400000;
+	time = 600000;
 
 	pause = pauseGui = activeGuiSettings = exit = false;
 
@@ -266,7 +266,7 @@ bool Scene::PreUpdate()
 		activeGuiSettings = false;
 	}
 
-	// Back
+	// Pause
 	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN && settings == false) {
 		if (app->scene->pause != true) {
 			pause = true;
@@ -277,6 +277,7 @@ bool Scene::PreUpdate()
 			pauseGui = false;
 			LOG("Game UnPaused");
 			timeControl.Start();
+			ResetCamera();
 		}
 	}
 
