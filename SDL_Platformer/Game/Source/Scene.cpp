@@ -53,7 +53,7 @@ bool Scene::Start()
 
 	time = 400000;
 
-	pause = false;
+	pause = pauseGui = activeGuiSettings = exit = false;
 
 	fxEnter = app->audio->LoadFx("Assets/audio/fx/enter.wav");
 	settingsMenu = app->tex->Load("Assets/textures/settings.png");
@@ -780,6 +780,13 @@ bool Scene::CleanUp()
 	btn11->state = GuiControlState::DISABLED;
 	btn12->state = GuiControlState::DISABLED;
 	btn13->state = GuiControlState::DISABLED;
+	btn14->state = GuiControlState::DISABLED;
+	btn15->state = GuiControlState::DISABLED;
+	btn16->state = GuiControlState::DISABLED;
+	btn17->state = GuiControlState::DISABLED;
+	btn18->state = GuiControlState::DISABLED;
+	chk3->state = GuiControlState::DISABLED;
+	chk4->state = GuiControlState::DISABLED;
 	//app->guiManager->Disable();
 
 	app->font->UnloadFont();

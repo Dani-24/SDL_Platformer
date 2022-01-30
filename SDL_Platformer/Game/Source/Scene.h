@@ -44,6 +44,7 @@ public:
 	bool checked = false;
 	PhysBody* checkPointSensor;
 
+	// Public GUI info
 	int coins, score, wCoins;
 	int time;
 
@@ -55,12 +56,15 @@ private:
 	iPoint hudPos;
 	int contHud = 100;
 	char coinText[100], scoreText[100], timeText[100];
+	Timer timeControl;
 
 	// PAUSE GUI
 	GuiButton* btn10;
 	GuiButton* btn11;
 	GuiButton* btn12;
 	GuiButton* btn13;
+
+	// Settings GUI
 
 	GuiButton* btn14;
 	GuiButton* btn15;
@@ -78,8 +82,6 @@ private:
 	int Volume, Fx;
 
 	SDL_Texture* settingsMenu;
-
-	Timer timeControl;
 
 	// EasterEGG
 	Animation eggAnim;
