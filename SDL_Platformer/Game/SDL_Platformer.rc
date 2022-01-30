@@ -13,7 +13,7 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// Spanish (Spain, International Sort) resources
+// Español (España, alfabetización internacional) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ESN)
 LANGUAGE LANG_SPANISH, SUBLANG_SPANISH_MODERN
@@ -61,8 +61,8 @@ IDI_ICON1               ICON                    "icon1.ico"
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 0,1,1,0
- PRODUCTVERSION 1,0,0,0
+ FILEVERSION 3,0,0,0
+ PRODUCTVERSION 3,0,1,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -79,12 +79,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "MacacoSerapios"
             VALUE "FileDescription", "We are MacacoSerapios, and this is a nice game."
-            VALUE "FileVersion", "0.1.1.0"
-            VALUE "InternalName", "SDL_Plat.exe"
+            VALUE "FileVersion", "3.0.0.0"
+            VALUE "InternalName", "SDL_Platformer.exe"
             VALUE "LegalCopyright", "Copyright (C) 2021"
-            VALUE "OriginalFilename", "SDL_Plat.exe"
+            VALUE "OriginalFilename", "SDL_Platformer.exe"
             VALUE "ProductName", "SDL Platformer"
-            VALUE "ProductVersion", "1.0.0.0"
+            VALUE "ProductVersion", "3.0.1.0"
         END
     END
     BLOCK "VarFileInfo"
@@ -93,7 +93,7 @@ BEGIN
     END
 END
 
-#endif    // Spanish (Spain, International Sort) resources
+#endif    // Español (España, alfabetización internacional) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
